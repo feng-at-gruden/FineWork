@@ -1,9 +1,9 @@
 <template>
-    <div id="app">
+    <v-app dark id="app">
         <transition :name="transitionName">
             <router-view />
         </transition>
-    </div>
+    </v-app>
 </template>
 <script>
 export default {

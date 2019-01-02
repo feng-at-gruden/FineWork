@@ -72,17 +72,17 @@ export default {
 					icon: 'location_city',
 					subNav: [
 						{ title: '项目一览', link: '/Project/List', icon: 'view_list' },
-						{ title: '新建项目', link: '/Project/New', icon: 'playlist_add' },
-						{ title: '项目计划', link: '/Project/Plan', icon: 'view_module' },
+						{ title: '新建项目', link: '/Project/Create', icon: 'playlist_add' },
+						{ title: '项目计划=', link: '/Project/Plan', icon: 'view_module' },
 					]
 				},
 
 				{
-					title: '计划',
+					title: '计划管理',
 					link: '',
 					icon: 'assessment',
 					subNav: [
-						{ title: '计划制定', link: '/Plan/Create', icon: 'view_module' },
+						{ title: '项目计划', link: '/Plan/Create', icon: 'view_module' },
 						{ title: '阶段计划', link: '/Plan/', icon: 'view_headline' },
 					]
 				},
