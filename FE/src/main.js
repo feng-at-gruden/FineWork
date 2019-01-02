@@ -7,9 +7,6 @@ import Vuex from 'vuex'
 import store from './vuex/store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-// Components
-import './components'
-
 
 Vue.use(Vuex)
 Vue.use(Vuetify)
