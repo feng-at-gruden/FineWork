@@ -5,17 +5,21 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
+		drawer: true,
 		identity: {
 			userName: '',
 			token: ''
 		}
 	},
 	mutations: {
+		openDrawer(state, v) {
+			state.drawer = v
+		},
 		userLogin(state, msg) {
 			state.identity = msg;
 		},
 		userLogout(state) {
-			state.identity = null;
+			state.identity = {};
 		}
 	}
 })

@@ -1,24 +1,28 @@
 <template>
-        <h1>{{msg}}</h1>
+    <v-toolbar app fixed clipped-left>
+        <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
+        <v-toolbar-title>{{title}}</v-toolbar-title>
+    </v-toolbar>
 </template>
-
 <script>
 export default {
     name: 'Header',
     props: [],
-    data() {
-        return {
-            msg: 'Welcome to Your Vue.js App'
+    computed: {
+        title() {
+            return this.$route.meta.title
         }
     },
-    methods: {
-        
-    }
-}
-</script>
+    data: () => ({
 
-<style>
-h1{
-    color:white;
+    }),
+    methods: {
+        openDrawer() {
+            this.$store.commit('openDrawer', !this.$store.state.drawer)
+        }
+    },
 }
+
+</script>
+<style>
 </style>

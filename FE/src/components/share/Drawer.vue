@@ -1,163 +1,114 @@
 <template>
-  <v-navigation-drawer
-    id="app-drawer"
-    v-model="inputValue"
-    app
-    dark
-    floating
-    persistent
-    mobile-break-point="991"
-    width="260"
-  >
-    <v-img
-      :src="image"
-      height="100%"
-    >
-      <v-layout
-        class="fill-height"
-        tag="v-list"
-        column
-      >
-        <v-list-tile avatar>
-          <v-list-tile-avatar
-            color="white"
-          >
-            <v-img
-              :src="logo"
-              height="34"
-              contain
-            />
-          </v-list-tile-avatar>
-          <v-list-tile-title class="title">
-            Vuetify MD
-          </v-list-tile-title>
-        </v-list-tile>
-        <v-divider/>
-        <v-list-tile
-          v-if="responsive"
-        >
-          <v-text-field
-            class="purple-input search-input"
-            label="Search..."
-            color="purple"
-          />
-        </v-list-tile>
-        <v-list-tile
-          v-for="(link, i) in links"
-          :key="i"
-          :to="link.to"
-          :active-class="color"
-          avatar
-          class="v-list-item"
-        >
-          <v-list-tile-action>
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title
-            v-text="link.text"
-          />
-        </v-list-tile>
-        <v-list-tile
-          disabled
-          active-class="primary"
-          class="v-list-item v-list__tile--buy"
-          to="/upgrade"
-        >
-          <v-list-tile-action>
-            <v-icon>mdi-package-up</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title class="font-weight-light">
-            Upgrade To PRO
-          </v-list-tile-title>
-        </v-list-tile>
-      </v-layout>
-    </v-img>
-  </v-navigation-drawer>
+	<v-navigation-drawer v-model="drawer" :mini-variant="mini" @input="handleInput" clipped fixed app>
+		<v-list class="pa-1">
+			<v-list-tile v-if="mini" @click.stop="mini = !mini">
+				<v-list-tile-action>
+					<v-icon>chevron_right</v-icon>
+				</v-list-tile-action>
+			</v-list-tile>
+			<v-list-tile avatar tag="div">
+				<v-list-tile-avatar>
+					<img src="https://randomuser.me/api/portraits/men/85.jpg">
+          			</v-list-tile-avatar>
+					<v-list-tile-content>
+						<v-list-tile-title>{{userName}}</v-list-tile-title>
+					</v-list-tile-content>
+					<v-list-tile-action>
+						<v-btn icon @click.stop="mini = !mini">
+							<v-icon>chevron_left</v-icon>
+						</v-btn>
+					</v-list-tile-action>
+			</v-list-tile>
+		</v-list>
+		<v-list class="pt-0" dense>
+			<v-divider light></v-divider>
+			<div v-for="(item,index) in navItems">
+				<v-list-tile v-if="!item.subNav" @click="goto(item)">
+					<v-list-tile-action>
+						<v-icon>{{item.icon}}</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-title>{{item.title}}</v-list-tile-title>
+				</v-list-tile>
+				<v-list-group no-action :prepend-icon="item.icon" v-if="item.subNav">
+					<v-list-tile slot="activator">
+						<v-list-tile-title>{{item.title}}</v-list-tile-title>
+					</v-list-tile>
+					<v-list-tile v-for="(subItem, i) in item.subNav" :key="i" @click="goto(subItem)" width="200px	">
+						<v-list-tile-title v-text="subItem.title"></v-list-tile-title>
+						<v-list-tile-action>
+							<v-icon v-text="subItem.icon"></v-icon>
+						</v-list-tile-action>
+					</v-list-tile>
+				</v-list-group>
+			</div>
+		</v-list>
+	</v-navigation-drawer>
 </template>
-
 <script>
-// Utilities
-import {
-  mapMutations,
-  mapState
-} from 'vuex'
-
 export default {
-  data: () => ({
-    logo: './img/vuetifylogo.png',
-    links: [
-      {
-        to: '/dashboard',
-        icon: 'mdi-view-dashboard',
-        text: 'Dashboard'
-      },
-      {
-        to: '/user-profile',
-        icon: 'mdi-account',
-        text: 'User Profile'
-      },
-      {
-        to: '/table-list',
-        icon: 'mdi-clipboard-outline',
-        text: 'Table List'
-      },
-      {
-        to: '/typography',
-        icon: 'mdi-format-font',
-        text: 'Typography'
-      },
-      {
-        to: '/icons',
-        icon: 'mdi-chart-bubble',
-        text: 'Icons'
-      },
-      {
-        to: '/maps',
-        icon: 'mdi-map-marker',
-        text: 'Maps'
-      },
-      {
-        to: '/notifications',
-        icon: 'mdi-bell',
-        text: 'Notifications'
-      }
-    ],
-    responsive: false
-  }),
-  computed: {
-    ...mapState('app', ['image', 'color']),
-    inputValue: {
-      get () {
-        return this.$store.state.app.drawer
-      },
-      set (val) {
-        this.setDrawer(val)
-      }
-    },
-    items () {
-      return this.$t('Layout.View.items')
-    }
-  },
-  mounted () {
-    this.onResponsiveInverted()
-    window.addEventListener('resize', this.onResponsiveInverted)
-  },
-  beforeDestroy () {
-    window.removeEventListener('resize', this.onResponsiveInverted)
-  },
-  methods: {
-    ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
-    onResponsiveInverted () {
-      if (window.innerWidth < 991) {
-        this.responsive = true
-      } else {
-        this.responsive = false
-      }
-    }
-  }
-}
-</script>
+	name: 'Drawer',
+	props: [],
+	data() {
+		return {
+			msg: 'Welcome to Your Vue.js App',
+			mini: false,
+			navItems: [
+				{ title: '登录', link: '/login', icon: 'supervisor_account' },
+				{ title: '主页', link: '/', icon: 'home' },
 
-<style >
-  
+				{
+					title: '项目',
+					link: '',
+					icon: 'location_city',
+					subNav: [
+						{ title: '项目一览', link: '/project/list', icon: 'view_list' },
+						{ title: '新建项目', link: '/project/create', icon: 'playlist_add' },
+						{ title: '项目计划=', link: '/project/plan', icon: 'view_module' },
+					]
+				},
+				{
+					title: '计划管理',
+					link: '',
+					icon: 'assessment',
+					subNav: [
+						{ title: '项目计划', link: '/plan/create', icon: 'view_module' },
+						{ title: '阶段计划', link: '/plan/', icon: 'view_headline' },
+					]
+				},
+				{ title: 'About', link: 'about', icon: 'question_answer' },
+				{ title: '退出', link: 'logout', icon: 'directions_run' }
+			],
+			right: null
+		}
+	},
+	computed: {
+		userName() {
+			return this.$store.state.identity.userName
+		},
+		drawer: {
+			get(){
+				return this.$store.state.drawer
+			},
+			set(value){
+				//this.$store.commit('openDrawer')
+			}
+		}
+	},
+	methods: {
+		goto(item) {
+			if (item.link == 'logout') {
+				this.$store.commit('userLogout')
+				this.$router.replace('/login')
+			} else {
+				this.$router.push(item.link)
+			}
+		},
+		handleInput(v){
+			this.$store.commit('openDrawer', v)
+		}
+	}
+}
+
+</script>
+<style>
 </style>

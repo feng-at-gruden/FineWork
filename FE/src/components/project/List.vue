@@ -5,12 +5,15 @@
 </template>
 
 <script>
+import BasePage from '../../assets/js/BasePage'
+
 export default {
+    extends : BasePage,
     name: 'ProjectList',
     props: [],
     data() {
         return {
-            title: 'Project list'
+
         }
     },
     methods: {

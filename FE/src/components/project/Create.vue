@@ -1,21 +1,27 @@
 <template>
-    <div>
-        {{title}}
-    </div>
+        <div style="background-color:red">
+            {{title}}
+        </div>
 </template>
 
 <script>
+import BasePage from '../../assets/js/BasePage'
+
 export default {
-    name: 'NewProject',
+    extends : BasePage,
+    name: 'CreateProject',
     props: [],
+    computed:{
+        
+    },
     data() {
         return {
-            title: 'Create a new project'
+            //title: 'Create a new project'
         }
     },
     methods: {
         
-    }
+    },
 }
 </script>
 
