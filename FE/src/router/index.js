@@ -30,19 +30,19 @@ export default new Router({
             children: [{
                     path: 'Create',
                     name: 'CreateProject',
-                    meta: { requiresAuth: false, level: 2, title: "新建工程项目", },
+                    meta: { requiresAuth: true, level: 2, title: "新建工程项目", },
                     component: CreateProject
                 },
                 {
                     path: 'List',
                     name: 'ProjectList',
-                    meta: { requiresAuth: false, level: 2, title: "项目一览", },
+                    meta: { requiresAuth: true, level: 2, title: "项目一览", },
                     component: ProjectList
                 },
                 {
                     path: ':id',
                     name: 'ProjectDetail',
-                    meta: { requiresAuth: false, level: 2, title: "项目详情", },
+                    meta: { requiresAuth: true, level: 2, title: "项目详情", },
                     component: ProjectDetail
                 },
 

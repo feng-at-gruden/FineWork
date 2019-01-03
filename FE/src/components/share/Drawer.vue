@@ -45,6 +45,7 @@
 	</v-navigation-drawer>
 </template>
 <script>
+import auth from '../../assets/js/Auth'
 export default {
 	name: 'Drawer',
 	props: [],
@@ -97,8 +98,7 @@ export default {
 	methods: {
 		goto(item) {
 			if (item.link == 'logout') {
-				this.$store.commit('userLogout')
-				this.$router.replace('/login')
+				auth.logout()
 			} else {
 				this.$router.push(item.link)
 			}

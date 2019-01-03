@@ -23,7 +23,7 @@
 							</v-card-text>
 							<v-card-actions>
 								<v-spacer></v-spacer>
-								<v-btn color="primary" @click="login">登录</v-btn>
+								<v-btn color="primary" @click="handleLoginClick">登录</v-btn>
 							</v-card-actions>
 						</v-card>
 					</v-flex>
@@ -45,12 +45,8 @@ export default {
 		}
 	},
 	methods: {
-		login() {
-			this.$store.commit('userLogin', {
-				userName: 'Feng Guo',
-				token: '123123'
-			})
-			this.$router.push('/')
+		handleLoginClick() {
+			this.auth.login()
 		}
 	}
 }
