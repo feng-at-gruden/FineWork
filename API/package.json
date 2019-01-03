@@ -1,17 +1,17 @@
 {
-  "name": "my-vue1",
-  "version": "1.0.0",
-  "description": "Training -1",
-  "main": "app.js",
-  "scripts": {
-    "start": "node API.js"
-  },
-  "keywords": [
-    "Feng"
-  ],
-  "author": "Feng",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.16.4",
-  }
+    "name": "my-vue1",
+    "version": "1.0.0",
+    "description": "Training -1",
+    "main": "app.js",
+    "scripts": {
+        "start": "node API.js"
+    },
+    "keywords": [
+        "Feng"
+    ],
+    "author": "Feng",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.16.4"
+    }
 }

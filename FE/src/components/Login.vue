@@ -17,8 +17,8 @@
 							</v-toolbar>
 							<v-card-text>
 								<v-form>
-									<v-text-field prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
-									<v-text-field prepend-icon="lock" name="password" label="Password" id="password" type="password"></v-text-field>
+									<v-text-field v-model="username" prepend-icon="person" name="login" label="Login" type="text"></v-text-field>
+									<v-text-field v-model="password" prepend-icon="lock" name="password" label="Password" id="password" type="password"></v-text-field>
 								</v-form>
 							</v-card-text>
 							<v-card-actions>
@@ -26,6 +26,9 @@
 								<v-btn color="primary" @click="handleLoginClick">登录</v-btn>
 							</v-card-actions>
 						</v-card>
+						<v-alert :value="alert" type="error" icon="warning" transition="scale-transition">
+							{{errorMsg}}
+						</v-alert>
 					</v-flex>
 				</v-layout>
 			</v-container>
@@ -36,17 +39,24 @@
 import BasePage from '../assets/js/BasePage'
 
 export default {
-    extends : BasePage,
+	extends: BasePage,
 	name: 'Login',
 	props: [],
 	data() {
 		return {
-			
+			username: '',
+			password: '',
+			alert: false,
+			errorMsg: ''
 		}
 	},
 	methods: {
 		handleLoginClick() {
-			this.auth.login()
+			this.alert = false
+			this.auth.login(this.username, this.password, (msg) => {
+				this.errorMsg = msg
+				this.alert = true
+			})
 		}
 	}
 }

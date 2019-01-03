@@ -13,16 +13,25 @@ Vue.use(Router)
 
 export default new Router({
     routes: [{
-            path: '/',
-            name: 'Main',
-            meta: { requiresAuth: true, level: 1, title: "建筑施工项目进度跟踪系统", },
-            component: Main
-        },
-        {
             path: '/Login',
             name: 'Login',
             meta: { requiresAuth: false, level: 1, title: "用户登录", },
             component: Login
+        },
+        {
+            path: '/',            
+            redirect: '/Dashboard',
+            component: Main,
+        },
+        {
+            path: '/',            
+            component: Main,
+            children: [{
+                path: 'Dashboard',
+                name: 'Dashboard',
+                meta: { requiresAuth: true, level: 2, title: "建筑施工项目进度跟踪系统", },
+                component: Dashboard
+            }]
         },
         {
             path: '/Project',
@@ -36,16 +45,15 @@ export default new Router({
                 {
                     path: 'List',
                     name: 'ProjectList',
-                    meta: { requiresAuth: true, level: 2, title: "项目一览", },
+                    meta: { requiresAuth: true, level: 2, title: "工程一览", },
                     component: ProjectList
                 },
                 {
                     path: ':id',
                     name: 'ProjectDetail',
-                    meta: { requiresAuth: true, level: 2, title: "项目详情", },
+                    meta: { requiresAuth: true, level: 2, title: "工程详情", },
                     component: ProjectDetail
                 },
-
             ]
         },
 

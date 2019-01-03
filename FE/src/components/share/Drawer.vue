@@ -33,7 +33,7 @@
 					<v-list-tile slot="activator">
 						<v-list-tile-title>{{item.title}}</v-list-tile-title>
 					</v-list-tile>
-					<v-list-tile v-for="(subItem, i) in item.subNav" :key="i" @click="goto(subItem)" width="200px	">
+					<v-list-tile v-for="(subItem, i) in item.subNav" :key="i" @click="goto(subItem)" width="200px">
 						<v-list-tile-title v-text="subItem.title"></v-list-tile-title>
 						<v-list-tile-action>
 							<v-icon v-text="subItem.icon"></v-icon>
@@ -51,20 +51,18 @@ export default {
 	props: [],
 	data() {
 		return {
-			msg: 'Welcome to Your Vue.js App',
 			mini: false,
 			navItems: [
-				{ title: '登录', link: '/login', icon: 'supervisor_account' },
+				/*{ title: '登录', link: '/login', icon: 'supervisor_account' },*/
 				{ title: '主页', link: '/', icon: 'home' },
-
 				{
-					title: '项目',
+					title: '工程管理',
 					link: '',
 					icon: 'location_city',
 					subNav: [
-						{ title: '项目一览', link: '/project/list', icon: 'view_list' },
-						{ title: '新建项目', link: '/project/create', icon: 'playlist_add' },
-						{ title: '项目计划=', link: '/project/plan', icon: 'view_module' },
+						{ title: '工程一览', link: '/project/list', icon: 'view_list' },
+						{ title: '新建工程', link: '/project/create', icon: 'playlist_add' },
+						{ title: '工程详细', link: '/project/12', icon: 'view_module' },
 					]
 				},
 				{
@@ -72,8 +70,16 @@ export default {
 					link: '',
 					icon: 'assessment',
 					subNav: [
-						{ title: '项目计划', link: '/plan/create', icon: 'view_module' },
-						{ title: '阶段计划', link: '/plan/', icon: 'view_headline' },
+						{ title: '工程计划', link: '/project/plan', icon: 'view_module' },
+						{ title: '阶段计划', link: '/plan/phase', icon: 'view_headline' },
+					]
+				},
+				{
+					title: '工作汇报',
+					link: '',
+					icon: 'assessment',
+					subNav: [
+						{ title: '日工作汇报', link: '/work/daily', icon: 'view_module' },
 					]
 				},
 				{ title: 'About', link: 'about', icon: 'question_answer' },
@@ -87,10 +93,10 @@ export default {
 			return this.$store.state.identity.userName
 		},
 		drawer: {
-			get(){
+			get() {
 				return this.$store.state.drawer
 			},
-			set(value){
+			set(value) {
 				//this.$store.commit('openDrawer')
 			}
 		}
@@ -103,7 +109,7 @@ export default {
 				this.$router.push(item.link)
 			}
 		},
-		handleInput(v){
+		handleInput(v) {
 			this.$store.commit('openDrawer', v)
 		}
 	}
