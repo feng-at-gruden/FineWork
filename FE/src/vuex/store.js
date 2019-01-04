@@ -7,7 +7,8 @@ const store = new Vuex.Store({
 	state: {
 		drawer: true,
 		identity: {
-			userName: '',
+			username: '',
+			realname:'',
 			token: ''
 		}
 	},

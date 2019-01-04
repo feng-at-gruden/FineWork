@@ -30,12 +30,6 @@ window.app = new Vue({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth) {
-        if (!auth.checkIsLogin()) {
-            router.replace('/login' + '?returnUrl=' + to.path)
-            return
-        }
-    }
     if (to.meta.title) {
         document.title = "Fine Work - " + to.meta.title
     }

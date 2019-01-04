@@ -90,7 +90,7 @@ export default {
 	},
 	computed: {
 		userName() {
-			return this.$store.state.identity.userName
+			return this.$store.state.identity.realname
 		},
 		drawer: {
 			get() {

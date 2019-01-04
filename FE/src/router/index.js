@@ -21,6 +21,7 @@ export default new Router({
         {
             path: '/',            
             redirect: '/Dashboard',
+            meta: { requiresAuth: true, level: 1, title: "建筑施工项目进度跟踪系统", },
             component: Main,
         },
         {

@@ -1,0 +1,87 @@
+.gantt_scale_cell.week_end {
+    background: #bdbcbc;
+}
+
+.gantt_task_cell.week_end {
+    background-color: #fbfbfb;
+}
+
+.gantt_task_row.gantt_selected .gantt_task_cell.week_end {
+    background-color: #FFF3A1;
+}
+
+.gantt_split_parent {
+    visibility: hidden;
+}
+
+.plan {
+    background: #807e7e;
+    border: solid 1px #616060;
+    opacity: 0.75;
+}
+
+.actual {
+    background: #5998bd;
+    border: solid 1px #5998bd;
+    opacity: 0.8;
+}
+
+/*人工输入的*/
+.working {
+    border: solid 1px #2898b0;
+    background: #3db9d3;
+    opacity: 0.8;
+}
+
+.pending {
+    border: solid 1px #430571;
+    background: #b319b3;
+    opacity: 0.8;
+}
+
+.not_start {
+    border: solid 1px #616060;
+    background: #807e7e;
+    opacity: 0.8;
+}
+
+.finished {
+    border: solid 1px #65c16f;
+    background: #3c9445;
+    opacity: 0.8;
+}
+
+/*计算的*/
+.exceed {
+    border: solid 0px #db2536;
+    background: #f11b30;
+    opacity: 0.8;
+}
+
+.delayed {
+    border: solid 0px #944b0d;
+    background: #f3550a;
+    opacity: 0.8;
+}
+
+.finished .gantt_task_progress,
+.gantt_task_progress {
+    background: rgb(241, 205, 0);
+    border: none;
+    box-shadow: none;
+    height: 6px;
+    top: 0px;
+    border-radius: 0px;
+    position: relative;
+    display: block;
+}
+.exceed .gantt_task_progress {
+    background: rgb(241, 205, 0);
+    border: none;
+    box-shadow: none;
+    height: 6px;
+    top: 0px;
+    border-radius: 0px;
+    position: relative;
+    display: block;
+}
