@@ -14,5 +14,6 @@ export default {
 <style>
 .footer {
     padding-left: 25px;
+
 }
 </style>

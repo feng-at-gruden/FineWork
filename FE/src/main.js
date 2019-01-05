@@ -17,7 +17,7 @@ Vue.use(Vuetify)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-window.app = new Vue({
+const app = new Vue({
 
     el: '#app',
     router,
@@ -28,10 +28,17 @@ window.app = new Vue({
     components: { App }
 
 })
+window.app = app
 
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = "Fine Work - " + to.meta.title
+    }
+    if (to.meta.fullWidth) {
+        app.$store.commit('openDrawer', false)
+    }
+    if (to.meta.autoLoading) {
+        app.$store.commit('loading', true)
     }
     next()
 })

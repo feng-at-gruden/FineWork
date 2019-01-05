@@ -1,10 +1,11 @@
 <template>
-	<div ref="container"></div>
+	<v-flex xs12 fill-height id="my-gantt-container" ref="container"></v-flex>
 </template>
 
 <script>
 import 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/ext/dhtmlxgantt_marker'
+import 'dhtmlx-gantt/codebase/ext/dhtmlxgantt_fullscreen'
 import myGantt from '../../assets/js/Gantt.js'
 //import '../../../static/gantt/ext/dhtmlxgantt_marker.js?v=6.0.2'
 //import '../../../static/gantt/sources/dhtmlxgantt.js?v=6.0.2'
@@ -19,20 +20,27 @@ export default {
 			}
 		}
 	},
-	mounted: function() {
-
-		//myGantt.initProjectGantt(this.$refs.container)
-		gantt.init(this.$refs.container)
+	beforeCreate() {
+		document.body.parentNode.style.overflowY = "hidden";
+	},
+	mounted() {
+		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
+		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
+		myGantt.initProjectGantt(this.$refs.container)
 		gantt.parse(this.$props.plan)
 	},
 	watch:{
 		plan:{
 			deep: true,
 			handler:function(v, ov){
-				//myGantt.initProjectGantt(this.$refs.container)
-				//debugger
-				//gantt.init(this.$refs.container)
-				gantt.parse(v)
+				if(v!==ov){
+					console.log('plan changed');
+					gantt.parse(v)
+					//gantt.setSizes()
+					v.data.filter(t=>t.open).forEach(t=>{						
+						gantt.open(t.id)						
+					})				
+				}				
 			}
 		}
 	}
@@ -44,5 +52,8 @@ export default {
 @import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
 /*@import "dhtmlx-gantt/codebase/locale/locale_cn.js"*/
 @import "../../assets/css/gantt.css" 
+
+
+
 
 </style>

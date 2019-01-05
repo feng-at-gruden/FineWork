@@ -52,7 +52,7 @@ export default new Router({
                 {
                     path: ':id',
                     name: 'ProjectDetail',
-                    meta: { requiresAuth: true, level: 2, title: "工程详情", },
+                    meta: { requiresAuth: true, level: 2, title: "工程详情", fullWidth: true, autoLoading: true },
                     component: ProjectDetail
                 },
             ]

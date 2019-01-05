@@ -85,3 +85,17 @@
     position: relative;
     display: block;
 }
+.gantt-content-samll{
+    font-size: 0.75em;
+    line-height: 12px;
+    padding: 6px 0 5px 0;
+    font-style: italic;
+    text-align: center;
+}
+.gantt_tree_content .dealyed{
+    color: #f00;
+}
+.gantt-content-samll .oneline
+{
+    padding-top: 8px
+}

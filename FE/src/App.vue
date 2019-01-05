@@ -9,26 +9,9 @@
 <script>
 export default {
     name: 'App',
-    components: {},
-    data() {
-        return {
-            transitionName: ''
-        }
-    },
-    // watch: {
-    //     $route(to, from) {
-    //         if (to.level > from.level) {
-    //             this.transitionName = 'fade'
-    //         } else {
-    //             this.transitionName = 'fade'
-    //         }
-    //     }
-    // }
+    components: {},    
 }
-
 </script>
 
 <style>
-
-
 </style>

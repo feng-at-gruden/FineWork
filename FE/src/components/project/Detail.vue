@@ -1,7 +1,7 @@
 <template>
-	<div class="container" style="width:100%; height:100%">
-		<ProjectPlanGantt :plan="plan"></ProjectPlanGantt>
-	</div>
+	<v-layout justify-center fill-height align-center>
+		<ProjectPlanGantt :plan="plan"></ProjectPlanGantt>		
+	</v-layout>
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
@@ -13,31 +13,34 @@ import ProjectPlanGantt from '../gantt/ProjectPlanGantt';
 export default {
 	extends: BasePage,
 	name: 'ProjectDetail',
-	components:{ProjectPlanGantt},
+	components: { ProjectPlanGantt },
 	data() {
 		return {
-			plan:{ data: [], links: [] }
+			plan: { data: [], links: [] },
+			mainContainerCSS: 'main-container-gantt'
 		}
 	},
 	methods: {
 		loadProjectDetail() {
-			// Call Ajax
+			// Call Ajax			
 			this.$http.get(this.config.API_URL + '/project/plan', { emulateJSON: true }).then(function(res) {
+				console.log('Loaded project detail');
 				this.plan = JSON.parse(res.bodyText)
+				this.$store.commit('loading', false)
 			}, function(res) {
 
 			})
 		}
 	},
-	mounted() {
+	created() {
 		this.loadProjectDetail()
 	}
 }
 
 </script>
-<style>
-/* @import "../../../static/gantt/dhtmlxgantt.css"
-@import "../../../static/gantt/locale/locale_cn.js"
-@import "../../assets/css/gantt.css" */
-
+<style scoped>
+.m-footer {
+	display: none;
+	border: 10px solid #f00;
+}
 </style>
