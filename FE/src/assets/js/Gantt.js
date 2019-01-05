@@ -45,6 +45,9 @@ export default {
 		gantt.config.min_column_width = 40;
 
 		//gantt.config.autofit = true;
+		gantt.config.drag_progress = false;
+	    gantt.config.drag_links = false;
+	    gantt.config.readonly = true;
 		gantt.config.scale_height = 90;
 
 		gantt.config.subscales = [

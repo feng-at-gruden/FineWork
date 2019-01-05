@@ -22,12 +22,16 @@ export default {
 	},
 	beforeCreate() {
 		document.body.parentNode.style.overflowY = "hidden";
+		document.getElementById("viewport").setAttribute('content','user-scalable=yes, width=device-width, initial-scale=0.5')
 	},
 	mounted() {
 		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
 		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
 		myGantt.initProjectGantt(this.$refs.container)
 		gantt.parse(this.$props.plan)
+	},
+	beforeDestroy(){
+		document.getElementById("viewport").setAttribute('content','user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
 	},
 	watch:{
 		plan:{
@@ -43,7 +47,7 @@ export default {
 				}				
 			}
 		}
-	}
+	},	
 }
 
 </script>
