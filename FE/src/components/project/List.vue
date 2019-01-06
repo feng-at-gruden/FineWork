@@ -5,25 +5,35 @@
                 <ProjectCard :project="p" :animIn="animationIn" :animOut="'animated tada'"></ProjectCard>
             </v-flex>
         </v-layout>
+        <div class="text-xs-center">
+            <v-pagination v-model="page" :total-visible="7" :length="4" circle></v-pagination>
+        </div>
+        <v-btn fab bottom right color="pink" dark fixed @click.stop="dialog = !dialog">
+            <v-icon>add</v-icon>
+        </v-btn>
+        <ProjectInfoDialog :dialog="dialog" @saveClick="dialogSaveClick" @cancelClick="dialogCancelClick"></ProjectInfoDialog>
     </v-container>
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
 import ProjectCard from '../ui/ProjectCard'
+import ProjectInfoDialog from '../ui/ProjectInfoDialog'
 
 export default {
     extends: BasePage,
     name: 'ProjectList',
-    components: { ProjectCard },
+    components: { ProjectCard, ProjectInfoDialog },
     data() {
         return {
-            projects: [],            
+            projects: [],
+            page: 2,
+            dialog: false
         }
     },
-    computed:{
-        animationIn(){
+    computed: {
+        animationIn() {
             return this.util.randomIn()
-        },        
+        },
     },
     methods: {
         loadPorjects() {
@@ -35,7 +45,15 @@ export default {
             }, function(res) {
 
             })
-        }
+        },
+        dialogSaveClick(v){
+            console.log('dialogSaveClick', v)
+            this.dialog = false
+        },
+        dialogCancelClick(){
+            console.log('dialogCancelClick')
+            this.dialog = false
+        },
     },
     created() {
         this.loadPorjects()
