@@ -48,7 +48,7 @@ export default {
 		gantt.config.drag_progress = false;
 	    gantt.config.drag_links = false;
 	    gantt.config.readonly = true;
-		gantt.config.scale_height = 90;
+		gantt.config.scale_height = 60;
 
 		gantt.config.subscales = [
 			{ unit: "week", step: 1, template: this.weekScaleTemplate },
@@ -57,7 +57,7 @@ export default {
 
 		gantt.init(id);
 		gantt.config.columns = [
-			{ name: "text", label: "施工任务", tree: true, width: "160" },
+			{ name: "text", label: "施工任务", tree: true, width: "*" },
 			{
 				name: "start_date",
 				label: "施工周期",
@@ -66,7 +66,7 @@ export default {
 				template(obj) {
 					if (obj.progress > 0) {
 						var str = '<div>' + obj.plan_start + " - " + obj.plan_end + '</div>'
-						str = str + '<div ' + (obj.exceed ? 'class="dealyed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
+						str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
 					} else {
 						var str = '<div class="oneline">' + obj.plan_start + " - " + obj.plan_end + '</div>'
 					}
@@ -77,11 +77,11 @@ export default {
 				name: "duration",
 				label: "天",
 				align: "center",
-				width: "25",
+				width: "23",
 				template(obj) {
 					if (obj.progress > 0) {
 						var str = '<div>' + obj.plan_duration + '</div>'
-						str = str + '<div ' + (obj.exceed ? 'class="dealyed"' : '') + '>' + obj.actual_duration + '</div>'
+						str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
 					} else {
 						var str = '<div class="oneline">' + obj.plan_duration + '</div>'
 					}
@@ -104,7 +104,7 @@ export default {
 					} else {
 						str = obj.progress * 100 + "%"
 					}
-					return "<div " + (obj.exceed ? 'class="dealyed"' : '') + '>' + str + "</div>"
+					return "<div class=\"gantt-content-left-status " + (obj.exceed ? 'project-delayed' : '') + '\">' + str + "</div>"
 				}
 			}
 		];

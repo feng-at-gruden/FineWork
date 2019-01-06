@@ -19,13 +19,13 @@ export default new Router({
             component: Login
         },
         {
-            path: '/',            
+            path: '/',
             redirect: '/Dashboard',
             meta: { requiresAuth: true, level: 1, title: "建筑施工项目进度跟踪系统", },
             component: Main,
         },
         {
-            path: '/',            
+            path: '/',
             component: Main,
             children: [{
                 path: 'Dashboard',
@@ -46,7 +46,7 @@ export default new Router({
                 {
                     path: 'List',
                     name: 'ProjectList',
-                    meta: { requiresAuth: true, level: 2, title: "工程一览", },
+                    meta: { requiresAuth: true, level: 2, title: "工程一览" },
                     component: ProjectList
                 },
                 {

@@ -35,6 +35,10 @@ app
 		res.json(mockData.tasks)
 		console.log('GET /project/plan')
 	})
+	.get('/project/list', (req, res) => {
+		res.json(mockData.projects)
+		console.log('GET /project/list')
+	})
 	.post('/task', (req, res) => {
 		console.log('POST Request')
 		tasks.data.push({
