@@ -12,7 +12,7 @@
                 <v-btn flat color="orange" @click="gotoDetail" slot="">Share</v-btn>
                 <v-btn flat color="orange">Explore</v-btn>
             </v-card-actions>
-        </v-card>123
+        </v-card>
     </CustomTransition>
 </template>
 <script>
@@ -20,37 +20,37 @@ import CustomTransition from './CustomTransition'
 import util from '../../assets/js/Util'
 
 export default {
-    name: 'ProjectCard',    
+    name: 'ProjectCard',
     props: ['project', 'animIn', 'animOut'],
-    components:{CustomTransition},
+    components: { CustomTransition },
     data() {
         return {
             clicked: false,
             util,
         }
     },
-    computed:{
-        animationIn(){
-            if(this.$props.animIn)
+    computed: {
+        animationIn() {
+            if (this.$props.animIn)
                 return this.$props.animIn
             else
                 return this.util.randomIn()
         },
-        animationOut(){
-            if(this.$props.animOut)
+        animationOut() {
+            if (this.$props.animOut)
                 return this.$props.animOut
             else
                 return this.util.randomOut()
         }
     },
     created() {
-      
+
     },
     methods: {
         gotoDetail() {
-            this.clicked = true            
+            this.clicked = true
         },
-        handleAnimEnd(){
+        handleAnimEnd() {
             this.$router.push('/Project/' + this.$props.project.id)
         }
     }

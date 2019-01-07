@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<v-app dark>
-			<Header />
+		<v-app >
 			<Drawer />
+			<Header />			
 			<v-content>
 				<v-container fill-height :class="[fullWidth?'main-container-full':'main-container', '']">
 					<v-layout justify-center fill-height row wrap align-center>

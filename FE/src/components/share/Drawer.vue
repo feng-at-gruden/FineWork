@@ -1,46 +1,29 @@
 <template>
-	<v-navigation-drawer v-model="drawer" :mini-variant="mini" @input="handleInput" clipped fixed app>
-		<v-list class="pa-1">
-			<v-list-tile v-if="mini" @click.stop="mini = !mini">
-				<v-list-tile-action>
-					<v-icon>chevron_right</v-icon>
-				</v-list-tile-action>
-			</v-list-tile>
-			<v-list-tile avatar tag="div">
-				<v-list-tile-avatar>
-					<img src="https://randomuser.me/api/portraits/men/85.jpg">
-          			</v-list-tile-avatar>
+	<v-navigation-drawer v-model="drawer" @input="handleInput" class="my-drawer grey lighten-4" clipped fixed app>
+		<v-list dense class="grey lighten-4">
+			<template v-for="(item, i) in items">
+				<v-layout row v-if="item.heading" align-center :key="i">
+					<v-flex xs6>
+						<v-subheader v-if="item.heading">
+							{{ item.heading }}
+						</v-subheader>
+					</v-flex>
+					<v-flex xs6 class="text-xs-right">
+						<!--<v-btn small flat>edit</v-btn>-->
+					</v-flex>
+				</v-layout>
+				<v-divider dark v-else-if="item.divider" class="my-3" :key="i"></v-divider>
+				<v-list-tile :key="i" v-else @click="goto(item)">
+					<v-list-tile-action>
+						<v-icon>{{ item.icon }}</v-icon>
+					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title>{{userName}}</v-list-tile-title>
+						<v-list-tile-title class="grey--text">
+							{{ item.title }}
+						</v-list-tile-title>
 					</v-list-tile-content>
-					<v-list-tile-action>
-						<v-btn icon @click.stop="mini = !mini">
-							<v-icon>chevron_left</v-icon>
-						</v-btn>
-					</v-list-tile-action>
-			</v-list-tile>
-		</v-list>
-		<v-list class="pt-0" dense>
-			<v-divider light></v-divider>
-			<div v-for="(item,index) in navItems">
-				<v-list-tile v-if="!item.subNav" @click="goto(item)">
-					<v-list-tile-action>
-						<v-icon>{{item.icon}}</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-title>{{item.title}}</v-list-tile-title>
 				</v-list-tile>
-				<v-list-group no-action :prepend-icon="item.icon" v-if="item.subNav">
-					<v-list-tile slot="activator">
-						<v-list-tile-title>{{item.title}}</v-list-tile-title>
-					</v-list-tile>
-					<v-list-tile v-for="(subItem, i) in item.subNav" :key="i" @click="goto(subItem)" width="200px">
-						<v-list-tile-title v-text="subItem.title"></v-list-tile-title>
-						<v-list-tile-action>
-							<v-icon v-text="subItem.icon"></v-icon>
-						</v-list-tile-action>
-					</v-list-tile>
-				</v-list-group>
-			</div>
+			</template>
 		</v-list>
 	</v-navigation-drawer>
 </template>
@@ -52,38 +35,23 @@ export default {
 	data() {
 		return {
 			mini: false,
-			navItems: [
+			items: [
 				/*{ title: '登录', link: '/login', icon: 'supervisor_account' },*/
 				{ title: '主页', link: '/', icon: 'home' },
-				{
-					title: '工程管理',
-					link: '',
-					icon: 'location_city',
-					subNav: [
-						{ title: '工程一览', link: '/project/list', icon: 'view_list' },
-						{ title: '新建工程', link: '/project/create', icon: 'playlist_add' },
-						{ title: '工程详细', link: '/project/12', icon: 'view_module' },
-					]
-				},
-				{
-					title: '计划管理',
-					link: '',
-					icon: 'assessment',
-					subNav: [
-						{ title: '工程计划', link: '/project/plan', icon: 'view_module' },
-						{ title: '阶段计划', link: '/plan/phase', icon: 'view_headline' },
-					]
-				},
-				{
-					title: '工作汇报',
-					link: '',
-					icon: 'assessment',
-					subNav: [
-						{ title: '日工作汇报', link: '/work/daily', icon: 'view_module' },
-					]
-				},
-				{ title: 'About', link: 'about', icon: 'question_answer' },
-				{ title: '退出', link: 'logout', icon: 'directions_run' }
+				{ divider: true },
+				{ heading: '工程管理' },
+				{ title: '新建工程', link: '/project/create', icon: 'library_add' },
+				{ title: '工程一览', link: '/project/list', icon: 'location_city' },
+				{ divider: true },
+				{ heading: '计划管理' },
+				{ title: '工程计划', link: '/project/plan', icon: 'view_list' },
+				{ title: '阶段计划', link: '/plan/phase', icon: 'line_style' },
+				{ divider: true },
+				{ heading: '工作汇报' },
+				{ title: '施工日志', link: '/work/daily', icon: 'assignment' },
+				{ divider: true },
+				{ heading: '系统管理' },
+				{ title: '账号管理', link: '/setting/account', icon: 'supervisor_account' },
 			],
 			right: null
 		}
@@ -104,7 +72,7 @@ export default {
 	methods: {
 		goto(item) {
 			if (item.link == 'logout') {
-				auth.logout()
+				this.auth.logout()
 			} else {
 				this.$router.push(item.link)
 			}
@@ -117,4 +85,10 @@ export default {
 
 </script>
 <style>
+.navigation-drawer__border {
+	display: none;
+}
+.my-drawer{
+	padding-top: 15px;	
+}
 </style>

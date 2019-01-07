@@ -5,7 +5,7 @@ import config from './Config'
 export default {
 	logout() {
 		window.app.$store.commit('userLogout')
-		router.replace('/login')
+		router.push('/login')
 	},
 	login(username, password, callback) {
 		var url = window.app.$route.query['returnUrl']
@@ -23,7 +23,7 @@ export default {
 	},
 	checkIsLogin(state) {
 		if (!state.identity.token) {
-			return true
+			return false
 		}
 		return true
 	}
