@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar color="amber" app absolute clipped-left>
+    <v-toolbar :color="config.Theme" app absolute clipped-left>
         <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
         <v-toolbar-title>{{title}}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -32,9 +32,11 @@
     </v-toolbar>
 </template>
 <script>
-import auth from '../../assets/js/Auth.js'
+import BasePage from '../../assets/js/BasePage'
+
 export default {
     name: 'Header',
+    extends: BasePage,
     props: [],
     computed: {
         title() {
@@ -42,7 +44,7 @@ export default {
         }
     },
     data: () => ({
-        auth,
+        
     }),
     methods: {
         openDrawer() {
