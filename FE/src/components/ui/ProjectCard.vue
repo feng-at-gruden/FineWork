@@ -9,13 +9,14 @@
                 </div>
             </v-card-title>
             <v-card-actions>
-                <v-btn flat color="orange" @click="gotoDetail" slot="">Share</v-btn>
-                <v-btn flat color="orange">Explore</v-btn>
+                <v-btn flat :color="config.Theme" @click="gotoDetail" slot="">Share</v-btn>
+                <v-btn flat :color="config.Theme">Explore</v-btn>
             </v-card-actions>
         </v-card>
     </CustomTransition>
 </template>
 <script>
+import config from '../../assets/js/Config'
 import CustomTransition from './CustomTransition'
 import util from '../../assets/js/Util'
 
@@ -27,6 +28,7 @@ export default {
         return {
             clicked: false,
             util,
+            config
         }
     },
     computed: {

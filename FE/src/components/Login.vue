@@ -44,8 +44,8 @@ export default {
 	props: [],
 	data() {
 		return {
-			username: '',
-			password: '',
+			username: 'feng.guo@gruden.com',
+			password: '123456',
 			alert: false,
 			errorMsg: ''
 		}

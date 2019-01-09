@@ -1,17 +1,20 @@
 <template>
-    <v-toolbar :color="config.Theme" app absolute clipped-left>
+    <v-toolbar :color="config.Theme" app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
         <v-toolbar-title>{{title}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon>
             <v-icon>search</v-icon>
         </v-btn>
+        <v-btn icon>
+            <v-icon>info_outline</v-icon>
+        </v-btn>
         <v-menu bottom offset-y transition="slide-y-transition">
             <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list dense class="setting-menu">
-                <v-list-tile @click="goto('myaccount')">
+                <v-list-tile @click="goto('/Setting/MyAccount')">
                     <v-list-tile-action class="setting-menu-list-tile-action">
                         <v-icon>settings</v-icon>
                     </v-list-tile-action>

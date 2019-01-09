@@ -1,6 +1,21 @@
 <template>
-    <v-container grid-list-xl>
-        <v-layout row wrap>
+    <v-container grid-list-xl class="project-list-container">
+        <v-layout justify-end row>
+            <v-flex sm2 xs5>
+                <v-btn-toggle v-model="toggle_one" mandatory>
+                    <v-btn flat>
+                        <v-icon>view_module</v-icon>
+                    </v-btn>
+                    <v-btn flat>
+                        <v-icon>view_list</v-icon>
+                    </v-btn>
+                    <v-btn flat>
+                        <v-icon>vertical_split</v-icon>
+                    </v-btn>
+                </v-btn-toggle>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap>            
             <v-flex lg4 md4 sm6 xs12 v-for="p in projects">
                 <ProjectCard :project="p" :animIn="animationIn" :animOut="'animated tada'"></ProjectCard>
             </v-flex>
@@ -8,7 +23,7 @@
         <div class="text-xs-center">
             <v-pagination v-model="page" :total-visible="7" :length="4" circle></v-pagination>
         </div>
-        <v-btn fab bottom right color="pink" dark fixed @click.stop="dialog = !dialog">
+        <v-btn fab bottom right :color="config.Theme" dark fixed @click.stop="dialog = !dialog">
             <v-icon>add</v-icon>
         </v-btn>
         <ProjectInfoDialog :dialog="dialog" @saveClick="dialogSaveClick" @cancelClick="dialogCancelClick"></ProjectInfoDialog>
@@ -27,7 +42,8 @@ export default {
         return {
             projects: [],
             page: 2,
-            dialog: false
+            dialog: false,
+            toggle_one: 0,
         }
     },
     computed: {
@@ -46,11 +62,11 @@ export default {
 
             })
         },
-        dialogSaveClick(v){
+        dialogSaveClick(v) {
             console.log('dialogSaveClick', v)
             this.dialog = false
         },
-        dialogCancelClick(){
+        dialogCancelClick() {
             console.log('dialogCancelClick')
             this.dialog = false
         },
@@ -62,4 +78,7 @@ export default {
 
 </script>
 <style>
+.project-list-container{
+    padding-top: 0px;
+}
 </style>

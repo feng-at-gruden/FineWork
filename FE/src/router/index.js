@@ -8,6 +8,9 @@ import Dashboard from '@/components/Dashboard'
 import CreateProject from '@/components/project/Create'
 import ProjectList from '@/components/project/List'
 import ProjectDetail from '@/components/project/Detail'
+import PhasePlan from '@/components/plan/Phase'
+import MyAccount from '@/components/setting/MyAccount'
+
 
 Vue.use(Router)
 
@@ -20,7 +23,7 @@ export default new Router({
         },
         {
             path: '/',
-            redirect: '/dashboard',
+            redirect: '/Dashboard',
             meta: { requiresAuth: true, level: 1, title: "建筑施工项目进度跟踪系统", },
             component: Main,
         },
@@ -56,6 +59,28 @@ export default new Router({
                     component: ProjectDetail
                 },
             ]
+        },
+        {
+            path: '/Plan',
+            component: Main,
+            children: [
+                {
+                    path: ':id',
+                    name: 'Phase',
+                    meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true },
+                    component: PhasePlan
+                },
+            ]
+        },
+        {
+            path: '/',
+            component: Main,
+            children: [{
+                path: '/Setting/MyAccount',
+                name: 'MyAccount',
+                meta: { requiresAuth: true, level: 2, title: "个人设置", },
+                component: MyAccount
+            }]
         },
 
     ]
