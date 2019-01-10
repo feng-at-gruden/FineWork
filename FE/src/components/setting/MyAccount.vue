@@ -17,7 +17,7 @@
                                 </v-layout>
                             </v-flex>
                             <v-text-field v-model="password" :rules="passwordRules" label="密码" prepend-icon="security" required></v-text-field>
-                            <v-text-field v-model="rePassword" :rules="passwordRules" label="确认密码" prepend-icon="security" required></v-text-field>
+                            <v-text-field v-model="rePassword" :rules="rePasswordRules" label="确认密码" prepend-icon="security" required></v-text-field>
                             <v-text-field v-model="email" :rules="emailRules" label="E-mail" prepend-icon="mail"></v-text-field>
                             <v-text-field v-model="phone" :rules="phoneRules" label="电话" type="tel" prepend-icon="phone"></v-text-field>
                             <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="角色" prepend-icon="perm_identity" required></v-select>
@@ -53,6 +53,11 @@ export default {
         password: '',
         passwordRules: [
             v => !!v || '密码不能为空',
+            v => (v && v.length < 4) || '密码必须4位以上'
+        ],
+        rePassword: '',
+        rePasswordRules: [
+            v => !!v || '请确认您的密码',
             v => (v && v.length < 4) || '密码必须4位以上'
         ],
         email: '',

@@ -5,7 +5,7 @@
 				<v-layout align-center justify-center>
 					<v-flex xs12 sm8 md4>
 						<v-card class="elevation-12">
-							<v-toolbar :color="config.Theme">
+							<v-toolbar color="primary">
 								<v-toolbar-title>{{title}}</v-toolbar-title>
 								<v-spacer></v-spacer>
 								<v-tooltip bottom>
@@ -23,7 +23,7 @@
 							</v-card-text>
 							<v-card-actions>
 								<v-spacer></v-spacer>
-								<v-btn :color="config.Theme" @click="handleLoginClick">登录</v-btn>
+								<v-btn color="primary" @click="handleLoginClick">登录</v-btn>
 							</v-card-actions>
 						</v-card>
 						<v-alert :value="alert" type="error" icon="warning" transition="scale-transition">

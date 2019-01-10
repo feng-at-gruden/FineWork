@@ -2,10 +2,15 @@ body{
     height: 100%;
     padding: 0px;
     margin: 0px;
-    overflow: hidden;
+    overflow: auto;
+    width:100%;
 }
-.main-container{
+.v-content-container{
 
+ }
+.main-container{
+    /*overflow: auto;*/
+    /*height: 100%;*/
 }
 
 .main-container-full{

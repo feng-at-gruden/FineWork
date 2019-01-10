@@ -32,6 +32,7 @@ export default {
 	},
 	beforeDestroy(){
 		document.getElementById("viewport").setAttribute('content','user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
+		document.body.parentNode.style.overflowY = "auto";
 	},
 	watch:{
 		plan:{

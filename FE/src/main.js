@@ -8,11 +8,12 @@ import store from './vuex/store'
 import auth from './assets/js/Auth'
 import Vuetify from 'vuetify'
 import resource from './resource'
+import config from './assets/js/Config'
 import 'vuetify/dist/vuetify.min.css'
 import './assets/css/site.css'
 
 Vue.use(Vuex)
-Vue.use(Vuetify)
+Vue.use(Vuetify,{theme: config.Theme})
 
 Vue.config.productionTip = false
 

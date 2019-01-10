@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar :color="config.Theme" app fixed clipped-left>
+    <v-toolbar color="primary" app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
         <v-toolbar-title>{{title}}</v-toolbar-title>
         <v-spacer></v-spacer>

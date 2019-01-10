@@ -1,29 +1,15 @@
 <template>
     <v-container grid-list-xl class="project-list-container">
-        <v-layout justify-end row>
-            <v-flex sm2 xs5>
-                <v-btn-toggle v-model="toggle_one" mandatory>
-                    <v-btn flat>
-                        <v-icon>view_module</v-icon>
-                    </v-btn>
-                    <v-btn flat>
-                        <v-icon>view_list</v-icon>
-                    </v-btn>
-                    <v-btn flat>
-                        <v-icon>vertical_split</v-icon>
-                    </v-btn>
-                </v-btn-toggle>
-            </v-flex>
-        </v-layout>
+        <ProjectFilter @filterChange="handleFilterChange" :layout="layout"></ProjectFilter>
         <v-layout row wrap>            
             <v-flex lg4 md4 sm6 xs12 v-for="p in projects">
                 <ProjectCard :project="p" :animIn="animationIn" :animOut="'animated tada'"></ProjectCard>
             </v-flex>
         </v-layout>
         <div class="text-xs-center">
-            <v-pagination v-model="page" :total-visible="7" :length="4" circle></v-pagination>
+            <v-pagination v-model="page" :total-visible="7" :length="4" circle color="primary"></v-pagination>
         </div>
-        <v-btn fab bottom right :color="config.Theme" dark fixed @click.stop="dialog = !dialog">
+        <v-btn fab bottom right color="primary" dark fixed @click.stop="dialog = !dialog">
             <v-icon>add</v-icon>
         </v-btn>
         <ProjectInfoDialog :dialog="dialog" @saveClick="dialogSaveClick" @cancelClick="dialogCancelClick"></ProjectInfoDialog>
@@ -31,19 +17,20 @@
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
+import ProjectFilter from '../ui/ProjectFilter'
 import ProjectCard from '../ui/ProjectCard'
 import ProjectInfoDialog from '../ui/ProjectInfoDialog'
 
 export default {
     extends: BasePage,
     name: 'ProjectList',
-    components: { ProjectCard, ProjectInfoDialog },
+    components: { ProjectFilter, ProjectCard, ProjectInfoDialog },
     data() {
         return {
             projects: [],
             page: 2,
             dialog: false,
-            toggle_one: 0,
+            layout: 0,
         }
     },
     computed: {
@@ -70,6 +57,9 @@ export default {
             console.log('dialogCancelClick')
             this.dialog = false
         },
+        handleFilterChange(filter){
+            console.log(filter)
+        }
     },
     created() {
         this.loadPorjects()
