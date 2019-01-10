@@ -3,7 +3,7 @@
         <ProjectFilter @filterChange="handleFilterChange" :layout="layout"></ProjectFilter>
         <v-layout row wrap>            
             <v-flex lg4 md4 sm6 xs12 v-for="p in projects">
-                <ProjectCard :project="p" :animIn="animationIn" :animOut="'animated tada'"></ProjectCard>
+                <ProjectCard :project="p" :animIn="'animated fadeIn'" :animOut="'animated pulse'"></ProjectCard>
             </v-flex>
         </v-layout>
         <div class="text-xs-center">
