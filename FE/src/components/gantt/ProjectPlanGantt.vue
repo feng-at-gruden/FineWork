@@ -39,9 +39,7 @@ export default {
 			deep: true,
 			handler:function(v, ov){
 				if(v!==ov){
-					console.log('plan changed');
 					gantt.parse(v)
-					//gantt.setSizes()
 					v.data.filter(t=>t.open).forEach(t=>{						
 						gantt.open(t.id)						
 					})				

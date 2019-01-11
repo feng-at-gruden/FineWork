@@ -2,7 +2,7 @@
     <v-container grid-list-xl class="project-list-container">
         <ProjectFilter @filterChange="handleFilterChange" :layout="layout"></ProjectFilter>
         <v-layout row wrap>            
-            <v-flex lg4 md4 sm6 xs12 v-for="p in projects">
+            <v-flex lg4 md4 sm6 xs12 v-for="p in projects" :key="p.id">
                 <ProjectCard :project="p" :animIn="'animated fadeIn'" :animOut="'animated pulse'"></ProjectCard>
             </v-flex>
         </v-layout>

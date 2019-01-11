@@ -8,7 +8,7 @@ export default {
 			auth,
 			config,
 			util,
-			mainContainerCSS:'main-container'
+			mainContainerCSS:'main-container',			
 		}
 	},
     computed: {
@@ -20,7 +20,7 @@ export default {
 		},
 		showOptionMenu(){
 			return this.$route.meta.showOptionMenu
-		},
+		},		
 		loading(){
 			return this.$store.state.loading
 		},
@@ -28,8 +28,7 @@ export default {
 			return this.util.IsPC() && !this.$route.meta.fullWidth
 		}
 	},
-	methods:{
-
+	methods:{		
 	},	
 	created(){
 	    if (this.$route.meta.requiresAuth) {

@@ -11,7 +11,7 @@
                 <v-icon>notes</v-icon>
             </v-btn>
             <v-list dense>
-                <v-list-tile v-for="(item, index) in $route.meta.optionMenu" @click="handleOptionMenuClick(item)">
+                <v-list-tile v-for="(item, index) in $route.meta.optionMenu" :key="item.text" @click="handleOptionMenuClick(item)">
                     <v-list-tile-action class="setting-menu-list-tile-action">
                         <v-icon>{{item.icon}}</v-icon>
                     </v-list-tile-action>

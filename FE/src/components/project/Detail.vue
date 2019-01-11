@@ -1,12 +1,12 @@
 <template>
 	<v-layout justify-center fill-height align-center>
 		<ProjectPlanGantt :plan="plan"></ProjectPlanGantt>
-		<ProjectInfoDialog :open="openProjectInfoDialog" @dialogClose="handleDialogClose"></ProjectInfoDialog>
-
+		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @dialogClose="handleProjectInfoDialogClose"></ProjectInfoDialog>
+		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @dialogClose="handleTimelineDialogClose"></ProjectTimeline>
 		<v-snackbar v-model="snackbar">
-			licked
-			<v-btn color="pink" flat @click="snackbar = false">
-				Close
+			{{snackbarMessage}}
+			<v-btn :color="snackbarColor" flat @click="snackbar = false">
+				确定
 			</v-btn>
 		</v-snackbar>
 	</v-layout>
@@ -15,6 +15,7 @@
 import BasePage from '../../assets/js/BasePage'
 import ProjectPlanGantt from '../gantt/ProjectPlanGantt'
 import ProjectInfoDialog from '../ui/ProjectInfoDialog'
+import ProjectTimeline from '../ui/ProjectTimeline'
 
 //import '../../../static/gantt/dhtmlxgantt.js?v=6.0.2'
 //import '../../../static/gantt/ext/dhtmlxgantt_marker.js?v=6.0.2'
@@ -23,11 +24,16 @@ import ProjectInfoDialog from '../ui/ProjectInfoDialog'
 export default {
 	extends: BasePage,
 	name: 'ProjectDetail',
-	components: { ProjectPlanGantt, ProjectInfoDialog },
+	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline },
 	data() {
 		return {
-			snackbar:false,
-			openProjectInfoDialog:false,
+			openProjectInfoDialog: false,
+			openProjectTimeline: false,
+			snackbar: false,
+			snackbarMessage: '',
+			snackbarColor: '',
+			project: {},
+			timeline: [],
 			plan: { data: [], links: [] },
 			mainContainerCSS: 'main-container-gantt'
 		}
@@ -39,22 +45,15 @@ export default {
 	},
 	watch: {
 		selectedOptionMenu(v) {
-			//this.snackbar = true
 			switch (v.text) {
 				case '项目信息':
 					this.openProjectInfoDialog = true
-					console.log('项目信息')
 					break;
 				case '时间轴':
-					this.openProjectInfoDialog = true
-					console.log('时间轴')
+					this.openProjectTimeline = true
 					break;
 				case '删除项目':
 					this.openProjectInfoDialog = true
-					console.log('删除项目')
-					break;
-				default:
-					// statements_def
 					break;
 			}
 		}
@@ -63,17 +62,25 @@ export default {
 		loadProjectDetail() {
 			// Call Ajax
 			this.$http.get(this.config.API_URL + '/project/plan', { emulateJSON: true }).then(function(res) {
-				console.log('Loaded project detail');
 				this.plan = JSON.parse(res.bodyText)
 				this.$store.commit('loading', false)
 			}, function(res) {
-
+				this.showSnackbar('项目信息加载失败!', 'error')
 			})
 		},
-		handleDialogClose(){
+		handleProjectInfoDialogClose() {
 			this.openProjectInfoDialog = false
 			this.$store.commit('optionMenuClick', {})
-		}
+		},
+		handleTimelineDialogClose() {
+			this.openProjectTimeline = false
+			this.$store.commit('optionMenuClick', {})
+		},
+		showSnackbar(msg, color) {
+			this.snackbarMessage = msg
+			this.snackbarColor = color
+			this.snackbar = true
+		},
 	},
 	created() {
 		this.loadProjectDetail()

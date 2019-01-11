@@ -7,7 +7,7 @@
 		</v-flex>
 		<v-flex d-flex lg6 md6 sm8 xs12>
 			<v-layout justify-start>
-				<v-checkbox v-for="item in config.ProjectStatus" v-model="filter" :label="item.text" :value="item.value" @change="filterChange"></v-checkbox>
+				<v-checkbox v-for="item in config.ProjectStatus" v-model="filter" :label="item.text" :value="item.value" :key="item.value" @change="filterChange"></v-checkbox>
 			</v-layout>
 		</v-flex>
 		<v-flex lg2 md4 sm12 xs12 offset-lg3>
