@@ -1,7 +1,7 @@
 <template>
     <v-stepper v-model="step" vertical color="primary">
         <v-stepper-step :complete="step > 1" step="1">
-            项目基础信息
+            设置项目基础信息
         </v-stepper-step>
         <v-stepper-content step="1">
             <v-card color="grey lighten-5" class="mb-5">
@@ -73,18 +73,27 @@
         </v-stepper-content>
         <v-stepper-step :complete="step > 2" step="2">设置工程施工阶段</v-stepper-step>
         <v-stepper-content step="2">
-            <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+            <!-- 项目阶段 -->
+            <v-card color="grey lighten-5" class="mb-5">
+                <v-container>
+                    <v-layout>
+                        <v-flex xs12 sm8>
+                            <v-select :items="config.ProjectPhase" v-model="project.phase" label="请选择项目主要施工阶段" multiple chips hint="各施工阶段工期评估可稍后在项目计划中进行设置" persistent-hint></v-select>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-card>
             <v-btn color="primary" @click="step++">下一步</v-btn>
             <v-btn flat @click="step--">上一步</v-btn>
         </v-stepper-content>
-        <v-stepper-step :complete="step > 3" step="3">添加项目管理人员</v-stepper-step>
+        <!-- <v-stepper-step :complete="step > 3" step="3">添加项目管理人员</v-stepper-step>
         <v-stepper-content step="3">
             <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
             <v-btn color="primary" @click="step++">下一步</v-btn>
             <v-btn flat @click="step--">上一步</v-btn>
-        </v-stepper-content>
-        <v-stepper-step step="4">项目信息确认</v-stepper-step>
-        <v-stepper-content step="4">
+        </v-stepper-content> -->
+        <v-stepper-step step="3">项目信息确认</v-stepper-step>
+        <v-stepper-content step="3">
             <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
             <v-btn color="primary" @click="step = 1">生成项目</v-btn>
             <v-btn flat @click="step--">上一步</v-btn>
@@ -114,6 +123,7 @@ export default {
             project: {
                 startDate: new Date().toISOString().substr(0, 10),
                 endDate: new Date().toISOString().substr(0, 10),
+                phase:[],
             }
         }
     },

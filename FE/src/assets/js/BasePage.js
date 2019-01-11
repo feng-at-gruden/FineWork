@@ -18,6 +18,9 @@ export default {
 		fullWidth() {
 			return this.$route.meta.fullWidth
 		},
+		showOptionMenu(){
+			return this.$route.meta.showOptionMenu
+		},
 		loading(){
 			return this.$store.state.loading
 		},

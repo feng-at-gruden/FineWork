@@ -55,7 +55,13 @@ export default new Router({
                 {
                     path: ':id',
                     name: 'ProjectDetail',
-                    meta: { requiresAuth: true, level: 2, title: "工程详情", fullWidth: true, autoLoading: true },
+                    meta: { requiresAuth: true, level: 2, title: "工程详情", fullWidth: true, autoLoading: true, 
+                        showOptionMenu: true, 
+                        optionMenu: [
+                        { icon: 'info', text: '项目信息' }, 
+                        { icon: 'timeline', text: '时间轴' }, 
+                        { icon: 'delete', text: '删除项目' }, 
+                        ] },
                     component: ProjectDetail
                 },
             ]
@@ -63,14 +69,12 @@ export default new Router({
         {
             path: '/Plan',
             component: Main,
-            children: [
-                {
-                    path: ':id',
-                    name: 'Phase',
-                    meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true },
-                    component: PhasePlan
-                },
-            ]
+            children: [{
+                path: ':id',
+                name: 'Phase',
+                meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true },
+                component: PhasePlan
+            }, ]
         },
         {
             path: '/',

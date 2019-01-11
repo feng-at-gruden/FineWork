@@ -1,20 +1,17 @@
 <template>
-    <v-dialog v-model="$props.dialog" width="800px">
-        <v-card>
+    <v-dialog v-model="dialogOpen" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
+        <v-card height="100%">
             <v-card-title class="grey lighten-4 py-4 title">
-                Create contact
+                项目信息
             </v-card-title>
             <v-container grid-list-sm class="pa-4">
                 <v-layout row wrap>
                     <v-flex xs12 align-center justify-space-between>
                         <v-layout align-center>
                             <v-avatar size="40px" class="mr-3">
-                                <img
-                            src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
-                            alt=""
-                          >
-                        </v-avatar>
-                                <v-text-field placeholder="Name"></v-text-field>
+                                <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt="" >
+                            </v-avatar>
+                            <v-text-field placeholder="姓名"></v-text-field>
                         </v-layout>
                     </v-flex>
                     <v-flex xs6>
@@ -23,12 +20,7 @@
                     <v-flex xs6>
                         <v-text-field placeholder="Job title"></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
-                        <v-text-field prepend-icon="mail" placeholder="Email"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-text-field type="tel" prepend-icon="phone" placeholder="(000) 000 - 0000" mask="phone"></v-text-field>
-                    </v-flex>
+                    
                     <v-flex xs12>
                         <v-text-field prepend-icon="notes" placeholder="Notes"></v-text-field>
                     </v-flex>
@@ -46,22 +38,43 @@
 <script>
 export default {
     name: 'ProjectInfoDialog',
-    props:['dialog'],
+    props: ['open'],
     data() {
         return {
-           
+
+        }
+    },
+    computed:{
+        dialogOpen:{
+            get(){return this.$props.open},
+            set(v){
+                this.$emit('dialogClose')
+            }
         }
     },
     methods: {
-        handleCancelClick(){
-            this.$emit('cancelClick')
+        handleCancelClick() {
+            this.dialogOpen = false
         },
-        handleSaveClick(){
-            this.$emit('saveClick', {})
+        handleSaveClick() {
+            this.dialogOpen = false
         }
     }
 }
 
 </script>
 <style>
+.half-right-dialog {
+    width: 480px;
+    right: 0;
+    height: auto;
+    position: fixed;
+    overflow-y: auto;
+    top: 65px;
+    margin:0;
+    bottom: 0px;
+}
+
+.dialog-left-transition {}
+
 </style>

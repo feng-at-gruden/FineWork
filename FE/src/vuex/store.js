@@ -7,6 +7,7 @@ const store = new Vuex.Store({
 	state: {
 		drawer: true,
 		loading: false,
+		selectedOptionMenu:null,
 		identity: {
 			username: '',
 			realname:'',
@@ -25,7 +26,10 @@ const store = new Vuex.Store({
 		},
 		userLogout(state) {
 			state.identity = {};
-		},		
+		},
+		optionMenuClick(state,v){
+			state.selectedOptionMenu = v
+		}	
 	}
 })
 

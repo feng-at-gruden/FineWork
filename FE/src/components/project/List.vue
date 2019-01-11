@@ -9,10 +9,6 @@
         <div class="text-xs-center">
             <v-pagination v-model="page" :total-visible="7" :length="4" circle color="primary"></v-pagination>
         </div>
-        <v-btn fab bottom right color="primary" dark fixed @click.stop="dialog = !dialog">
-            <v-icon>add</v-icon>
-        </v-btn>
-        <ProjectInfoDialog :dialog="dialog" @saveClick="dialogSaveClick" @cancelClick="dialogCancelClick"></ProjectInfoDialog>
     </v-container>
 </template>
 <script>
@@ -29,7 +25,6 @@ export default {
         return {
             projects: [],
             page: 2,
-            dialog: false,
             layout: 0,
         }
     },
@@ -44,18 +39,9 @@ export default {
             this.$http.get(this.config.API_URL + '/project/list', { emulateJSON: true }).then(function(res) {
                 console.log('Loaded project list');
                 this.projects = JSON.parse(res.bodyText)
-                //this.$store.commit('loading', false)                
             }, function(res) {
 
             })
-        },
-        dialogSaveClick(v) {
-            console.log('dialogSaveClick', v)
-            this.dialog = false
-        },
-        dialogCancelClick() {
-            console.log('dialogCancelClick')
-            this.dialog = false
         },
         handleFilterChange(filter){
             console.log(filter)

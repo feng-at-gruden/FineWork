@@ -1,8 +1,8 @@
 import colors from 'vuetify/es5/util/colors'
 
-//const API_URL = "http://127.0.0.1:3000"
+const API_URL = "http://127.0.0.1:3000"
+//const API_URL = "http://192.168.31.33:3000"
 //const API_URL = "http://192.168.123.1:3000"
-const API_URL = "http://192.168.31.33:3000"
 
 
 const Themes = [
@@ -15,6 +15,7 @@ const Themes = [
 const Theme = Themes[1]
 //"amber" "orange accent-4"//"pink accent-2"//"amber" orange
 
+//项目状态
 const ProjectStatus = [
 	{ value: 1, text: '筹备中' },
 	{ value: 2, text: '在建中' },
@@ -23,14 +24,28 @@ const ProjectStatus = [
 	{ value: 5, text: '已停工' },
 ]
 
-const ProjcetType = ['新建','扩建','改建','拆建','恢复','其他']
+//施工阶段
+const ProjectPhase = [
+	'基础工程',
+	'主体工程',
+	'屋面工程',
+	'装饰装修工程',
+]
 
-const TaskStatus = []
+//项目性质类型
+const ProjcetType = ['新建', '扩建', '改建', '拆建', '恢复', '其他']
+
+
+//任务状态
+const TaskStatus = ['未开始', '进行中', '已完成', '停工中', '', '']
+const TaskProgress = []
+
 
 export default {
 	API_URL,
 	Theme,
 	ProjectStatus,
 	TaskStatus,
-	ProjcetType
+	ProjcetType,
+	ProjectPhase
 }

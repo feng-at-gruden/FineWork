@@ -6,10 +6,22 @@
         <v-btn icon>
             <v-icon>search</v-icon>
         </v-btn>
-        <v-btn icon>
-            <v-icon>info_outline</v-icon>
-        </v-btn>
-        <v-menu bottom offset-y transition="slide-y-transition">
+        <v-menu bottom offset-y transition="slide-y-transition" v-if="showOptionMenu" nudge-bottom="15">
+            <v-btn slot="activator" icon>
+                <v-icon>notes</v-icon>
+            </v-btn>
+            <v-list dense>
+                <v-list-tile v-for="(item, index) in $route.meta.optionMenu" @click="handleOptionMenuClick(item)">
+                    <v-list-tile-action class="setting-menu-list-tile-action">
+                        <v-icon>{{item.icon}}</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{item.text}}</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+        </v-menu>
+        <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15">
             <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>
             </v-btn>
@@ -47,13 +59,16 @@ export default {
         }
     },
     data: () => ({
-        
+
     }),
     methods: {
         openDrawer() {
             this.$store.commit('openDrawer', !this.$store.state.drawer)
         },
-        goto(link){            
+        handleOptionMenuClick(menuItem){
+            this.$emit('onOptionMenuClick', menuItem)
+        },
+        goto(link) {
             if (link == 'logout') {
                 this.auth.logout()
             } else {
@@ -65,7 +80,7 @@ export default {
 
 </script>
 <style>
-.setting-menu-list-tile-action{
+.setting-menu-list-tile-action {
     min-width: 35px;
 }
 </style>

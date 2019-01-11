@@ -2,7 +2,7 @@
 	<div>
 		<v-app >
 			<Drawer />
-			<Header />			
+			<Header @onOptionMenuClick="handleHeaderOptionMenuClick"/>			
 			<v-content class="v-content-container">
 				<v-container fill-height :class="[fullWidth?'main-container-full':'main-container', '']">
 					<v-layout justify-center fill-height row wrap align-center>
@@ -42,7 +42,9 @@ export default {
 		}
 	},
 	methods: {
-
+		handleHeaderOptionMenuClick(menuItem){
+			this.$store.commit('optionMenuClick', menuItem)
+		}
 	}
 }
 

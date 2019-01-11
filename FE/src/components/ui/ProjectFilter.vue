@@ -12,7 +12,7 @@
 		</v-flex>
 		<v-flex lg2 md4 sm12 xs12 offset-lg3>
 			<v-layout justify-end align-center class="project-layout-container">
-				<v-btn-toggle v-model="$props.layout" mandatory>
+				<v-btn-toggle v-model="displayLayout" mandatory>
 					<v-btn flat>
 						<v-icon>view_module</v-icon>
 					</v-btn>
@@ -36,6 +36,12 @@ export default {
 		return {
 			config,
 			filter: []
+		}
+	},
+	computed:{
+		displayLayout:{
+			get(){return this.$props.layout},
+			set(v){this.$emit('layoutChange', v)}
 		}
 	},
 	methods: {

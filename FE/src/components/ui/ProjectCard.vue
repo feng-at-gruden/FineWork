@@ -1,6 +1,6 @@
 <template>
     <CustomTransition :in="animationIn" :out="animationOut" @afterLeave="handleAnimEnd">
-        <v-card v-show="!clicked">
+        <v-card>
             <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
             <v-card-title primary-title>
                 <div>
@@ -50,10 +50,11 @@ export default {
     },
     methods: {
         gotoDetail() {
-            this.clicked = true
+            //this.clicked = true
+            this.$router.push('/Project/' + this.$props.project.id)
         },
         handleAnimEnd() {
-            this.$router.push('/Project/' + this.$props.project.id)
+            //this.$router.push('/Project/' + this.$props.project.id)
         }
     }
 }

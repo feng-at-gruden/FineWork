@@ -42,7 +42,7 @@
 import BasePage from '../../assets/js/BasePage'
 export default {
     extends: BasePage,
-    name: 'MyAccount.vue',
+    name: 'MyAccount',
     data: () => ({
         valid: true,
         name: '',
