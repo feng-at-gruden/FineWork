@@ -1,8 +1,9 @@
 <template>
 	<v-layout justify-center fill-height align-center>
-		<ProjectPlanGantt :plan="plan" :editable="editPlan"></ProjectPlanGantt>
+		<ProjectPlanGantt :plan="plan" :newTask="newTaskToGantt" :editable="editPlan" @onBeforeCreateTask="handleBeforekCreateTask"></ProjectPlanGantt>
 		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @dialogClose="handleProjectInfoDialogClose"></ProjectInfoDialog>
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @dialogClose="handleTimelineDialogClose"></ProjectTimeline>
+		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" @dialogClose="handleCreatePlanDialogClose" @onSaveClick="handleOnCreateTask"></CreateTaskDialog>
 		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
 			{{snackbarMessage}}
 			<v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -14,6 +15,7 @@ import BasePage from '../../assets/js/BasePage'
 import ProjectPlanGantt from '../gantt/ProjectPlanGantt'
 import ProjectInfoDialog from '../ui/ProjectInfoDialog'
 import ProjectTimeline from '../ui/ProjectTimeline'
+import CreateTaskDialog from '../ui/CreateTaskDialog'
 
 //import '../../../static/gantt/dhtmlxgantt.js?v=6.0.2'
 //import '../../../static/gantt/ext/dhtmlxgantt_marker.js?v=6.0.2'
@@ -22,19 +24,26 @@ import ProjectTimeline from '../ui/ProjectTimeline'
 export default {
 	extends: BasePage,
 	name: 'ProjectPlan',
-	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline },
+	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline, CreateTaskDialog },
 	data() {
 		return {
 			editPlan: false,
 			openProjectInfoDialog: false,
 			openProjectTimeline: false,
+			openCreateTaskDialog: false,
 			snackbar: false,
 			snackbarMessage: '',
 			snackbarColor: '',
 			project: {},
 			timeline: [],
-			plan: { data: [], links: [] },
-			mainContainerCSS: 'main-container-gantt'
+			plan: { data: [], links: [] },			
+			newTask:{
+                start_date: new Date().toISOString().substr(0, 10),
+                end_date: new Date().toISOString().substr(0, 10),
+            },
+            newTaskToGantt:null,
+			mainContainerCSS: 'main-container-gantt',
+			fackIndex:2019,
 		}
 	},
 	computed: {
@@ -46,28 +55,28 @@ export default {
 		selectedOptionMenu(v) {
 			switch (v.text) {
 				case '工程项目信息':
-					this.openProjectInfoDialog = true					
+					this.openProjectInfoDialog = true
 					break
 				case '项目时间轴':
-					this.openProjectTimeline = true					
+					this.openProjectTimeline = true
 					break
 				case '项目计划调整':
 					//TODO 加载项目原计划（不含当前进度信息）
-					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。','info')
+					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
 					this.$store.commit('openDrawer', false)
 					this.$store.commit('editing', true)
-					this.editPlan = true					
+					this.editPlan = true
 					break
 				case '退出编辑模式':
 					//TODO 加载项目原计划（不含当前进度信息）
-					this.showSnackbar('已退出项目计划编辑模式','info')
+					this.showSnackbar('已退出项目计划编辑模式', 'info')
 					this.$store.commit('editing', false)
 					this.editPlan = false
 					break
 				case '删除本项目':
 					this.openProjectInfoDialog = true
 					break
-			}			
+			}
 		}
 	},
 	methods: {
@@ -84,7 +93,32 @@ export default {
 			this.openProjectInfoDialog = false
 		},
 		handleTimelineDialogClose() {
-			this.openProjectTimeline = false			
+			this.openProjectTimeline = false
+		},
+		handleCreatePlanDialogClose(){
+			this.openCreateTaskDialog = false
+		},
+		handleBeforekCreateTask(pid) {			
+			this.newTask.parent = pid						
+			this.openCreateTaskDialog = true
+		},
+		handleOnCreateTask(task){
+			console.log(task);
+			//TODO Call API
+
+			//Update gantt
+			if(true){
+				this.newTask.id = this.fackIndex++//todo get id from API
+				this.newTask.start_date= '02-04-2018'                
+				this.newTask.duration = 10
+				this.newTaskToGantt = this.newTask
+			}
+			//Clear newTask
+			this.newTask = {
+                start_date: '02-04-2018',
+                end_date: '02-04-2018',
+                duration: 10,
+            }
 		},
 		showSnackbar(msg, color) {
 			this.snackbarMessage = msg
@@ -95,7 +129,7 @@ export default {
 	created() {
 		this.$store.commit('loading', true)
 		this.loadProjectDetail()
-	},	
+	},
 }
 
 </script>

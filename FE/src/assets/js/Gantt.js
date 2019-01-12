@@ -1,3 +1,83 @@
+const projectReadonlyColumns = [
+	{ name: "text", label: "施工任务", tree: true, width: "*" },
+	{
+		name: "start_date",
+		label: "施工周期",
+		align: "center",
+		width: "90",
+		template(obj) {
+			if (obj.progress > 0) {
+				var str = '<div>' + obj.plan_start + " - " + obj.plan_end + '</div>'
+				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
+			} else {
+				var str = '<div class="oneline">' + obj.plan_start + " - " + obj.plan_end + '</div>'
+			}
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{
+		name: "duration",
+		label: "天",
+		align: "center",
+		width: "23",
+		template(obj) {
+			if (obj.progress > 0) {
+				var str = '<div>' + obj.plan_duration + '</div>'
+				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
+			} else {
+				var str = '<div class="oneline">' + obj.plan_duration + '</div>'
+			}
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{
+		name: "progress",
+		label: "状态",
+		align: "center",
+		width: "48",
+		template: function(obj) {
+			var str
+			if (obj.status == "pending") {
+				str = "停工"
+			} else if (obj.progress == 1) {
+				str = "已完工"
+			} else if (obj.progress == 0) {
+				str = "未开工"
+			} else {
+				str = obj.progress * 100 + "%"
+			}
+			return "<div class=\"gantt-content-left-status " + (obj.exceed ? 'project-delayed' : '') + '\">' + str + "</div>"
+		}
+	}
+];
+
+const projectEditingColumns = [
+		{ name: "text", label: "施工任务", tree: true, width: "*" },
+		{
+			name: "start_date",
+			label: "施工周期",
+			align: "center",
+			width: "90",
+			template(obj) {				
+				var str = '<div class="oneline">' + obj.plan_start + " - " + obj.plan_end + '</div>'				
+				return '<div class="gantt-content-samll">' + str + '</div>'
+			}
+		},
+		{
+			name: "duration",
+			label: "天",
+			align: "center",
+			width: "23",
+			template(obj) {				
+				var str = '<div class="oneline">' + obj.plan_duration + '</div>'				
+				return '<div class="gantt-content-samll">' + str + '</div>'
+			}
+		},
+		{ name: "add", label: "", width: "30" }
+	];
+
+
+
 export default {
 
 	weekScaleTemplate: function(date) {
@@ -40,7 +120,6 @@ export default {
 		});
 
 
-
 		gantt.config.work_time = false;
 		gantt.config.scale_unit = "month";
 		gantt.config.step = 1;
@@ -49,67 +128,23 @@ export default {
 
 		//gantt.config.autofit = true;
 		gantt.config.drag_progress = false;
-	    gantt.config.drag_links = false;
-	    gantt.config.readonly = !editable;
+		gantt.config.drag_links = false;
+		gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
 
 		gantt.config.subscales = [
 			{ unit: "week", step: 1, template: this.weekScaleTemplate },
 			{ unit: "day", step: 1, date: "%j", css: this.daysStyle }
 		];
-		
-		gantt.config.columns = [
-			{ name: "text", label: "施工任务", tree: true, width: "*" },
-			{
-				name: "start_date",
-				label: "施工周期",
-				align: "center",
-				width: "90",
-				template(obj) {
-					if (obj.progress > 0) {
-						var str = '<div>' + obj.plan_start + " - " + obj.plan_end + '</div>'
-						str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
-					} else {
-						var str = '<div class="oneline">' + obj.plan_start + " - " + obj.plan_end + '</div>'
-					}
-					return '<div class="gantt-content-samll">' + str + '</div>'
-				}
-			},
-			{
-				name: "duration",
-				label: "天",
-				align: "center",
-				width: "23",
-				template(obj) {
-					if (obj.progress > 0) {
-						var str = '<div>' + obj.plan_duration + '</div>'
-						str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
-					} else {
-						var str = '<div class="oneline">' + obj.plan_duration + '</div>'
-					}
-					return '<div class="gantt-content-samll">' + str + '</div>'
-				}
-			},
-			{
-				name: "progress",
-				label: "状态",
-				align: "center",
-				width: "48",
-				template: function(obj) {
-					var str
-					if (obj.status == "pending") {
-						str = "停工"
-					} else if (obj.progress == 1) {
-						str = "已完工"
-					} else if (obj.progress == 0) {
-						str = "未开工"
-					} else {
-						str = obj.progress * 100 + "%"
-					}
-					return "<div class=\"gantt-content-left-status " + (obj.exceed ? 'project-delayed' : '') + '\">' + str + "</div>"
-				}
-			}
-		];
+
+		//切换编辑和只读模式
+		if (editable) {
+			gantt.config.columns = projectEditingColumns
+		} else {			
+			gantt.config.columns = projectReadonlyColumns
+		}
+
+
 		gantt.templates.task_class = function(start, end, task) {
 			var c = ''
 			if (task.type == 'plan')
@@ -141,11 +176,34 @@ export default {
 			}
 			return c
 		};
-		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) { var task = gantt.getTask(id); return !task.locked && task.progress != 1; });
 
+		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
+			var task = gantt.getTask(id);
+			return !task.locked && task.progress != 1;
+		});
+
+		/*
+		//自定义添加按钮点击事件
+		gantt.attachEvent("onTaskCreated", function(task) {
+			//any custom logic here
+			console.log('onTaskCreated', );
+			return false;
+		});
+
+		gantt.attachEvent("onBeforeLightbox", function(id) {
+			var task = gantt.getTask(id);
+			console.log('onBeforeLightbox', task);
+			return false;
+		});
+		*/
 
 		gantt.init(id);
-	}
+	},
 
+	attachEvent(eventName, f){
+		gantt.attachEvent(eventName,f)
+		return false
+	},
+	gantt,
 	//gantt.parse(tasks);
 }

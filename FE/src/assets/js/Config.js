@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
-const API_URL = "http://127.0.0.1:3000"
-//const API_URL = "http://192.168.31.33:3000"
+//const API_URL = "http://127.0.0.1:3000"
+const API_URL = "http://192.168.31.33:3000"
 //const API_URL = "http://192.168.123.1:3000"
 const APP_NAME = "Fine.Work"
 
@@ -38,7 +38,7 @@ const ProjcetType = ['新建', '扩建', '改建', '拆建', '恢复', '其他']
 
 
 //任务状态
-const TaskStatus = ['未开始', '进行中', '已完成', '停工中', '', '']
+const TaskStatus = ['未开始', '进行中', '已完成', '停工中',]
 const TaskProgress = []
 
 
