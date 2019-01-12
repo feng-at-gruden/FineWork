@@ -68,7 +68,7 @@
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions bottom v-if="edit" style="position: absolute;">
                                         <v-spacer></v-spacer>
-                                        <v-btn  @click="handleCancelClick">取消</v-btn>
+                                        <v-btn @click="handleCancelClick">取消</v-btn>
                                         <v-btn color="primary" @click="handleSaveClick" :disabled="!valid1" :loading="valid1">保存</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>

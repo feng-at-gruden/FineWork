@@ -7,7 +7,7 @@ import Main from '@/components/Main'
 import Dashboard from '@/components/Dashboard'
 import CreateProject from '@/components/project/Create'
 import ProjectList from '@/components/project/List'
-import ProjectDetail from '@/components/project/Detail'
+import ProjectPlan from '@/components/project/Plan'
 import PhasePlan from '@/components/plan/Phase'
 import MyAccount from '@/components/setting/MyAccount'
 
@@ -54,15 +54,17 @@ export default new Router({
                 },
                 {
                     path: ':id',
-                    name: 'ProjectDetail',
-                    meta: { requiresAuth: true, level: 2, title: "工程详情", fullWidth: true, autoLoading: true, 
+                    name: 'ProjectPlan',
+                    meta: { requiresAuth: true, level: 2, title: "工程计划", fullWidth: true, autoLoading: true, 
                         showOptionMenu: true, 
                         optionMenu: [
-                        { icon: 'info', text: '项目信息' }, 
-                        { icon: 'timeline', text: '时间轴' }, 
-                        { icon: 'delete', text: '删除项目' }, 
+                        { icon: 'info', text: '工程项目信息', }, 
+                        { icon: 'timeline', text: '项目时间轴' }, 
+                        { icon: '', text: 'Divider' }, 
+                        { icon: 'edit', text: '项目计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
+                        { icon: 'delete', text: '删除本项目' }, 
                         ] },
-                    component: ProjectDetail
+                    component: ProjectPlan
                 },
             ]
         },

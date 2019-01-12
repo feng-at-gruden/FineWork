@@ -25,6 +25,7 @@ const app = new Vue({
     store,
     auth,
     resource,
+    config,
     template: '<App/>',
     components: { App }
 
@@ -33,13 +34,14 @@ window.app = app
 
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
-        document.title = "Fine Work - " + to.meta.title
+        document.title = config.APP_NAME + " " + to.meta.title
     }
     if (to.meta.fullWidth) {
         app.$store.commit('openDrawer', false)
     }
     if (to.meta.autoLoading) {
-        app.$store.commit('loading', true)
+        //app.$store.commit('loading', true)
     }
+    app.$store.commit('editing', false)
     next()
 })

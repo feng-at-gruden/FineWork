@@ -1,13 +1,11 @@
 <template>
 	<v-layout justify-center fill-height align-center>
-		<ProjectPlanGantt :plan="plan"></ProjectPlanGantt>
+		<ProjectPlanGantt :plan="plan" :editable="editPlan"></ProjectPlanGantt>
 		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @dialogClose="handleProjectInfoDialogClose"></ProjectInfoDialog>
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @dialogClose="handleTimelineDialogClose"></ProjectTimeline>
-		<v-snackbar v-model="snackbar">
+		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
 			{{snackbarMessage}}
-			<v-btn :color="snackbarColor" flat @click="snackbar = false">
-				确定
-			</v-btn>
+			<v-btn dark flat @click="snackbar = false">确定</v-btn>
 		</v-snackbar>
 	</v-layout>
 </template>
@@ -23,10 +21,11 @@ import ProjectTimeline from '../ui/ProjectTimeline'
 
 export default {
 	extends: BasePage,
-	name: 'ProjectDetail',
+	name: 'ProjectPlan',
 	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline },
 	data() {
 		return {
+			editPlan: false,
 			openProjectInfoDialog: false,
 			openProjectTimeline: false,
 			snackbar: false,
@@ -46,16 +45,29 @@ export default {
 	watch: {
 		selectedOptionMenu(v) {
 			switch (v.text) {
-				case '项目信息':
+				case '工程项目信息':
+					this.openProjectInfoDialog = true					
+					break
+				case '项目时间轴':
+					this.openProjectTimeline = true					
+					break
+				case '项目计划调整':
+					//TODO 加载项目原计划（不含当前进度信息）
+					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。','info')
+					this.$store.commit('openDrawer', false)
+					this.$store.commit('editing', true)
+					this.editPlan = true					
+					break
+				case '退出编辑模式':
+					//TODO 加载项目原计划（不含当前进度信息）
+					this.showSnackbar('已退出项目计划编辑模式','info')
+					this.$store.commit('editing', false)
+					this.editPlan = false
+					break
+				case '删除本项目':
 					this.openProjectInfoDialog = true
-					break;
-				case '时间轴':
-					this.openProjectTimeline = true
-					break;
-				case '删除项目':
-					this.openProjectInfoDialog = true
-					break;
-			}
+					break
+			}			
 		}
 	},
 	methods: {
@@ -70,11 +82,9 @@ export default {
 		},
 		handleProjectInfoDialogClose() {
 			this.openProjectInfoDialog = false
-			this.$store.commit('optionMenuClick', {})
 		},
 		handleTimelineDialogClose() {
-			this.openProjectTimeline = false
-			this.$store.commit('optionMenuClick', {})
+			this.openProjectTimeline = false			
 		},
 		showSnackbar(msg, color) {
 			this.snackbarMessage = msg
@@ -83,8 +93,9 @@ export default {
 		},
 	},
 	created() {
+		this.$store.commit('loading', true)
 		this.loadProjectDetail()
-	}
+	},	
 }
 
 </script>

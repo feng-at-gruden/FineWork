@@ -13,7 +13,7 @@ export default {
 		return "";
 	},
 
-	initProjectGantt: function(id) {
+	initProjectGantt: function(id, editable) {
 		gantt.templates.task_cell_class = function(task, date) {
 			var dateToStr = gantt.date.date_to_str("%D");
 			if (dateToStr(date) == "六" || dateToStr(date) == "日")
@@ -29,6 +29,7 @@ export default {
 		};
 		*/
 
+		//加入当天Marker
 		var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
 		var today = new Date(2018, 3, 26);
 		gantt.addMarker({
@@ -37,6 +38,8 @@ export default {
 			text: "Today",
 			title: "Today: " + date_to_str(today)
 		});
+
+
 
 		gantt.config.work_time = false;
 		gantt.config.scale_unit = "month";
@@ -47,15 +50,14 @@ export default {
 		//gantt.config.autofit = true;
 		gantt.config.drag_progress = false;
 	    gantt.config.drag_links = false;
-	    gantt.config.readonly = true;
+	    gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
 
 		gantt.config.subscales = [
 			{ unit: "week", step: 1, template: this.weekScaleTemplate },
 			{ unit: "day", step: 1, date: "%j", css: this.daysStyle }
 		];
-
-		gantt.init(id);
+		
 		gantt.config.columns = [
 			{ name: "text", label: "施工任务", tree: true, width: "*" },
 			{
@@ -140,6 +142,9 @@ export default {
 			return c
 		};
 		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) { var task = gantt.getTask(id); return !task.locked && task.progress != 1; });
+
+
+		gantt.init(id);
 	}
 
 	//gantt.parse(tasks);

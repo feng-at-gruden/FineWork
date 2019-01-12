@@ -4,7 +4,7 @@
             <v-container style="max-width: 600px;">
                 <v-timeline dense clipped>                
                     <v-slide-x-transition group>
-                        <v-timeline-item v-for="event in timeline" :key="event.id" class="mb-3" color="pink" small>
+                        <v-timeline-item v-for="event in timelineData" :key="event.id" class="mb-3" color="pink" small>
                             <v-layout justify-space-between>
                                 <v-flex xs7 v-text="event.text"></v-flex>
                                 <v-flex xs5 text-xs-right v-text="event.time"></v-flex>
@@ -70,7 +70,7 @@ export default {
     name: 'ProjectTimeline',
     props: ['open','timeline'],
     computed: {
-        timeline(){
+        timelineData(){
             return this.$props.timeline
         },
         dialogOpen: {

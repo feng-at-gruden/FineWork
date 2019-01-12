@@ -23,7 +23,7 @@ export default {
 	},
 	checkIsLogin(state) {
 		if (!state.identity.token) {
-			return true
+			return false
 		}
 		return true
 	}

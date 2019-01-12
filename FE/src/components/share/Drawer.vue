@@ -44,7 +44,7 @@ export default {
 				{ title: '工程一览', link: '/Project/List', icon: 'location_city' },
 				{ divider: true },
 				{ heading: '计划管理' },
-				{ title: '工程计划', link: '/Project/plan', icon: 'subject' },
+				{ title: '工程计划', link: '/Project/Plan', icon: 'subject' },
 				{ title: '阶段计划', link: '/Plan/Phase', icon: 'playlist_add_check' },
 				{ divider: true },
 				{ heading: '工作汇报' },

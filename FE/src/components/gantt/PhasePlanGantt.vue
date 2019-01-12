@@ -31,14 +31,14 @@ export default {
 		gantt.parse(this.$props.plan)
 	},
 	beforeDestroy(){
-		document.getElementById("viewport").setAttribute('content','user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
+		document.getElementById("viewport").setAttribute('content','user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1')
+		document.body.parentNode.style.overflowY = "auto"
 	},
 	watch:{
 		plan:{
 			deep: true,
 			handler:function(v, ov){
 				if(v!==ov){
-					console.log('plan changed');
 					gantt.parse(v)
 					//gantt.setSizes()
 					v.data.filter(t=>t.open).forEach(t=>{						

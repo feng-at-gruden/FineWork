@@ -18,6 +18,12 @@ export default {
 			default () {
 				return { data: [], links: [] }
 			}
+		},
+		editable:false,
+	},
+	computed: {
+		edit(){
+			return this.$props.editable			
 		}
 	},
 	beforeCreate() {
@@ -27,7 +33,7 @@ export default {
 	mounted() {
 		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
 		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
-		myGantt.initProjectGantt(this.$refs.container)
+		myGantt.initProjectGantt(this.$refs.container, this.edit)
 		gantt.parse(this.$props.plan)
 	},
 	beforeDestroy(){
@@ -40,11 +46,14 @@ export default {
 			handler:function(v, ov){
 				if(v!==ov){
 					gantt.parse(v)
-					v.data.filter(t=>t.open).forEach(t=>{						
+					v.data.filter(t=>t.open).forEach(t=>{
 						gantt.open(t.id)						
 					})				
 				}				
 			}
+		},
+		editable(v,ov){
+			myGantt.initProjectGantt(this.$refs.container, this.edit)
 		}
 	},	
 }

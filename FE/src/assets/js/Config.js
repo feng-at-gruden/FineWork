@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 const API_URL = "http://127.0.0.1:3000"
 //const API_URL = "http://192.168.31.33:3000"
 //const API_URL = "http://192.168.123.1:3000"
+const APP_NAME = "Fine.Work"
 
 
 const Themes = [
@@ -42,6 +43,7 @@ const TaskProgress = []
 
 
 export default {
+	APP_NAME,
 	API_URL,
 	Theme,
 	ProjectStatus,
