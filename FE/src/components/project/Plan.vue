@@ -1,9 +1,15 @@
 <template>
 	<v-layout justify-center fill-height align-center>
-		<ProjectPlanGantt :plan="plan" :newTask="newTaskToGantt" :editable="editPlan" @onBeforeCreateTask="handleBeforekCreateTask"></ProjectPlanGantt>
+		<!--项目计划甘特图-->
+		<ProjectPlanGantt :plan="plan" :newTask="newTaskToGantt" :editable="editPlan" @onBeforeCreateTask="handleBeforekCreateTask" @onTaskUpdate="handleOnTaskUpdate" @onOpenEditBox="handleOnOpenEditBox"></ProjectPlanGantt>
+		<!--项目信息对话框-->
 		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @dialogClose="handleProjectInfoDialogClose"></ProjectInfoDialog>
+		<!--项目时间线对话框-->
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @dialogClose="handleTimelineDialogClose"></ProjectTimeline>
+		<!--添加阶段计划对话框-->
 		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" @dialogClose="handleCreatePlanDialogClose" @onSaveClick="handleOnCreateTask"></CreateTaskDialog>
+
+
 		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
 			{{snackbarMessage}}
 			<v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -17,17 +23,12 @@ import ProjectInfoDialog from '../ui/ProjectInfoDialog'
 import ProjectTimeline from '../ui/ProjectTimeline'
 import CreateTaskDialog from '../ui/CreateTaskDialog'
 
-//import '../../../static/gantt/dhtmlxgantt.js?v=6.0.2'
-//import '../../../static/gantt/ext/dhtmlxgantt_marker.js?v=6.0.2'
-//import myGantt from '../../assets/js/Gantt.js'
-
 export default {
 	extends: BasePage,
 	name: 'ProjectPlan',
 	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline, CreateTaskDialog },
 	data() {
 		return {
-			editPlan: false,
 			openProjectInfoDialog: false,
 			openProjectTimeline: false,
 			openCreateTaskDialog: false,
@@ -36,19 +37,27 @@ export default {
 			snackbarColor: '',
 			project: {},
 			timeline: [],
-			plan: { data: [], links: [] },			
-			newTask:{
-                start_date: new Date().toISOString().substr(0, 10),
-                end_date: new Date().toISOString().substr(0, 10),
-            },
-            newTaskToGantt:null,
+			plan: {data:[], lilnks:[]},
+			newTask: {
+				start_date: new Date().toISOString().substr(0, 10),
+				end_date: new Date().toISOString().substr(0, 10),
+			},
+			newTaskToGantt: null,
 			mainContainerCSS: 'main-container-gantt',
-			fackIndex:2019,
+			fackIndex: 2019,
 		}
 	},
 	computed: {
 		selectedOptionMenu() {
 			return this.$store.state.selectedOptionMenu
+		},
+		editPlan:{
+			get(){return this.$store.state.editPlan},
+			set(v){this.$store.commit('editPlan', v)}
+		},
+		loading:{
+			get(){return this.$store.state.loading},
+			set(v){this.$store.commit('loading', v)}	
 		}
 	},
 	watch: {
@@ -63,14 +72,12 @@ export default {
 				case '项目计划调整':
 					//TODO 加载项目原计划（不含当前进度信息）
 					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
-					this.$store.commit('openDrawer', false)
-					this.$store.commit('editing', true)
+					this.$store.commit('openDrawer', false)					
 					this.editPlan = true
 					break
 				case '退出编辑模式':
-					//TODO 加载项目原计划（不含当前进度信息）
-					this.showSnackbar('已退出项目计划编辑模式', 'info')
-					this.$store.commit('editing', false)
+					//TODO 加载项目原计划（含当前进度信息）
+					this.showSnackbar('已退出项目计划编辑模式', 'info')					
 					this.editPlan = false
 					break
 				case '删除本项目':
@@ -84,7 +91,7 @@ export default {
 			// Call Ajax
 			this.$http.get(this.config.API_URL + '/project/plan', { emulateJSON: true }).then(function(res) {
 				this.plan = JSON.parse(res.bodyText)
-				this.$store.commit('loading', false)
+				this.loading = false
 			}, function(res) {
 				this.showSnackbar('项目信息加载失败!', 'error')
 			})
@@ -95,30 +102,38 @@ export default {
 		handleTimelineDialogClose() {
 			this.openProjectTimeline = false
 		},
-		handleCreatePlanDialogClose(){
+		handleCreatePlanDialogClose() {
 			this.openCreateTaskDialog = false
 		},
-		handleBeforekCreateTask(pid) {			
-			this.newTask.parent = pid						
+		handleBeforekCreateTask(pid) {
+			//获取父节点ID
+			//console.log('handleBeforekCreateTask Pid - ', pid);
+			this.newTask.parent = pid
 			this.openCreateTaskDialog = true
 		},
-		handleOnCreateTask(task){
-			console.log(task);
-			//TODO Call API
-
+		handleOnCreateTask(task) {
+			//TODO Call API, and get task ID
+			
 			//Update gantt
-			if(true){
-				this.newTask.id = this.fackIndex++//todo get id from API
-				this.newTask.start_date= '02-04-2018'                
-				this.newTask.duration = 10
-				this.newTaskToGantt = this.newTask
+			if (true) {				
+				this.newTaskToGantt = {
+					id:this.fackIndex++, 
+					start_date: this.util.dateFormat('d/M/yyyy',this.util.stringToDate(task.start_date)), 
+					parent:task.parent, 
+					text:task.text, 
+					duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))}
 			}
-			//Clear newTask
+			//Clear newTask for CreateTaskDialog
 			this.newTask = {
-                start_date: '02-04-2018',
-                end_date: '02-04-2018',
-                duration: 10,
-            }
+				start_date: new Date().toISOString().substr(0, 10),
+				end_date: new Date().toISOString().substr(0, 10),				
+			}
+		},
+		handleOnTaskUpdate(task) {
+			console.log('handleOnTaskUpdate - ', task);
+		},
+		handleOnOpenEditBox(task){
+			console.log('handleOnOpenEditBox - ', task);
 		},
 		showSnackbar(msg, color) {
 			this.snackbarMessage = msg
@@ -127,7 +142,7 @@ export default {
 		},
 	},
 	created() {
-		this.$store.commit('loading', true)
+		this.loading = true
 		this.loadProjectDetail()
 	},
 }

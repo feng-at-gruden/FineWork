@@ -27,7 +27,7 @@ export default {
 	mounted() {
 		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
 		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
-		myGantt.initProjectGantt(this.$refs.container)
+		//myGantt.initProjectGantt(this.$refs.container)
 		gantt.parse(this.$props.plan)
 	},
 	beforeDestroy(){
@@ -54,7 +54,6 @@ export default {
 
 <style>
 @import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
-/*@import "dhtmlx-gantt/codebase/locale/locale_cn.js"*/
 @import "../../assets/css/gantt.css" 
 
 

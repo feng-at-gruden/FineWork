@@ -42,6 +42,6 @@ router.beforeEach((to, from, next) => {
     if (to.meta.autoLoading) {
         //app.$store.commit('loading', true)
     }
-    app.$store.commit('editing', false)
+    //app.$store.commit('editing', false)
     next()
 })

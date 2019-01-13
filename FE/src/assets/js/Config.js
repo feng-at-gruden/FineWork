@@ -13,7 +13,7 @@ const Themes = [
 	{ primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
 ]
 
-const Theme = Themes[1]
+const Theme = Themes[3]
 //"amber" "orange accent-4"//"pink accent-2"//"amber" orange
 
 //项目状态
@@ -39,7 +39,7 @@ const ProjcetType = ['新建', '扩建', '改建', '拆建', '恢复', '其他']
 
 //任务状态
 const TaskStatus = ['未开始', '进行中', '已完成', '停工中',]
-const TaskProgress = []
+const TaskProgress = ['正常','已延期','已逾期']
 
 
 export default {

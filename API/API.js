@@ -31,13 +31,17 @@ app
 			res.status(500).send({ error: 'invalid username and passowrd' });			
 		}
 	})
-	.get('/project/plan', (req, res) => {
-		res.json(mockData.tasks)
-		console.log('GET /project/plan')
-	})
 	.get('/project/list', (req, res) => {
 		res.json(mockData.projects)
 		console.log('GET /project/list')
+	})
+	.get('/project/plan', (req, res) => {
+		res.json(mockData.projectPlan)
+		console.log('GET /project/plan')
+	})
+	.get('/plan/phase', (req, res) => {
+		res.json(mockData.task)
+		console.log('GET /plan/phase')
 	})
 	.post('/task', (req, res) => {
 		console.log('POST Request')

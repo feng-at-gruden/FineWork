@@ -1,7 +1,7 @@
 <template>
     <v-toolbar color="primary" app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
-        <v-toolbar-title>{{title}} <v-fade-transition mode="in-out"><v-icon v-if="$store.state.editing">edit</v-icon></v-fade-transition></v-toolbar-title>
+        <v-toolbar-title>{{title}} <v-fade-transition mode="in-out"><v-icon v-if="editing">edit</v-icon></v-fade-transition></v-toolbar-title>
         <v-spacer></v-spacer>
         <v-flex xs8 sm4 md2>
             <v-slide-x-reverse-transition>
@@ -86,7 +86,7 @@ export default {
             return this.$route.meta.title
         },
         editing() {
-            return this.$store.state.editing
+            return this.$store.state.editPlan    //TODO add more
         }
     },
     data: () => ({

@@ -53,11 +53,11 @@
                         <v-flex xs6 md12>
                             <v-text-field v-model="projectInfo.firstParty" label="项目甲方"></v-text-field>
                         </v-flex>
-                        <v-flex md12>
+                        <v-flex sm12>
                             <v-text-field v-model="projectInfo.location" label="项目地点"></v-text-field>
                         </v-flex>
-                        <v-flex>
-                            <v-layout align-end justify-center row fill-height pa-5>
+                        <v-flex xs12 sm12>
+                            <v-layout justify-center pa-5>
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions v-if="!edit" style="position: absolute;">
                                         <v-spacer></v-spacer>

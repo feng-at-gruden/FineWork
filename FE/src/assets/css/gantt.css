@@ -103,3 +103,16 @@
     font-size: 0.85em;
     font-style: italic;
 }
+
+.start-work{
+    font-style: italic;
+    background-color: #ffb100;
+}
+.end-work{
+    font-style: italic;
+    background-color: #028b00;
+}
+.today{
+    font-style: italic;
+    background-color: #ff1744
+}

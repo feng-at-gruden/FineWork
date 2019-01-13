@@ -7,7 +7,7 @@ const store = new Vuex.Store({
 	state: {
 		drawer: true,
 		loading: false,
-		editing: false,
+		editPlan: false,
 		selectedOptionMenu:null,
 		identity: {
 			username: '',
@@ -22,8 +22,8 @@ const store = new Vuex.Store({
 		loading(state, v) {
 			state.loading = v
 		},
-		editing(state, v) {
-			state.editing = v
+		editPlan(state, v) {
+			state.editPlan = v
 		},
 		userLogin(state, msg) {
 			state.identity = msg;

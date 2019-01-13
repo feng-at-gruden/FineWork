@@ -5,9 +5,8 @@
 import 'dhtmlx-gantt'
 import 'dhtmlx-gantt/codebase/ext/dhtmlxgantt_marker'
 import 'dhtmlx-gantt/codebase/ext/dhtmlxgantt_fullscreen'
+import "dhtmlx-gantt/codebase/locale/locale_cn.js"
 import myGantt from '../../assets/js/Gantt.js'
-//import '../../../static/gantt/ext/dhtmlxgantt_marker.js?v=6.0.2'
-//import '../../../static/gantt/sources/dhtmlxgantt.js?v=6.0.2'
 
 export default {
 	name: 'ProjectPlanGantt',
@@ -15,11 +14,16 @@ export default {
 		plan: {
 			type: Object,
 			default () {
-				return { data: [], links: [] }
+				return {data:[], lilnks:[], start_date:'', end_date:''}
 			}
 		},
 		editable: false,
-		newTask: null,
+		newTask: null,		
+	},
+	data(){
+		return {
+			ganttEventIds:[],
+		}
 	},
 	computed: {
 		edit() {
@@ -27,7 +31,32 @@ export default {
 		},
 		commingTask() {
 			return this.$props.newTask
+		},
+		project(){
+			return this.$props.plan	
 		}
+	},
+	methods:{
+		attachGanttEditEvents() {
+			if (this.edit) {
+				//编辑模式，event捕捉并传出
+				this.ganttEventIds.push(myGantt.attachEvent('onTaskCreated', (task) => {
+					this.$emit('onBeforeCreateTask', task.parent) //添加任务/子任务事件
+					return false
+				}))
+				this.ganttEventIds.push(myGantt.attachEvent('onBeforeLightbox', (id) => {
+					var task = myGantt.gantt.getTask(id);
+					this.$emit('onOpenEditBox', task)
+					return false
+				}))
+				this.ganttEventIds.push(myGantt.attachEvent('onAfterTaskUpdate', (id, task) => {
+					this.$emit('onTaskUpdate', task)
+					return false
+				}))
+			}else{			
+				this.ganttEventIds.forEach(t=>{myGantt.detachEvent(t)})	
+			}
+		},
 	},
 	beforeCreate() {
 		document.body.parentNode.style.overflowY = "hidden";
@@ -35,20 +64,22 @@ export default {
 	},
 	mounted() {
 		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
-		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
-		myGantt.initProjectGantt(this.$refs.container, this.edit)
-		gantt.parse(this.$props.plan)
+		document.getElementById('my-gantt-container').style.width = document.body.clientWidth		
+		myGantt.initProjectGantt(this.$refs.container, this.edit)		
+		this.attachGanttEditEvents()		
+		gantt.parse(this.project)
 	},
 	beforeDestroy() {
 		document.getElementById("viewport").setAttribute('content', 'user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
 		document.body.parentNode.style.overflowY = "auto";
-	},
+	},	
 	watch: {
 		plan: {
 			deep: true,
 			handler: function(v, ov) {
 				if (v !== ov) {
 					gantt.parse(v)
+					myGantt.addMarkers(v)   //添加开工/竣工Marker
 					v.data.filter(t => t.open).forEach(t => {
 						gantt.open(t.id)
 					})
@@ -56,28 +87,15 @@ export default {
 			}
 		},
 		editable(v, ov) {
-			myGantt.initProjectGantt(this.$refs.container, this.edit)
-			if (this.edit) {
-				//编辑模式，event捕捉并传出
-				myGantt.attachEvent('onTaskCreated', (task) => {
-					this.$emit('onBeforeCreateTask', task.parent) //添加任务/子任务事件
-					return false
-				})
-				myGantt.attachEvent('onBeforeLightbox', (id) => {
-					var task = myGantt.gantt.getTask(id);
-					console.log('onBeforeLightbox', task);
-					this.$emit('onBeforeLightbox', task)
-					return false
-				})
+			if (v!=ov) {				
+				myGantt.initProjectGantt(this.$refs.container, this.edit)
+				this.attachGanttEditEvents()
 			}
 		},
 		newTask(v, ov) {
 			if (v !== ov && v) {
-				console.log('here to up date gantt')
-				console.log(v, v.parent);				
-				//myGantt.gantt.addTask(v, 5)
-				//TODO, to check the bug
-				myGantt.gantt.addTask({text:v.text,start_date:v.start_date, duration: 6, }, v.parent)
+				//Not sure why is datetime value
+				myGantt.gantt.addTask({text:v.text,start_date:v.start_date, duration: v.duration }, v.parent)
 			}
 		},
 	}
@@ -86,7 +104,6 @@ export default {
 </script>
 <style>
 @import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
-/*@import "dhtmlx-gantt/codebase/locale/locale_cn.js"*/
 @import "../../assets/css/gantt.css"
 
 </style>
