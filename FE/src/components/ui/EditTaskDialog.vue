@@ -2,9 +2,9 @@
     <v-dialog v-model="dialog" lazy transition="scale-transition" width="720">
         <v-card>
             <v-card-title class="grey lighten-4 py-4 title">
-                添加{{unitName}}
+                编辑{{unitName}}
             </v-card-title>
-            <v-form v-model="formValid" lazy-validation ref="createTaskForm">
+            <v-form v-model="formValid" lazy-validation ref="taskForm">
                 <v-container fluid>
                     <v-layout wrap>
                         <v-flex xs8 md8>
@@ -50,8 +50,8 @@ import BasePage from '../../assets/js/BasePage'
 import config from '../../assets/js/Config'
 export default {
     extends: BasePage,
-    name: 'CreateTaskDialog',
-    props: ['open', 'newTask', 'unit'],
+    name: 'EditTaskDialog',
+    props: ['open', 'taskToEdit', 'unit'],
     data() {
         return {
             config,            
@@ -66,7 +66,7 @@ export default {
     },
     computed:{
         task(){
-            return this.$props.newTask
+            return this.$props.taskToEdit
         },
         unitName(){
             return this.$props.unit
@@ -78,17 +78,17 @@ export default {
             }
         }
     },    
-    methods: {        
+    methods: {       
         handleSaveClick() {
-            if (this.$refs.createTaskForm.validate()){
+            if (this.$refs.taskForm.validate()){
                 this.formValid = true
-                this.dialog = false                
+                this.dialog = false
+                this.task.duration = this.util.dateDifference(this.task.end_date, this.task.start_date)
                 this.$emit('save', this.task)
             }            
         }
     }
 }
-
 </script>
 <style>
 </style>

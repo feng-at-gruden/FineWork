@@ -18,7 +18,7 @@ export default {
 			}
 		},
 		editable: false,
-		newTask: null,		
+		taskToAdd: null,
 	},
 	data(){
 		return {
@@ -29,11 +29,9 @@ export default {
 		edit() {
 			return this.$props.editable
 		},
-		commingTask() {
-			return this.$props.newTask
-		},
-		project(){
-			return this.$props.plan	
+		myPlan:{
+			get(){return this.$props.plan},
+			set(v){}			
 		}
 	},
 	methods:{
@@ -67,24 +65,28 @@ export default {
 		document.getElementById('my-gantt-container').style.width = document.body.clientWidth		
 		myGantt.initProjectGantt(this.$refs.container, this.edit)		
 		this.attachGanttEditEvents()		
-		gantt.parse(this.project)
+		gantt.parse(this.myPlan)
 	},
 	beforeDestroy() {
 		document.getElementById("viewport").setAttribute('content', 'user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
 		document.body.parentNode.style.overflowY = "auto";
 	},	
 	watch: {
-		plan: {
-			deep: true,
+		myPlan: {			
 			handler: function(v, ov) {
-				if (v !== ov) {
+				if (v != ov) {
+					console.log('Data Changed')
 					gantt.parse(v)
 					myGantt.addMarkers(v)   //添加开工/竣工Marker
+					myGantt.removeMarkers() //Not work
 					v.data.filter(t => t.open).forEach(t => {
 						gantt.open(t.id)
 					})
+				}else{
+					console.log('Data MAYBE Changed')
 				}
-			}
+			},
+			//deep: true,
 		},
 		editable(v, ov) {
 			if (v!=ov) {				
@@ -92,12 +94,12 @@ export default {
 				this.attachGanttEditEvents()
 			}
 		},
-		newTask(v, ov) {
+		taskToAdd(v, ov) {
 			if (v !== ov && v) {
 				//Not sure why is datetime value
-				myGantt.gantt.addTask({text:v.text,start_date:v.start_date, duration: v.duration }, v.parent)
+				myGantt.gantt.addTask({text:v.text,start_date:v.start_date, duration: v.duration, status:v.status, description:v.description }, v.parent)
 			}
-		},
+		},		
 	}
 }
 

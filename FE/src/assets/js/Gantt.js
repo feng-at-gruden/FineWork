@@ -111,23 +111,35 @@ export default {
 		var str_to_date = gantt.date.str_to_date("%d-%m-%Y")
 		if(marker_date !=''){
 			var start = str_to_date(marker_date)					
-			gantt.addMarker({
+			var id = gantt.addMarker({
 				start_date: start,
 				css,
 				text,
 				title: text + "日期: " + date_to_str(start)
-			})			
+			})
+			return id
 		}
+		return 0
 	},
 
 	addMarkers: function(project){
 		if(project.start_date!='')
-			this.addMarker(project.start_date, '开工', 'start-work')
+			this.markerIds.push(this.addMarker(project.start_date, '开工', 'start-work'))
 		if(project.end_date!='')
-			this.addMarker(project.end_date, '竣工', 'end-work')
+			this.markerIds.push(this.addMarker(project.end_date, '竣工', 'end-work'))
 		var date_to_str = gantt.date.date_to_str("%d-%m-%Y")		
-		this.addMarker(date_to_str(new Date()), '今天', 'today')
+		this.markerIds.push(this.addMarker(date_to_str(new Date()), '今天', 'today'))
 	},
+	removeMarkers: function(){
+		console.log(this.markerIds);
+		for(var i; i<this.markerIds.length;i++){
+			gantt.deleteMarker(this.markerIds[i])
+		}
+	},
+	removeMarker: function(id){
+		document.getElementById('')//TODO
+	},
+	markerIds:[],
 
 	initBasicProjectGantt: function(id, editable)
 	{

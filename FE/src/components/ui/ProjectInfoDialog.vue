@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialogOpen" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
+    <v-dialog v-model="dialog" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
         <v-card min-height="100%">
             <v-card-title class="grey lighten-4 py-4 title">
                 <v-slide-y-transition mode="in-out"><span v-show="edit" style="position: absolute;">编辑项目信息</span></v-slide-y-transition>
@@ -68,7 +68,7 @@
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions bottom v-if="edit" style="position: absolute;">
                                         <v-spacer></v-spacer>
-                                        <v-btn @click="handleCancelClick">取消</v-btn>
+                                        <v-btn @click="edit = false">取消</v-btn>
                                         <v-btn color="primary" @click="handleSaveClick" :disabled="!valid1" :loading="valid1">保存</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>
@@ -114,22 +114,20 @@ export default {
         editable() {
             return !this.readonly && this.edit
         },
-        dialogOpen: {
+        dialog: {
             get() { return this.$props.open },
             set(v) {
-                this.$emit('dialogClose')
+                this.$emit('close')
             }
         }
     },
-    methods: {
-        handleCancelClick() {
-            this.edit = false
-        },
+    methods: {        
         handleSaveClick() {
+            //form validtion            
             this.edit = false
             this.snackbar = true
             //TODO call save project
-
+            this.$emit('save')
         }
     }
 }

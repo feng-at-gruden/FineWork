@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialogOpen" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
+    <v-dialog v-model="dialog" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
         <v-card>
             <v-container style="max-width: 600px;">
                 <v-timeline dense clipped>                
@@ -73,10 +73,10 @@ export default {
         timelineData(){
             return this.$props.timeline
         },
-        dialogOpen: {
+        dialog: {
             get() { return this.$props.open },
             set(v) {
-                this.$emit('dialogClose')
+                this.$emit('close')
             }
         }
     },
