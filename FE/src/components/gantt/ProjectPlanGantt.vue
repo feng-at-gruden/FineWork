@@ -18,7 +18,7 @@ export default {
 			}
 		},
 		editable: false,
-		taskToAdd: null,
+		deleteId:0,
 	},
 	data(){
 		return {
@@ -75,15 +75,14 @@ export default {
 		myPlan: {			
 			handler: function(v, ov) {
 				if (v != ov) {
-					console.log('Data Changed')
+					//console.log('Data Changed')
 					gantt.parse(v)
 					myGantt.addMarkers(v)   //添加开工/竣工Marker
-					myGantt.removeMarkers() //Not work
 					v.data.filter(t => t.open).forEach(t => {
 						gantt.open(t.id)
 					})
 				}else{
-					console.log('Data MAYBE Changed')
+					//console.log('Data MAYBE Changed')
 				}
 			},
 			//deep: true,
@@ -94,12 +93,10 @@ export default {
 				this.attachGanttEditEvents()
 			}
 		},
-		taskToAdd(v, ov) {
-			if (v !== ov && v) {
-				//Not sure why is datetime value
-				myGantt.gantt.addTask({text:v.text,start_date:v.start_date, duration: v.duration, status:v.status, description:v.description }, v.parent)
-			}
-		},		
+		deleteId(v, ov){
+			if(v>0)
+				gantt.deleteTask(v)
+		}
 	}
 }
 

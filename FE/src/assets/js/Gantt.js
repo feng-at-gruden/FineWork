@@ -54,36 +54,54 @@ const projectReadonlyColumns = [
 ];
 
 const projectEditingColumns = [
-		{ name: "text", label: "阶段计划", tree: true, width: "*" },
-		{
-			name: "start_date",
-			label: "施工周期",
-			align: "center",
-			width: "90",
-			template(obj) {				
-				var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
-				return '<div class="gantt-content-samll">' + str + '</div>'
-			}
-		},
-		{
-			name: "duration",
-			label: "天",
-			align: "center",
-			width: "23",
-			template(obj) {				
-				var str = '<div class="oneline">' + obj.duration + '</div>'				
-				return '<div class="gantt-content-samll">' + str + '</div>'
-			}
-		},
-		{ name: "add", label: "", width: "30" }
-	];
+	{ name: "text", label: "阶段计划", tree: true, width: "*" },
+	{
+		name: "start_date",
+		label: "施工周期",
+		align: "center",
+		width: "90",
+		template(obj) {
+			var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{
+		name: "duration",
+		label: "天",
+		align: "center",
+		width: "23",
+		template(obj) {
+			var str = '<div class="oneline">' + obj.duration + '</div>'
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{ name: "add", label: "", width: "30" }
+];
 
+function limitMoveLeft(task, limit) {
+	var dur = task.end_date - task.start_date;
+	task.end_date = new Date(limit.end_date);
+	task.start_date = new Date(+task.end_date - dur);
+}
 
+function limitMoveRight(task, limit) {
+	var dur = task.end_date - task.start_date;
+	task.start_date = new Date(limit.start_date);
+	task.end_date = new Date(+task.start_date + dur);
+}
+
+function limitResizeLeft(task, limit) {
+	task.end_date = new Date(limit.end_date);
+}
+
+function limitResizeRight(task, limit) {
+	task.start_date = new Date(limit.start_date)
+}
 
 export default {
 
-	monthScaleTemplate: function(date){
-		var formatFunc = gantt.date.date_to_str("%M");		
+	monthScaleTemplate: function(date) {
+		var formatFunc = gantt.date.date_to_str("%M");
 		return formatFunc(date)
 	},
 
@@ -105,12 +123,12 @@ export default {
 		return "";
 	},
 
-	addMarker: function(marker_date, text, css){
+	addMarker: function(marker_date, text, css) {
 		//add start and finish marker
 		var date_to_str = gantt.date.date_to_str("%Y年%m月%d日")
 		var str_to_date = gantt.date.str_to_date("%d-%m-%Y")
-		if(marker_date !=''){
-			var start = str_to_date(marker_date)					
+		if (marker_date != '') {
+			var start = str_to_date(marker_date)
 			var id = gantt.addMarker({
 				start_date: start,
 				css,
@@ -122,27 +140,28 @@ export default {
 		return 0
 	},
 
-	addMarkers: function(project){
-		if(project.start_date!='')
+	addMarkers: function(project) {
+		if (this.markerIds.length >= 3)
+			return
+		if (project.start_date != '')
 			this.markerIds.push(this.addMarker(project.start_date, '开工', 'start-work'))
-		if(project.end_date!='')
+		if (project.end_date != '')
 			this.markerIds.push(this.addMarker(project.end_date, '竣工', 'end-work'))
-		var date_to_str = gantt.date.date_to_str("%d-%m-%Y")		
+		var date_to_str = gantt.date.date_to_str("%d-%m-%Y")
 		this.markerIds.push(this.addMarker(date_to_str(new Date()), '今天', 'today'))
 	},
-	removeMarkers: function(){
+	removeMarkers: function() {
 		console.log(this.markerIds);
-		for(var i; i<this.markerIds.length;i++){
+		for (var i; i < this.markerIds.length; i++) {
 			gantt.deleteMarker(this.markerIds[i])
 		}
 	},
-	removeMarker: function(id){
-		document.getElementById('')//TODO
+	removeMarker: function(id) {
+		document.getElementById('') //TODO
 	},
-	markerIds:[],
+	markerIds: [],
 
-	initBasicProjectGantt: function(id, editable)
-	{
+	initBasicProjectGantt: function(id, editable) {
 		/*gantt.templates.task_cell_class = function(task, date) {
 			var dateToStr = gantt.date.date_to_str("%D");
 			if (dateToStr(date) == "六" || dateToStr(date) == "日")
@@ -169,7 +188,7 @@ export default {
 			title: "Today: " + date_to_str(today)
 		});*/
 
-		gantt.config.work_time = false;		//false为工作日也计算在内
+		gantt.config.work_time = false; //false为工作日也计算在内
 		gantt.config.min_column_width = 40;
 
 		//gantt.config.autofit = true;
@@ -177,11 +196,51 @@ export default {
 		gantt.config.drag_links = false;
 		gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
+		
+		gantt.config.round_dnd_dates = false;
+		gantt.config.drag_project = true;
 
 		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
 			var task = gantt.getTask(id);
 			return !task.locked && task.progress != 1;
-		});	
+		});
+
+		gantt.attachEvent("onTaskDrag", function (id, mode, task, original, e) {
+			var parent = task.parent ? gantt.getTask(task.parent) : null,
+				children = gantt.getChildren(id),
+				modes = gantt.config.drag_mode;
+
+			var limitLeft = null,
+				limitRight = null;
+
+			if (!(mode == modes.move || mode == modes.resize)) return;
+
+			if (mode == modes.move) {
+				limitLeft = limitMoveLeft;
+				limitRight = limitMoveRight;
+			} else if (mode == modes.resize) {
+				limitLeft = limitResizeLeft;
+				limitRight = limitResizeRight;
+			}
+
+			//check parents constraints
+			if (parent && +parent.end_date < +task.end_date) {
+				limitLeft(task, parent);
+			}
+			if (parent && +parent.start_date > +task.start_date) {
+				limitRight(task, parent);
+			}
+
+			//check children constraints
+			for (var i = 0; i < children.length; i++) {
+				var child = gantt.getTask(children[i]);
+				if (+task.end_date < +child.end_date) {
+					limitLeft(task, child);
+				} else if (+task.start_date > +child.start_date) {
+					limitRight(task, child)
+				}
+			}
+		});
 	},
 
 	initProjectGantt: function(id, editable) {
@@ -193,14 +252,14 @@ export default {
 			{ unit: "month", step: 1, template: this.monthScaleTemplate },
 			//{ unit: "week", step: 1, template: this.projectWeekScaleTemplate, date:"%W" }, //确定是否要加week显示
 		];
-		gantt.config.step = 1;
+		//gantt.config.step = 1;
 		gantt.config.date_scale = "%Y年";
-		gantt.config.fit_tasks = true; 
+		gantt.config.fit_tasks = true;
 
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = projectEditingColumns
-		} else {			
+		} else {
 			gantt.config.columns = projectReadonlyColumns
 		}
 		gantt.init(id);
@@ -254,7 +313,7 @@ export default {
 		if (editable) {
 			gantt.config.columns = projectEditingColumns
 			console.log('projectEditingColumns');
-		} else {			
+		} else {
 			gantt.config.columns = projectReadonlyColumns
 			console.log('projectReadonlyColumns');
 		}
@@ -293,16 +352,16 @@ export default {
 		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
 			var task = gantt.getTask(id);
 			return !task.locked && task.progress != 1;
-		});		
+		});
 		gantt.init(id);
 	},
 
 
-	attachEvent(eventName, f){
-		var eventId = gantt.attachEvent(eventName,f)
+	attachEvent(eventName, f) {
+		var eventId = gantt.attachEvent(eventName, f)
 		return eventId
 	},
-	detachEvent(eventId){
+	detachEvent(eventId) {
 		gantt.detachEvent(eventId)
 	},
 	gantt,

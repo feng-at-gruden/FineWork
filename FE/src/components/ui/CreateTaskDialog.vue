@@ -4,7 +4,7 @@
             <v-card-title class="grey lighten-4 py-4 title">
                 添加{{unitName}}
             </v-card-title>
-            <v-form v-model="formValid" lazy-validation ref="createTaskForm">
+            <v-form v-model="formValid" ref="createTaskForm">
                 <v-container fluid>
                     <v-layout wrap>
                         <v-flex xs8 md8>
@@ -19,24 +19,21 @@
                         <v-flex xs6 md6>
                             <v-menu :close-on-content-click="false" v-model="dateMenu1" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
                                 <v-text-field slot="activator" v-model="task.start_date" label="开始日期" prepend-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="task.start_date" @input="dateMenu1 = false"></v-date-picker>
+                                <v-date-picker v-model="task.start_date" :min="min_date" :max="max_date" @input="dateMenu1 = false"></v-date-picker>
                             </v-menu>
                         </v-flex>
                         <v-flex xs6 md6>
                             <v-menu :close-on-content-click="false" v-model="dateMenu2" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
                                 <v-text-field slot="activator" v-model="task.end_date" label="结束日期" prepend-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="task.end_date" @input="dateMenu2 = false"></v-date-picker>
+                                <v-date-picker v-model="task.end_date" :min="min_date" :max="max_date" @input="dateMenu2 = false"></v-date-picker>
                             </v-menu>
                         </v-flex>
                         
                         <v-flex>
-                            <v-layout align-end justify-center row fill-height pa-5>
-                                <v-card-actions bottom>
+                            <v-layout align-end justify-center row fill-height>
                                     <v-spacer></v-spacer>
                                     <v-btn @click="dialog = false">取消</v-btn>
                                     <v-btn color="primary" @click="handleSaveClick" :disabled="!formValid">确定</v-btn>
-                                    <v-spacer></v-spacer>
-                                </v-card-actions>
                             </v-layout>
                         </v-flex>
                     </v-layout>
@@ -70,6 +67,12 @@ export default {
         },
         unitName(){
             return this.$props.unit
+        },
+        min_date(){
+            return this.$props.newTask.min_date
+        },
+        max_date(){
+            return this.$props.newTask.max_date
         },
         dialog: {
             get() { return this.$props.open },

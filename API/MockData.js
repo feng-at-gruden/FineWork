@@ -75,10 +75,10 @@ const projectPlan = {
     links: [],
     data: [
         // {id:998, text:"项目开工", type:"milestone", start_date:"1-03-2018"},
-        { id: 1, text: "基础工程", start_date: "02-04-2018", duration: 6, progress: 0, open: true},
-        { id: 2, text: "主体工程", start_date: "12-04-2018", duration: 20, progress: 0, open: true},
-        { id: 3, text: "屋面工程", start_date: "25-04-2018", duration: 36, progress: 0, open: true},
-        { id: 4, text: "装饰装修工程", start_date: "02-05-2018", duration: 47, progress: 0, open: true},
+        { id: 1, text: "基础工程", start_date: "02-04-2018", duration: 6, progress: 0, type: "project", open: true},
+        { id: 2, text: "主体工程", start_date: "12-04-2018", duration: 20, progress: 0, type: "project", open: true},
+        { id: 3, text: "屋面工程", start_date: "25-04-2018", duration: 36, progress: 0, type: "project", open: true},
+        { id: 4, text: "装饰装修工程", start_date: "02-05-2018", duration: 47, progress: 0, type: "project", open: true},
         // {id:999, text:"竣工", type:"milestone", start_date:"1-21-2019"},
     ]
 }

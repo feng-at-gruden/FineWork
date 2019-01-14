@@ -1,21 +1,15 @@
 <template>
 	<v-layout justify-center fill-height align-center>
 		<!--项目计划甘特图-->
-		<ProjectPlanGantt :plan="plan" :editable="editPlan" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox"></ProjectPlanGantt>
-		
+		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox"></ProjectPlanGantt>
 		<!--项目信息对话框-->
 		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false"></ProjectInfoDialog>
-		
 		<!--项目时间线对话框-->
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @close="openProjectTimeline = false"></ProjectTimeline>
-
 		<!--添加阶段计划对话框-->
 		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'阶段计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
-
 		<!--编辑阶段计划对话框-->
-		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave"></EditTaskDialog>
-
-
+		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
 		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
 			{{snackbarMessage}}
 			<v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -45,12 +39,13 @@ export default {
 			snackbarColor: '',
 			project: {},
 			timeline: [],
-			plan: {data:[], lilnks:[]},
+			plan: { data: [], lilnks: [] },
 			newTask: {
 				start_date: new Date().toISOString().substr(0, 10),
 				end_date: new Date().toISOString().substr(0, 10),
-			},
+			},			
 			taskToEdit: {},
+			taskToDelete: 0,
 			mainContainerCSS: 'main-container-gantt',
 			fackIndex: 2019,
 		}
@@ -59,13 +54,13 @@ export default {
 		selectedOptionMenu() {
 			return this.$store.state.selectedOptionMenu
 		},
-		editPlan:{
-			get(){return this.$store.state.editPlan},
-			set(v){this.$store.commit('editPlan', v)}
+		editPlan: {
+			get() { return this.$store.state.editPlan },
+			set(v) { this.$store.commit('editPlan', v) }
 		},
-		loading:{
-			get(){return this.$store.state.loading},
-			set(v){this.$store.commit('loading', v)}	
+		loading: {
+			get() { return this.$store.state.loading },
+			set(v) { this.$store.commit('loading', v) }
 		}
 	},
 	watch: {
@@ -80,12 +75,12 @@ export default {
 				case '项目计划调整':
 					//TODO 加载项目原计划（不含当前进度信息）
 					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
-					this.$store.commit('openDrawer', false)					
+					this.$store.commit('openDrawer', false)
 					this.editPlan = true
 					break
 				case '退出编辑模式':
 					//TODO 加载项目原计划（含当前进度信息）
-					this.showSnackbar('已退出项目计划编辑模式', 'info')					
+					this.showSnackbar('已退出项目计划编辑模式', 'info')
 					this.editPlan = false
 					break
 				case '删除本项目':
@@ -103,30 +98,63 @@ export default {
 			}, function(res) {
 				this.showSnackbar('项目信息加载失败!', 'error')
 			})
-		},		
+		},
 		handleOnGanttBeforeCreateTask(pid) {
 			//获取父节点ID
-			//console.log('handleBeforekCreateTask Pid - ', pid);
 			this.newTask.parent = pid
 			this.openCreateTaskDialog = true
-		},		
-		handleOnGanttTaskUpdate(task) {
-			console.log('handleOnGanttTaskUpdate - ', task);
+			//替换成项目开始日期或者父任务开始日期
+			//限制时间MAX/MIN不能超过或者低于父节点计划
+			//父节点为空则，设置为项目开始日期
+			var strToDate = gantt.date.str_to_date("%d-%m-%Y")
+			var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
+			if (pid > 0) {
+				var pTask = this.plan.data.filter(t=>t.id==pid)[0]
+				this.newTask.start_date = dateToStr(pTask.start_date)
+				this.newTask.end_date = this.newTask.start_date
+				this.newTask.min_date = this.newTask.start_date
+				this.newTask.max_date = dateToStr(pTask.end_date)
+			} else {
+				this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
+				this.newTask.end_date = this.newTask.start_date
+				this.newTask.min_date = this.newTask.start_date
+				this.newTask.max_date = dateToStr(strToDate(this.plan.end_date))
+			}			
 		},
-		handleOnGanttOpenEditBox(task){
+		handleOnGanttOpenEditBox(task) {
 			//填充UI data
 			var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
+			var strToDate = gantt.date.str_to_date("%d-%m-%Y")
 			this.taskToEdit = {
-				id:task.id, 
-				text:task.text, 
-				duration: task.duration, 
-				parent:task.parent,
+				id: task.id,
+				text: task.text,
+				duration: task.duration,
+				parent: task.parent,
 				start_date: dateToStr(task.start_date),
 				end_date: dateToStr(task.end_date),
 				status: task.status,
+				open: true,
 				description: task.description,
+			}			
+			if (task.parent > 0) {
+				var pTask = this.plan.data.filter(t=>t.id==task.parent)[0]
+				this.taskToEdit.min_date = dateToStr(pTask.start_date)
+				this.taskToEdit.max_date = dateToStr(pTask.end_date)
+			} else {
+				this.taskToEdit.min_date = dateToStr(strToDate(this.plan.start_date))
+				this.taskToEdit.max_date = dateToStr(strToDate(this.plan.end_date))
 			}
 			this.openEditTaskDialog = true
+		},
+		handleOnGanttTaskUpdate(task) {
+			//TODO Call API save to BE
+
+			//Update VUE data
+			for (var i = 0; i < this.plan.data.length; i++) {
+				if (task.id == this.plan.data[i].id) {
+					this.plan.data[i] = task
+				}
+			}			
 		},
 		handleOnCreateTaskSave(task) {
 			//新建任务窗口SAVE按钮点击
@@ -137,15 +165,17 @@ export default {
 			//Update gantt
 			if (true) {
 				var newTaskToGantt = {
-					id:this.fackIndex++, 
-					start_date: this.util.dateFormat('d/M/yyyy',this.util.stringToDate(task.start_date)), 
-					parent:task.parent,
-					status:task.status,
-					description:task.description,
-					text:task.text, 
-					duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))}
-				this.plan.data.push(newTaskToGantt)  
-				this.plan = Object.assign({}, this.plan)  //Force to refresh to Gantt component
+					id: this.fackIndex++,
+					start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+					parent: task.parent,
+					status: task.status,
+					opne: task.open,
+					description: task.description,
+					text: task.text,
+					duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
+				}
+				this.plan.data.push(newTaskToGantt)
+				this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
 			}
 			//Clear newTask for CreateTaskDialog
 			this.newTask = {
@@ -153,32 +183,56 @@ export default {
 				end_date: new Date().toISOString().substr(0, 10),
 			}
 		},
-		handleOnEditTaskSave(task){
+		handleOnEditTaskSave(task) {
 			//任务编辑窗口SAVE按钮点击
 
 			//TODO CAlL API
 
 			//Update to Gantt
 
-			if(true)
-			{
-				for(var i=0; i<this.plan.data.length;i++)
-				{		
-					if(task.id == this.plan.data[i].id)
-					{
+			if (true) {
+				for (var i = 0; i < this.plan.data.length; i++) {
+					if (task.id == this.plan.data[i].id) {
 						var editTaskToGantt = {
-						id:task.id,
-						start_date: this.util.dateFormat('d/M/yyyy',this.util.stringToDate(task.start_date)), 
-						parent:task.parent, 
-						text:task.text, 
-						duration: task.duration,
-						description: task.description,
-						status: task.status,}
-						this.plan.data[i] = editTaskToGantt						
+							id: task.id,
+							start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+							parent: task.parent,
+							text: task.text,
+							duration: task.duration,
+							description: task.description,
+							open: task.open,
+							status: task.status,
+						}
+						this.plan.data[i] = editTaskToGantt
 					}
-					this.plan = Object.assign({}, this.plan)  //Force to refresh to Gantt component
 				}
-			}			
+				this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
+			}
+		},
+		handleOnDeleteTask(task) {
+			//删除任务
+
+			//TODO Call API
+
+			//Update to Gantt
+			if (true) {
+				var ids = this.findNodeChildren(task.id, this.plan.data)
+				this.plan.data = this.plan.data.filter(t => ids.indexOf(t.id) == -1)
+				//console.log(this.plan.data);
+				//this.plan = Object.assign({}, this.plan) //Not work
+				this.taskToDelete = task.id
+			}
+		},
+		findNodeChildren(id, data) {
+			var result = []
+			for (var i = 0; i < data.length; i++) {
+				if (data[i].id == id) {
+					result.push(data[i].id)
+				} else if (data[i].parent == id) {
+					result = result.concat(this.findNodeChildren(data[i].id, data))
+				}
+			}
+			return result
 		},
 		showSnackbar(msg, color) {
 			this.snackbarMessage = msg
@@ -192,10 +246,12 @@ export default {
 	},
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */
+//TODO, 项目整体移动
 </script>
 <style scoped>
 .m-footer {
 	display: none;
 	border: 10px solid #f00;
 }
+
 </style>
