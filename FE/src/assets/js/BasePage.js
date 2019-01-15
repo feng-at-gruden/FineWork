@@ -20,15 +20,19 @@ export default {
 		},
 		showOptionMenu(){
 			return this.$route.meta.showOptionMenu
-		},		
+		},	
 		loading(){
 			return this.$store.state.loading
 		},
 		needFooter(){
 			return this.util.IsPC() && !this.$route.meta.fullWidth
+		},
+		drawer:{
+			get(){this.$store.state.drawer},
+			set(v){this.$store.commit('openDrawer', v)}
 		}
 	},
-	methods:{		
+	methods:{
 	},	
 	created(){
 	    if (this.$route.meta.requiresAuth) {

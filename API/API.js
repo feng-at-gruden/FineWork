@@ -35,13 +35,17 @@ app
 		res.json(mockData.projects)
 		console.log('GET /project/list')
 	})
-	.get('/project/plan', (req, res) => {
-		res.json(mockData.projectPlan)
-		console.log('GET /project/plan')
+	.get('/project/plan/raw', (req, res) => {
+		res.json(mockData.projectRawPlan)
+		console.log('GET /project/plan/raw')
 	})
-	.get('/plan/phase', (req, res) => {
-		res.json(mockData.task)
-		console.log('GET /plan/phase')
+	.get('/project/plan/detail', (req, res) => {
+		res.json(mockData.projectDetailedPlan)
+		console.log('GET /project/plan/detail')
+	})
+	.get('/phase/plan', (req, res) => {
+		res.json(mockData.tasks)
+		console.log('GET /phase/plan')
 	})
 	.post('/task', (req, res) => {
 		console.log('POST Request')

@@ -45,7 +45,7 @@ export default {
 				{ divider: true },
 				{ heading: '计划管理' },
 				{ title: '工程计划', link: '/Project/Plan', icon: 'subject' },
-				{ title: '阶段计划', link: '/Plan/Phase', icon: 'playlist_add_check' },
+				{ title: '阶段计划', link: '/Phase/Plan', icon: 'playlist_add_check' },
 				{ divider: true },
 				{ heading: '工作汇报' },
 				{ title: '施工日志', link: '/work/daily', icon: 'assignment' },

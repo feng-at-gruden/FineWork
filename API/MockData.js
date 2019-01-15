@@ -58,7 +58,9 @@ const tasks = {
         { id: 27, text: "顶板梁钢筋绑扎、墙柱模板加固", start_date: "11-04-2018", duration: 2, progress: 0, parent: 23 },
         { id: 28, text: "二层混凝土浇筑", start_date: "11-04-2018", duration: 5, progress: 0, parent: 23, oldplan: { id: 1, start_date: "11-02-2018", duration: 2 } },
     ],
-    links: []
+    links: [],
+    start_date: "01-03-2018",
+    end_date: "01-12-2019",
 };
 
 const projects = [
@@ -69,7 +71,22 @@ const projects = [
     { id: 5, name: '万达中心城项目', description: '项目描述、项目描述、项目描述、项目描述、项目描述、项目描述、', image: '' },
 ]
 
-const projectPlan = {
+const projectDetailedPlan = {
+    start_date: "01-03-2018",
+    end_date: "01-12-2019",
+    links: [],
+    data: [
+        // {id:998, text:"项目开工", type:"milestone", start_date:"1-03-2018"},
+        { id: 1, text: "基础工程", start_date: "02-04-2018", duration: 6, progress: 1, type: "project", open: true},
+        { id: 2, text: "主体工程", start_date: "12-04-2018", duration: 20, progress: 0.8, type: "project", open: true},
+        { id: 3, text: "屋面工程", start_date: "25-04-2018", duration: 36, progress: 0.2, type: "project", open: true},
+        { id: 4, text: "装饰装修工程", start_date: "02-05-2018", duration: 47, progress: 0.2, type: "project", open: true},
+        { id: 5, text: "收尾阶段", start_date: "02-05-2018", duration: 7, progress: 0, type: "project", open: true},
+        // {id:999, text:"竣工", type:"milestone", start_date:"1-21-2019"},
+    ]
+}
+
+const projectRawPlan = {
     start_date: "01-03-2018",
     end_date: "01-12-2019",
     links: [],
@@ -85,4 +102,5 @@ const projectPlan = {
 
 exports.tasks = tasks
 exports.projects = projects
-exports.projectPlan = projectPlan
+exports.projectDetailedPlan = projectDetailedPlan
+exports.projectRawPlan = projectRawPlan

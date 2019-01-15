@@ -8,7 +8,7 @@ import Dashboard from '@/components/Dashboard'
 import CreateProject from '@/components/project/Create'
 import ProjectList from '@/components/project/List'
 import ProjectPlan from '@/components/project/Plan'
-import PhasePlan from '@/components/plan/Phase'
+import PhasePlan from '@/components/phase/Plan'
 import MyAccount from '@/components/setting/MyAccount'
 
 
@@ -69,11 +69,11 @@ export default new Router({
             ]
         },
         {
-            path: '/Plan',
+            path: '/Phase',
             component: Main,
             children: [{
                 path: ':id',
-                name: 'Phase',
+                name: 'Plan',
                 meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true },
                 component: PhasePlan
             }, ]

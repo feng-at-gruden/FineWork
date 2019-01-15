@@ -1,7 +1,11 @@
 <template>
     <v-toolbar color="primary" app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
-        <v-toolbar-title>{{title}} <v-fade-transition mode="in-out"><v-icon v-if="editing">edit</v-icon></v-fade-transition></v-toolbar-title>
+        <v-toolbar-title>
+            {{title}} 
+            <v-fade-transition mode="in-out"><v-icon v-if="editing">edit</v-icon></v-fade-transition>
+        </v-toolbar-title>
+        <div class="loader" v-if="loading"></div>
         <v-spacer></v-spacer>
         <v-flex xs8 sm4 md2>
             <v-slide-x-reverse-transition>

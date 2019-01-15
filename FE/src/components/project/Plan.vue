@@ -74,12 +74,14 @@ export default {
 					break
 				case '项目计划调整':
 					//TODO 加载项目原计划（不含当前进度信息）
+					this.loadRawPlan()
 					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
-					this.$store.commit('openDrawer', false)
+					this.drawer = false
 					this.editPlan = true
 					break
 				case '退出编辑模式':
 					//TODO 加载项目原计划（含当前进度信息）
+					this.loadDetailedPlan()
 					this.showSnackbar('已退出项目计划编辑模式', 'info')
 					this.editPlan = false
 					break
@@ -90,13 +92,22 @@ export default {
 		}
 	},
 	methods: {
-		loadProjectDetail() {
+		loadDetailedPlan() {
 			// Call Ajax
-			this.$http.get(this.config.API_URL + '/project/plan', { emulateJSON: true }).then(function(res) {
+			this.$http.get(this.config.API_URL + '/project/plan/detail', { emulateJSON: true }).then(function(res) {
+				this.plan = JSON.parse(res.bodyText)
+				this.loading = false				
+			}, function(res) {
+				this.showSnackbar('项目信息加载失败!', 'error')
+			})
+		},
+		loadRawPlan() {
+			// Call Ajax
+			this.$http.get(this.config.API_URL + '/project/plan/raw', { emulateJSON: true }).then(function(res) {
 				this.plan = JSON.parse(res.bodyText)
 				this.loading = false
 			}, function(res) {
-				this.showSnackbar('项目信息加载失败!', 'error')
+				this.showSnackbar('项目信息加载失败!', 'error')				
 			})
 		},
 		handleOnGanttBeforeCreateTask(pid) {
@@ -242,8 +253,11 @@ export default {
 	},
 	created() {
 		this.loading = true
-		this.loadProjectDetail()
+		this.loadDetailedPlan()
 	},
+	beforeDestroy(){
+		this.editPlan = false
+	}
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */
 //TODO, 项目整体移动

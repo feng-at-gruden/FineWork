@@ -14,28 +14,32 @@ export default {
 		plan: {
 			type: Object,
 			default () {
-				return {data:[], lilnks:[], start_date:'', end_date:''}
+				return { data: [], lilnks: [], start_date: '', end_date: '' }
 			}
 		},
 		editable: false,
-		deleteId:0,
+		deleteId: 0,
 	},
-	data(){
+	data() {
 		return {
-			ganttEventIds:[],
+			ganttEventIds: [],
 		}
 	},
 	computed: {
 		edit() {
 			return this.$props.editable
 		},
-		myPlan:{
-			get(){return this.$props.plan},
-			set(v){}			
+		myPlan: {
+			get() { return this.$props.plan },
+			set(v) {}
 		}
 	},
-	methods:{
-		attachGanttEditEvents() {
+	methods: {
+		clearAttachedGanttEvents(){
+			this.ganttEventIds.forEach(t => { myGantt.detachEvent(t) })
+		},
+		attachGanttEvents() {
+			this.clearAttachedGanttEvents()
 			if (this.edit) {
 				//编辑模式，event捕捉并传出
 				this.ganttEventIds.push(myGantt.attachEvent('onTaskCreated', (task) => {
@@ -48,11 +52,18 @@ export default {
 					return false
 				}))
 				this.ganttEventIds.push(myGantt.attachEvent('onAfterTaskUpdate', (id, task) => {
+					console.log('onAfterTaskUpdate');
 					this.$emit('onTaskUpdate', task)
 					return false
 				}))
-			}else{			
-				this.ganttEventIds.forEach(t=>{myGantt.detachEvent(t)})	
+			} else {
+				this.ganttEventIds.push(myGantt.attachEvent('onTaskDblClick', (id, event) => {
+					//按ctrl键点击task进入阶段计划
+					console.log(id, event);
+					//TODO. expose and goto phase plan
+					this.$emit('onTaskDblClick', id)
+					return false					
+				}))
 			}
 		},
 	},
@@ -62,39 +73,42 @@ export default {
 	},
 	mounted() {
 		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
-		document.getElementById('my-gantt-container').style.width = document.body.clientWidth		
-		myGantt.initProjectGantt(this.$refs.container, this.edit)		
-		this.attachGanttEditEvents()		
+		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
+		myGantt.initProjectGantt(this.$refs.container, this.edit)
+		this.attachGanttEvents()
 		gantt.parse(this.myPlan)
+		gantt.render()
 	},
 	beforeDestroy() {
 		document.getElementById("viewport").setAttribute('content', 'user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
 		document.body.parentNode.style.overflowY = "auto";
-	},	
+		this.clearAttachedGanttEvents()
+	},
 	watch: {
-		myPlan: {			
+		myPlan: {
 			handler: function(v, ov) {
 				if (v != ov) {
-					//console.log('Data Changed')
+					gantt.clearAll()
+					myGantt.markerIds = []
 					gantt.parse(v)
-					myGantt.addMarkers(v)   //添加开工/竣工Marker
+					myGantt.addMarkers(v) //添加开工/竣工Marker					
 					v.data.filter(t => t.open).forEach(t => {
 						gantt.open(t.id)
 					})
-				}else{
+				} else {
 					//console.log('Data MAYBE Changed')
 				}
 			},
 			//deep: true,
 		},
 		editable(v, ov) {
-			if (v!=ov) {				
+			if (v != ov) {
 				myGantt.initProjectGantt(this.$refs.container, this.edit)
-				this.attachGanttEditEvents()
+				this.attachGanttEvents()
 			}
 		},
-		deleteId(v, ov){
-			if(v>0)
+		deleteId(v, ov) {
+			if (v > 0)
 				gantt.deleteTask(v)
 		}
 	}

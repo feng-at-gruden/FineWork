@@ -151,7 +151,6 @@ export default {
 		this.markerIds.push(this.addMarker(date_to_str(new Date()), '今天', 'today'))
 	},
 	removeMarkers: function() {
-		console.log(this.markerIds);
 		for (var i; i < this.markerIds.length; i++) {
 			gantt.deleteMarker(this.markerIds[i])
 		}
@@ -177,17 +176,6 @@ export default {
 		};
 		*/
 
-		//加入当天Marker
-
-		/*var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
-		var today = new Date(2018, 3, 26);
-		gantt.addMarker({
-			start_date: today,
-			css: "today",
-			text: "Today",
-			title: "Today: " + date_to_str(today)
-		});*/
-
 		gantt.config.work_time = false; //false为工作日也计算在内
 		gantt.config.min_column_width = 40;
 
@@ -198,7 +186,7 @@ export default {
 		gantt.config.scale_height = 60;
 		
 		gantt.config.round_dnd_dates = false;
-		gantt.config.drag_project = true;
+		gantt.config.drag_project = false; //Project自动计算并整体可拖拽
 
 		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
 			var task = gantt.getTask(id);
@@ -262,6 +250,35 @@ export default {
 		} else {
 			gantt.config.columns = projectReadonlyColumns
 		}
+
+		gantt.templates.task_class = function(start, end, task) {
+			var c = ''			
+			if (task.progress == 1) {
+				c += ' finished'
+			} else if (task.progress == 0){
+				c += ' not_start'
+			} else {
+				switch (task.status) {
+					case "working":
+						c += ' working'
+						break
+					case "pending":
+						c += ' pending'
+						break
+					case "finished":
+						c += ' finished'
+						break
+					case "not_start":
+						c += ' not_start'
+						break
+				}
+				if (task.exceed)
+					c = ' exceed'
+				if (task.delayed)
+					c = ' delayed'
+			}
+			return c
+		};
 		gantt.init(id);
 	},
 
