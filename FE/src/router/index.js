@@ -49,20 +49,20 @@ export default new Router({
                 {
                     path: 'List',
                     name: 'ProjectList',
-                    meta: { requiresAuth: true, level: 2, title: "工程一览" },
+                    meta: { requiresAuth: true, level: 2, title: "项目一览" },
                     component: ProjectList
                 },
                 {
                     path: ':id',
                     name: 'ProjectPlan',
-                    meta: { requiresAuth: true, level: 2, title: "工程计划", fullWidth: true, autoLoading: true, 
+                    meta: { requiresAuth: true, level: 2, title: "项目计划", fullWidth: true, autoLoading: true, 
                         showOptionMenu: true, 
                         optionMenu: [
                         { icon: 'info', text: '工程项目信息', }, 
                         { icon: 'timeline', text: '项目时间轴' }, 
                         { icon: '', text: 'Divider' }, 
                         { icon: 'edit', text: '项目计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
-                        { icon: 'delete', text: '删除本项目' }, 
+                        { icon: 'delete', text: '删除整个项目' }, 
                         ] },
                     component: ProjectPlan
                 },

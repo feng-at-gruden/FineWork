@@ -4,8 +4,7 @@
         <v-toolbar-title>
             {{title}} 
             <v-fade-transition mode="in-out"><v-icon v-if="editing">edit</v-icon></v-fade-transition>
-        </v-toolbar-title>
-        <div class="loader" v-if="loading"></div>
+        </v-toolbar-title>        
         <v-spacer></v-spacer>
         <v-flex xs8 sm4 md2>
             <v-slide-x-reverse-transition>
@@ -102,7 +101,7 @@ export default {
         },
         handleOptionMenuClick(menuItem) {
             this.$emit('onOptionMenuClick', menuItem)
-            setTimeout(() => (this.$emit('onOptionMenuClick', {})), 4000)
+            setTimeout(() => (this.$emit('onOptionMenuClick', {})), 2000)
         },
         goto(link) {
             if (link == 'logout') {

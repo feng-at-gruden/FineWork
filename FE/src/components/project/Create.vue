@@ -1,7 +1,7 @@
 <template>
     <v-stepper v-model="step" vertical color="primary">
         <v-stepper-step :complete="step > 1" step="1">
-            设置项目基础信息
+            项目基础信息
         </v-stepper-step>
         <v-stepper-content step="1">
             <v-card color="grey lighten-5" class="mb-5">
@@ -71,7 +71,7 @@
             </v-card>
             <v-btn color="primary" @click="validate1" :disabled="!valid1">下一步</v-btn>
         </v-stepper-content>
-        <v-stepper-step :complete="step > 2" step="2">设置工程施工阶段</v-stepper-step>
+        <v-stepper-step :complete="step > 2" step="2">工程施工阶段</v-stepper-step>
         <v-stepper-content step="2">
             <!-- 项目阶段 -->
             <v-card color="grey lighten-5" class="mb-5">

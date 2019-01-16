@@ -1,7 +1,7 @@
 <template>
 	<v-layout justify-center fill-height align-center>
 		<!--项目计划甘特图-->
-		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox"></ProjectPlanGantt>
+		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDbClick"></ProjectPlanGantt>
 		<!--项目信息对话框-->
 		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false"></ProjectInfoDialog>
 		<!--项目时间线对话框-->
@@ -10,6 +10,8 @@
 		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'阶段计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
 		<!--编辑阶段计划对话框-->
 		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
+		<!--删除项目确认对话框-->
+		<DeleteProjectDialog :open="openDeleteProjectDialog"  @close="openDeleteProjectDialog = false" @delete="handleOnDeleteProject"></DeleteProjectDialog>
 		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
 			{{snackbarMessage}}
 			<v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -23,17 +25,19 @@ import ProjectInfoDialog from '../ui/ProjectInfoDialog'
 import ProjectTimeline from '../ui/ProjectTimeline'
 import CreateTaskDialog from '../ui/CreateTaskDialog'
 import EditTaskDialog from '../ui/EditTaskDialog'
+import DeleteProjectDialog from '../ui/DeleteProjectDialog'
 
 export default {
 	extends: BasePage,
 	name: 'ProjectPlan',
-	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline, CreateTaskDialog, EditTaskDialog },
+	components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline, CreateTaskDialog, EditTaskDialog, DeleteProjectDialog },
 	data() {
 		return {
 			openProjectInfoDialog: false,
 			openProjectTimeline: false,
 			openCreateTaskDialog: false,
 			openEditTaskDialog: false,
+			openDeleteProjectDialog: false,
 			snackbar: false,
 			snackbarMessage: '',
 			snackbarColor: '',
@@ -43,7 +47,7 @@ export default {
 			newTask: {
 				start_date: new Date().toISOString().substr(0, 10),
 				end_date: new Date().toISOString().substr(0, 10),
-			},			
+			},
 			taskToEdit: {},
 			taskToDelete: 0,
 			mainContainerCSS: 'main-container-gantt',
@@ -82,11 +86,11 @@ export default {
 				case '退出编辑模式':
 					//TODO 加载项目原计划（含当前进度信息）
 					this.loadDetailedPlan()
-					this.showSnackbar('已退出项目计划编辑模式', 'info')
+					this.showSnackbar('您已退出项目计划编辑模式', 'info')
 					this.editPlan = false
 					break
-				case '删除本项目':
-					this.openProjectInfoDialog = true
+				case '删除整个项目':				
+					this.openDeleteProjectDialog = true
 					break
 			}
 		}
@@ -96,7 +100,7 @@ export default {
 			// Call Ajax
 			this.$http.get(this.config.API_URL + '/project/plan/detail', { emulateJSON: true }).then(function(res) {
 				this.plan = JSON.parse(res.bodyText)
-				this.loading = false				
+				this.loading = false
 			}, function(res) {
 				this.showSnackbar('项目信息加载失败!', 'error')
 			})
@@ -107,7 +111,7 @@ export default {
 				this.plan = JSON.parse(res.bodyText)
 				this.loading = false
 			}, function(res) {
-				this.showSnackbar('项目信息加载失败!', 'error')				
+				this.showSnackbar('项目信息加载失败!', 'error')
 			})
 		},
 		handleOnGanttBeforeCreateTask(pid) {
@@ -120,7 +124,7 @@ export default {
 			var strToDate = gantt.date.str_to_date("%d-%m-%Y")
 			var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
 			if (pid > 0) {
-				var pTask = this.plan.data.filter(t=>t.id==pid)[0]
+				var pTask = this.plan.data.filter(t => t.id == pid)[0]
 				this.newTask.start_date = dateToStr(pTask.start_date)
 				this.newTask.end_date = this.newTask.start_date
 				this.newTask.min_date = this.newTask.start_date
@@ -130,7 +134,7 @@ export default {
 				this.newTask.end_date = this.newTask.start_date
 				this.newTask.min_date = this.newTask.start_date
 				this.newTask.max_date = dateToStr(strToDate(this.plan.end_date))
-			}			
+			}
 		},
 		handleOnGanttOpenEditBox(task) {
 			//填充UI data
@@ -146,9 +150,9 @@ export default {
 				status: task.status,
 				open: true,
 				description: task.description,
-			}			
+			}
 			if (task.parent > 0) {
-				var pTask = this.plan.data.filter(t=>t.id==task.parent)[0]
+				var pTask = this.plan.data.filter(t => t.id == task.parent)[0]
 				this.taskToEdit.min_date = dateToStr(pTask.start_date)
 				this.taskToEdit.max_date = dateToStr(pTask.end_date)
 			} else {
@@ -165,7 +169,14 @@ export default {
 				if (task.id == this.plan.data[i].id) {
 					this.plan.data[i] = task
 				}
-			}			
+			}
+		},
+		handleOnGanttTaskDbClick(id) {			
+			var child = this.plan.data.filter(t=>t.parent==id)
+			if(child.length>0)
+			{
+				this.$route.push('/Phase/' + id + '/Plan')
+			}
 		},
 		handleOnCreateTaskSave(task) {
 			//新建任务窗口SAVE按钮点击
@@ -234,6 +245,10 @@ export default {
 				this.taskToDelete = task.id
 			}
 		},
+		handleOnDeleteProject(id){
+			console.log('delete project');
+			//TODO Call API
+		},
 		findNodeChildren(id, data) {
 			var result = []
 			for (var i = 0; i < data.length; i++) {
@@ -255,12 +270,13 @@ export default {
 		this.loading = true
 		this.loadDetailedPlan()
 	},
-	beforeDestroy(){
+	beforeDestroy() {
 		this.editPlan = false
 	}
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */
 //TODO, 项目整体移动
+
 </script>
 <style scoped>
 .m-footer {

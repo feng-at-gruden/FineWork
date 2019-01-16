@@ -14,10 +14,10 @@
 					</v-layout>
 				</v-container>
 			</v-content>
-			<Footer v-if="needFooter" />
+			<Footer v-if="needFooter" />			
 		</v-app>
-		</Footer>
-		<!--<div class="loading" v-show="loading"></div>-->
+		<div class="loader" v-if="loading"></div>
+		<!--<div class="loading" v-show="loading"></div>-->		
 	</div>
 </template>
 <script>

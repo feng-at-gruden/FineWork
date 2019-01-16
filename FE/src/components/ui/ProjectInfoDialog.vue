@@ -2,8 +2,8 @@
     <v-dialog v-model="dialog" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
         <v-card min-height="100%">
             <v-card-title class="grey lighten-4 py-4 title">
-                <v-slide-y-transition mode="in-out"><span v-show="edit" style="position: absolute;">编辑项目信息</span></v-slide-y-transition>
-                <v-slide-y-transition mode="in-out"><span v-show="!edit" style="position: absolute;">项目信息</span></v-slide-y-transition>
+                <v-slide-x-transition mode="in-out"><span v-show="edit" style="position: absolute;"><v-icon>edit</v-icon>编辑项目信息</span></v-slide-x-transition>
+                <v-slide-x-reverse-transition mode="in-out"><span v-show="!edit" style="position: absolute;">项目信息</span></v-slide-x-reverse-transition>
             </v-card-title>
             <v-form v-model="valid1" lazy-validation ref="editProjectForm">
                 <v-container fluid>
@@ -138,11 +138,11 @@ export default {
     width: 480px;
     right: 0;
     height: auto;
+    max-height: 100%;
     position: fixed;
     overflow-y: auto;
     top: 65px;
     margin: 0;
-    bottom: 0px;
 }
 
 .dialog-left-transition {}
