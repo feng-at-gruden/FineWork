@@ -74,7 +74,12 @@ export default new Router({
             children: [{
                 path: ':id',
                 name: 'Plan',
-                meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true },
+                meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true,
+                    showOptionMenu: true, 
+                    optionMenu: [
+                    { icon: 'edit', text: '阶段计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
+                    { icon: 'delete', text: '删除阶段计划' }, 
+                    ] },                 
                 component: PhasePlan
             }, ]
         },

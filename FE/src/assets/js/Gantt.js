@@ -146,7 +146,10 @@ export default {
 		if (project.start_date != '')
 			this.markerIds.push(this.addMarker(project.start_date, '开工', 'start-work'))
 		if (project.end_date != '')
-			this.markerIds.push(this.addMarker(project.end_date, '竣工', 'end-work'))
+			this.markerIds.push(this.addMarker(project.end_date, '竣工', 'end-work'))		
+		this.addTodayMarker()
+	},
+	addTodayMarker: function(){
 		var date_to_str = gantt.date.date_to_str("%d-%m-%Y")
 		this.markerIds.push(this.addMarker(date_to_str(new Date()), '今天', 'today'))
 	},
@@ -185,7 +188,6 @@ export default {
 		gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
 		
-		gantt.config.round_dnd_dates = false;
 		gantt.config.drag_project = false; //Project自动计算并整体可拖拽
 
 		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
@@ -233,7 +235,6 @@ export default {
 
 	initProjectGantt: function(id, editable) {
 		this.initBasicProjectGantt(id, editable)
-		gantt.config.fit_tasks = true
 		//按年为单位
 		gantt.config.scale_unit = "year";
 		gantt.config.subscales = [
@@ -243,6 +244,7 @@ export default {
 		//gantt.config.step = 1;
 		gantt.config.date_scale = "%Y年";
 		gantt.config.fit_tasks = true;
+		gantt.config.round_dnd_dates = false;
 
 		//切换编辑和只读模式
 		if (editable) {
@@ -283,6 +285,7 @@ export default {
 	},
 
 	initPhaseGantt: function(id, editable) {
+		this.initBasicProjectGantt(id, editable)
 		gantt.templates.task_cell_class = function(task, date) {
 			var dateToStr = gantt.date.date_to_str("%D");
 			if (dateToStr(date) == "六" || dateToStr(date) == "日")
@@ -291,48 +294,24 @@ export default {
 		};
 		gantt.templates.task_class = function(st, end, item) {
 			return item.exceed == 1 ? "high" : ""
-		};
-		/*
-		gantt.templates.rightside_text = function(start, end, task) {
-			return "" + task.duration + '天'
-		};
-		*/
+		};		
 
-		//加入当天Marker
-		var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
-		var today = new Date(2018, 3, 26);
-		gantt.addMarker({
-			start_date: today,
-			css: "today",
-			text: "Today",
-			title: "Today: " + date_to_str(today)
-		});
-
-
-		gantt.config.work_time = false;
 		gantt.config.scale_unit = "month";
 		gantt.config.step = 1;
 		gantt.config.date_scale = "%Y %F";
-		gantt.config.min_column_width = 40;
-
-		//gantt.config.autofit = true;
-		gantt.config.drag_progress = false;
-		gantt.config.drag_links = false;
-		gantt.config.readonly = !editable;
-		gantt.config.scale_height = 60;
-
+		gantt.config.round_dnd_dates = true;
+		
 		gantt.config.subscales = [
 			{ unit: "week", step: 1, template: this.weekScaleTemplate },
 			{ unit: "day", step: 1, date: "%j", css: this.daysStyle }
 		];
 
 		//切换编辑和只读模式
+		//TODO
 		if (editable) {
 			gantt.config.columns = projectEditingColumns
-			console.log('projectEditingColumns');
 		} else {
 			gantt.config.columns = projectReadonlyColumns
-			console.log('projectReadonlyColumns');
 		}
 
 		gantt.templates.task_class = function(start, end, task) {

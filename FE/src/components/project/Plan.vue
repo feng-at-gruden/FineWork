@@ -6,9 +6,9 @@
 		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false"></ProjectInfoDialog>
 		<!--项目时间线对话框-->
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @close="openProjectTimeline = false"></ProjectTimeline>
-		<!--添加阶段计划对话框-->
+		<!--添加计划对话框-->
 		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'阶段计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
-		<!--编辑阶段计划对话框-->
+		<!--编辑计划对话框-->
 		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
 		<!--删除项目确认对话框-->
 		<DeleteProjectDialog :open="openDeleteProjectDialog"  @close="openDeleteProjectDialog = false" @delete="handleOnDeleteProject"></DeleteProjectDialog>
@@ -77,14 +77,12 @@ export default {
 					this.openProjectTimeline = true
 					break
 				case '项目计划调整':
-					//TODO 加载项目原计划（不含当前进度信息）
 					this.loadRawPlan()
 					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
 					this.drawer = false
 					this.editPlan = true
 					break
 				case '退出编辑模式':
-					//TODO 加载项目原计划（含当前进度信息）
 					this.loadDetailedPlan()
 					this.showSnackbar('您已退出项目计划编辑模式', 'info')
 					this.editPlan = false
@@ -171,12 +169,14 @@ export default {
 				}
 			}
 		},
-		handleOnGanttTaskDbClick(id) {			
+		handleOnGanttTaskDbClick(id) {
+			this.$router.push('/Phase/' + id)
+			/*
 			var child = this.plan.data.filter(t=>t.parent==id)
 			if(child.length>0)
 			{
-				this.$route.push('/Phase/' + id + '/Plan')
-			}
+				
+			}*/
 		},
 		handleOnCreateTaskSave(task) {
 			//新建任务窗口SAVE按钮点击
