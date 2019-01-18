@@ -11,17 +11,11 @@ export default {
 		var url = window.app.$route.query['returnUrl']
 		const user = { username, password }
 		window.app.$http.post(config.API_URL + '/token', user, {
-			emulateJSON: true,
-			headers: {
-				'Content-Type': 'application/json',
-				'x-requested-with':'123123123',
-				'auth' :'123'
-			}
+			emulateJSON: true,			
 		}).then(function(res) {
-			var json = JSON.parse(res.bodyText)
-			var token = json.oken
-			var identity = { username, token }
-			console.log(identity)
+			var token = JSON.parse(res.bodyText).Token
+            localStorage.setItem("token",token)
+			var identity = {username, token }
 			window.app.$store.commit('userLogin', identity)
 			if (url)
 				router.push(url)
@@ -33,7 +27,7 @@ export default {
 	},
 	checkIsLogin(state) {
 		if (!state.identity.token) {
-			return true
+			return false
 		}
 		return true
 	}

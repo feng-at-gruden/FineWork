@@ -19,16 +19,15 @@ app
 	.get('/', (req, res) => {
 		res.send('<h1>Welcom to Demo RESTful</h1>')
 	})
-	.post('/login', (req, res) => {
+	.post('/token', (req, res) => {
 		var username = req.body.username;
 		var password = req.body.password;
 		console.log(username,password);
-		if(username=='feng.guo@gruden.com' && password=="123456"){
-			var identity = {username, password, realname:"Feng Guo", role:"Admin",token:"THIS IS ACCESS TOKEN" }
-			res.json({ "status": "success", identity })
+		if(username=='admin' && password=="123456"){
+			res.json({ "success": true, Token:'AAAAAAAAAAA' })
 		}
 		else{
-			res.status(500).send({ error: 'invalid username and passowrd' });			
+			res.status(401).send({ Message: 'Invalid username and passowrd' });			
 		}
 	})
 	.get('/project/list', (req, res) => {

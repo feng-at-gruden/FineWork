@@ -37,7 +37,6 @@ export default {
         loadPorjects() {
             // Call Ajax
             this.$http.get(this.config.API_URL + '/project/list', { emulateJSON: true }).then(function(res) {
-                console.log('Loaded project list');
                 this.projects = JSON.parse(res.bodyText)
             }, function(res) {
 

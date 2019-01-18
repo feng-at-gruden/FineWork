@@ -34,7 +34,7 @@ export default {
 	},
 	methods:{
 	},	
-	created(){
+	created(){		
 	    if (this.$route.meta.requiresAuth) {
 	        if (!this.auth.checkIsLogin(this.$store.state)) {
 	            this.$router.replace('/login' + '?returnUrl=' + this.$route.path)

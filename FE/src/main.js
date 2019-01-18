@@ -27,7 +27,6 @@ const app = new Vue({
     config,
     template: '<App/>',
     components: { App },
-
     computed: {
         token() {
             console.log(this.$store.state.identity)
@@ -38,24 +37,19 @@ const app = new Vue({
 })
 window.app = app
 
-/*
+
 Vue.http.interceptors.push(function(request, next) {
-    var token = "123123"
-    if (token) {
-        //不知是Bearer;还是Bearer半角空格，网上两种写法都有。  
-        request.headers.set('auth', 'Bearer;' + token);
-        //下面这个方法不正确。浏览器控制台或后台服务程序均无法看到传递值  
-        //request.headers.Authorization = 'Bearer;' + token;  
+    var token = localStorage.getItem("token")
+    if (token && request.url.indexOf('token')<0) {
+        request.headers.set('auth', token);
     }
-    console.log("拦截器输出，请求参数：", request.body ? request.body : request.params);
-    next(function(response) {
-        console.log("拦截器输出，返回状态：", response.status);
-        if (response.status === 401) {
-            window.location.href = '../public/login.html';
+    next(function(response) {                
+        if (response.status === 401 && response.url.indexOf('token')<0) {            
+            this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
         }
     });
 });
-*/
+
 
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
