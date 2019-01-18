@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="FineWorkModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="FineWorkModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Department">
           <Key>
             <PropertyRef Name="Id" />
@@ -43,9 +43,10 @@
           <Property Name="Description" Type="varchar" MaxLength="255" />
           <Property Name="StartDate" Type="datetime" Precision="0" />
           <Property Name="EndDate" Type="datetime" Precision="0" />
-          <Property Name="Progress" Type="varchar" MaxLength="255" />
+          <Property Name="Progress" Type="decimal" Precision="3" Scale="2" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedDate" Type="datetime" Precision="0" />
+          <Property Name="Status" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -224,8 +225,7 @@
             <End Role="WorkLog" EntitySet="WorkLog" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="FineWorkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -258,24 +258,9 @@
           <Property Name="EndDate" Type="DateTime" />
           <Property Name="CreatedDate" Type="DateTime" />
           <Property Name="CreatedBy" Type="Int32" />
-          <NavigationProperty Name="Project" Relationship="Self.phase_ibfk_1" FromRole="Phase" ToRole="Project" />
           <NavigationProperty Name="User" Relationship="Self.phase_ibfk_2" FromRole="Phase" ToRole="User" />
           <NavigationProperty Name="Task" Relationship="Self.task_ibfk_1" FromRole="Phase" ToRole="Task" />
-        </EntityType>
-        <EntityType Name="Project">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="StartDate" Type="DateTime" />
-          <Property Name="EndDate" Type="DateTime" />
-          <Property Name="Progress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" />
-          <NavigationProperty Name="Phase" Relationship="Self.phase_ibfk_1" FromRole="Project" ToRole="Phase" />
-          <NavigationProperty Name="User" Relationship="Self.Project_ibfk_1" FromRole="Project" ToRole="User" />
+          <NavigationProperty Name="Project" Relationship="FineWorkModel.phase_ibfk_1" FromRole="Phase" ToRole="Project" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -312,8 +297,8 @@
           <Property Name="Permissions" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Department" Relationship="Self.User_ibfk_1" FromRole="User" ToRole="Department" />
           <NavigationProperty Name="Phase" Relationship="Self.phase_ibfk_2" FromRole="User" ToRole="Phase" />
-          <NavigationProperty Name="Project" Relationship="Self.Project_ibfk_1" FromRole="User" ToRole="Project" />
           <NavigationProperty Name="WorkLog" Relationship="Self.worklog_ibfk_2" FromRole="User" ToRole="WorkLog" />
+          <NavigationProperty Name="Project" Relationship="FineWorkModel.Project_ibfk_1" FromRole="User" ToRole="Project" />
         </EntityType>
         <EntityType Name="WorkLog">
           <Key>
@@ -339,18 +324,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="phase_ibfk_1">
-          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
-          <End Role="Phase" Type="Self.Phase" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Project">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Phase">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="phase_ibfk_2">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Phase" Type="Self.Phase" Multiplicity="*" />
@@ -372,18 +345,6 @@
             </Principal>
             <Dependent Role="Task">
               <PropertyRef Name="PhaseId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Project_ibfk_1">
-          <End Role="User" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Project" Type="Self.Project" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Project">
-              <PropertyRef Name="CreatedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -427,17 +388,12 @@
           <EntitySet Name="Department" EntityType="Self.Department" />
           <EntitySet Name="Permission" EntityType="Self.Permission" />
           <EntitySet Name="Phase" EntityType="Self.Phase" />
-          <EntitySet Name="Project" EntityType="Self.Project" />
           <EntitySet Name="Task" EntityType="Self.Task" />
           <EntitySet Name="User" EntityType="Self.User" />
           <EntitySet Name="WorkLog" EntityType="Self.WorkLog" />
           <AssociationSet Name="User_ibfk_1" Association="Self.User_ibfk_1">
             <End Role="Department" EntitySet="Department" />
             <End Role="User" EntitySet="User" />
-          </AssociationSet>
-          <AssociationSet Name="phase_ibfk_1" Association="Self.phase_ibfk_1">
-            <End Role="Project" EntitySet="Project" />
-            <End Role="Phase" EntitySet="Phase" />
           </AssociationSet>
           <AssociationSet Name="phase_ibfk_2" Association="Self.phase_ibfk_2">
             <End Role="User" EntitySet="User" />
@@ -446,10 +402,6 @@
           <AssociationSet Name="task_ibfk_1" Association="Self.task_ibfk_1">
             <End Role="Phase" EntitySet="Phase" />
             <End Role="Task" EntitySet="Task" />
-          </AssociationSet>
-          <AssociationSet Name="Project_ibfk_1" Association="Self.Project_ibfk_1">
-            <End Role="User" EntitySet="User" />
-            <End Role="Project" EntitySet="Project" />
           </AssociationSet>
           <AssociationSet Name="task_ibfk_2" Association="Self.task_ibfk_2">
             <End Role="Task" EntitySet="Task" />
@@ -463,8 +415,57 @@
             <End Role="User" EntitySet="User" />
             <End Role="WorkLog" EntitySet="WorkLog" />
           </AssociationSet>
-        </EntityContainer>
-      </Schema>
+          <EntitySet Name="Project" EntityType="FineWorkModel.Project" />
+          <AssociationSet Name="phase_ibfk_1" Association="FineWorkModel.phase_ibfk_1">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Phase" EntitySet="Phase" />
+          </AssociationSet>
+          <AssociationSet Name="Project_ibfk_1" Association="FineWorkModel.Project_ibfk_1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Project" EntitySet="Project" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" />
+          <Property Name="EndDate" Type="DateTime" />
+          <Property Name="Progress" Type="Decimal" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" />
+          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Phase" Relationship="FineWorkModel.phase_ibfk_1" FromRole="Project" ToRole="Phase" />
+          <NavigationProperty Name="User" Relationship="FineWorkModel.Project_ibfk_1" FromRole="Project" ToRole="User" />
+        </EntityType>
+        <Association Name="phase_ibfk_1">
+          <End Type="FineWorkModel.Project" Role="Project" Multiplicity="0..1" />
+          <End Type="FineWorkModel.Phase" Role="Phase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Phase">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Project_ibfk_1">
+          <End Type="FineWorkModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="FineWorkModel.Project" Role="Project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Project">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -499,20 +500,6 @@
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Project">
-            <EntityTypeMapping TypeName="FineWorkModel.Project">
-              <MappingFragment StoreEntitySet="Project">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="Progress" ColumnName="Progress" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -556,6 +543,21 @@
                 <ScalarProperty Name="TaskId" ColumnName="TaskId" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Project">
+            <EntityTypeMapping TypeName="FineWorkModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Progress" ColumnName="Progress" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

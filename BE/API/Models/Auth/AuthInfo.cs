@@ -14,14 +14,14 @@ namespace API.Models.Auth
         public string UserName { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public string RealName { get; set; }
+
+        /// <summary>
         /// 角色
         /// </summary>
         public List<string> Permissions { get; set; }
-
-        /// <summary>
-        /// 是否管理员
-        /// </summary>
-        public bool IsAdmin { get; set; }
 
         /// <summary>
         /// 口令过期时间

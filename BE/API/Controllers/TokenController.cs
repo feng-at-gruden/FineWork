@@ -22,7 +22,6 @@ namespace API.Controllers
         /// <param name="loginRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("")]
         public HttpResponseMessage GetToken([FromBody] LoginRequest loginRequest)
         {
             TokenInfo response = new TokenInfo();//需要返回的口令信息
@@ -32,12 +31,9 @@ namespace API.Controllers
                 string passWord = loginRequest.Password;
 
                 var u = db.User.FirstOrDefault(m => m.Password == passWord && m.UserName == userName);
-                
                 if (u!=null)
                 {
-                    //TODO 获取身份验证信息
-                    AuthInfo authInfo = new AuthInfo { UserName = userName, ExpiryDateTime = DateTime.Now.AddHours(2) };
-
+                    AuthInfo authInfo = new AuthInfo { UserName = u.UserName, RealName= u.RealName, ExpiryDateTime = DateTime.Now.AddHours(2) };
                     const string secretKey = Configurations.SECRET_KEY;//口令加密秘钥
                     try
                     {
@@ -63,7 +59,6 @@ namespace API.Controllers
                     response.Success = false;
                     response.Message = "用户名/密码错误";
                 }
-                
             }
             else
             {
@@ -78,7 +73,6 @@ namespace API.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.OK, response, "application/json"); ;
             }
-            
         }
 
 

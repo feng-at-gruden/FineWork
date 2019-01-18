@@ -246,6 +246,7 @@
     <Compile Include="Models\Department.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\JsonModel\UserViewModel.cs" />
     <Compile Include="Models\Permission.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -255,6 +256,7 @@
     <Compile Include="Models\Project.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\JsonModel\ProjectViewModel.cs" />
     <Compile Include="Models\Task.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -366,7 +368,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>9901</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:9901/</IISUrl>
+          <IISUrl>http://localhost:9909/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

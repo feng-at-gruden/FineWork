@@ -28,9 +28,9 @@ namespace API.Models
         public virtual DbSet<Department> Department { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Phase> Phase { get; set; }
-        public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Task> Task { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<WorkLog> WorkLog { get; set; }
+        public virtual DbSet<Project> Project { get; set; }
     }
 }

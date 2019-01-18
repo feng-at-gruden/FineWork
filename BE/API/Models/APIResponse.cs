@@ -16,5 +16,10 @@ namespace API.Models
         /// 错误信息
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// 返回数据
+        /// </summary>
+        public object Data { get; set; }
     }
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-01-18 10:18:37
+Date: 2019-01-18 13:45:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -93,17 +93,19 @@ CREATE TABLE `Project` (
   `Description` varchar(255) DEFAULT NULL,
   `StartDate` datetime DEFAULT NULL,
   `EndDate` datetime DEFAULT NULL,
-  `Progress` varchar(255) DEFAULT NULL,
+  `Progress` decimal(3,2) DEFAULT NULL,
   `CreatedBy` int(11) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
+  `Status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `CreatedBy` (`CreatedBy`),
   CONSTRAINT `Project_ibfk_1` FOREIGN KEY (`CreatedBy`) REFERENCES `User` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of Project
 -- ----------------------------
+INSERT INTO `Project` VALUES ('1', '软件开发项目', null, '2019-01-01 00:00:00', '2019-03-31 00:00:00', '0.00', '1', '2019-01-18 11:08:04', '筹备中');
 
 -- ----------------------------
 -- Table structure for Task
