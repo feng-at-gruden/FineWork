@@ -10,15 +10,25 @@ export default {
 	login(username, password, callback) {
 		var url = window.app.$route.query['returnUrl']
 		const user = { username, password }
-		window.app.$http.post(config.API_URL + '/login', user, { emulateJSON: true }).then(function(res) {
-			var identity = JSON.parse(res.bodyText).identity
+		window.app.$http.post(config.API_URL + '/token', user, {
+			emulateJSON: true,
+			headers: {
+				'Content-Type': 'application/json',
+				'x-requested-with':'123123123',
+				'auth' :'123'
+			}
+		}).then(function(res) {
+			var json = JSON.parse(res.bodyText)
+			var token = json.oken
+			var identity = { username, token }
+			console.log(identity)
 			window.app.$store.commit('userLogin', identity)
 			if (url)
 				router.push(url)
 			else
 				router.push('/')
 		}, function(res) {
-			callback(JSON.parse(res.bodyText).error)
+			callback(JSON.parse(res.bodyText).Message)
 		});
 	},
 	checkIsLogin(state) {
