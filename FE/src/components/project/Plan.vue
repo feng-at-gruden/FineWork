@@ -42,7 +42,7 @@ export default {
 			snackbarMessage: '',
 			snackbarColor: '',
 			timeline: [],
-			plan: { data: [], lilnks: [] },
+			plan: { data: [], links: [] },
 			detail: {},
 			newTask: {
 				start_date: new Date().toISOString().substr(0, 10),
@@ -61,10 +61,6 @@ export default {
 		editPlan: {
 			get() { return this.$store.state.editPlan },
 			set(v) { this.$store.commit('editPlan', v) }
-		},
-		loading: {
-			get() { return this.$store.state.loading },
-			set(v) { this.$store.commit('loading', v) }
 		},
 		projectId() {
 			return this.$route.params.id
@@ -99,8 +95,17 @@ export default {
 	methods: {
 		loadDetailedPlan() {
 			// Call Ajax
-			this.$http.get(this.config.API_URL + '/project/plan/detail', { emulateJSON: true }).then(function(res) {
-				this.plan = JSON.parse(res.bodyText)
+			this.$http.get(this.config.API_URL + '/Project/DetailedPlan/?id=' + this.projectId).then(function(res) {
+				var json = JSON.parse(res.bodyText)
+				var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
+				if(json.data){
+					for(var i =0; i<json.data.length; i++){
+						if(!json.data[i].start_date){
+							json.data[i].start_date = dateToStr(new Date())
+						}
+					}
+				}
+				this.plan = json
 				this.loading = false
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')
@@ -108,8 +113,17 @@ export default {
 		},
 		loadRawPlan() {
 			// Call Ajax
-			this.$http.get(this.config.API_URL + '/project/plan/raw', { emulateJSON: true }).then(function(res) {
-				this.plan = JSON.parse(res.bodyText)
+			this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.projectId).then(function(res) {
+				var json = JSON.parse(res.bodyText)
+				var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
+				if(json.data){
+					for(var i =0; i<json.data.length; i++){
+						if(!json.data[i].start_date){
+							json.data[i].start_date = dateToStr(new Date())
+						}
+					}
+				}
+				this.plan = json
 				this.loading = false
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')

@@ -256,6 +256,8 @@
     <Compile Include="Models\Department.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\JsonModel\ProjectPlanViewModel.cs" />
+    <Compile Include="Models\JsonModel\TaskViewModel.cs" />
     <Compile Include="Models\JsonModel\UserViewModel.cs" />
     <Compile Include="Models\Permission.cs">
       <DependentUpon>DBModel.tt</DependentUpon>

@@ -73,6 +73,73 @@ namespace API.Controllers
             }           
         }
 
+        [HttpGet]
+        [Route("RawPlan")]
+        public HttpResponseMessage RawPlan(int id)
+        {
+            var phase = from row in db.Phase
+                        where row.ProjectId == id
+                        select new TaskViewModel
+                        {
+                            id = row.Id,
+                            text = row.Name,
+                            start_date = row.StartDate,
+                            end_date = row.EndDate,
+                            status = row.Status,
+                            parent = 0,
+                            progress = row.Progress.Value,
+                            type = "project",
+                            open = true
+                        };
+            var p = db.Project.SingleOrDefault(m => m.Id == id);
+            var model = new ProjectPlanViewModel
+            {
+                id = p.Id,
+                name = p.Name,
+                start_date = p.StartDate.Value,
+                end_date = p.EndDate.Value,
+                status = p.Status,
+                progress = p.Progress.Value,
+            };
+            model.data = phase.ToArray();
+            model.links = null;
+            
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
+
+        [HttpGet]
+        [Route("DetailedPlan")]
+        public HttpResponseMessage DetailedPlan(int id)
+        {
+            var phase = from row in db.Phase
+                        where row.ProjectId == id
+                        select new TaskViewModel
+                        {
+                            id = row.Id,
+                            text = row.Name,
+                            start_date = row.StartDate,
+                            end_date = row.EndDate,
+                            status = row.Status,
+                            parent = 0,
+                            progress = row.Progress.Value,
+                            type = "project",
+                            open = true
+                        };
+            var p = db.Project.SingleOrDefault(m => m.Id == id);
+            var model = new ProjectPlanViewModel
+            {
+                id = p.Id,
+                name = p.Name,
+                start_date = p.StartDate.Value,
+                end_date = p.EndDate.Value,
+                status = p.Status,
+                progress = p.Progress.Value,
+            };
+            model.data = phase.ToArray();
+            model.links = null;
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
+
         [HttpPost]
         public HttpResponseMessage Create([FromBody]ProjectViewModel project)
         {

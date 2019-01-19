@@ -23,7 +23,7 @@
 							</v-card-text>
 							<v-card-actions>
 								<v-spacer></v-spacer>
-								<v-btn color="primary" @click="handleLoginClick">登录</v-btn>
+								<v-btn color="primary" @click="handleLoginClick" :loading="loading">登录</v-btn>
 							</v-card-actions>
 						</v-card>
 						<v-alert :value="alert" type="error" icon="warning" transition="scale-transition">
@@ -52,7 +52,10 @@ export default {
 	},
 	methods: {
 		handleLoginClick() {
+			//TODO, form validation
+			//this.
 			this.alert = false
+			this.loading = true
 			this.auth.login(this.username, this.password, (msg) => {
 				this.errorMsg = msg
 				this.alert = true

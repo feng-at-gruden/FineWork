@@ -17,12 +17,14 @@ export default {
             localStorage.setItem("token",token)
 			var identity = {username, token }
 			window.app.$store.commit('userLogin', identity)
+			window.app.$store.commit('loading', false)
 			if (url)
 				router.push(url)
 			else
 				router.push('/')
 		}, function(res) {
 			callback(JSON.parse(res.bodyText).Message)
+			window.app.$store.commit('loading', false)
 		});
 	},
 	checkIsLogin(state) {

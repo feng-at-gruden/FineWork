@@ -20,9 +20,10 @@ export default {
 		},
 		showOptionMenu(){
 			return this.$route.meta.showOptionMenu
-		},	
-		loading(){
-			return this.$store.state.loading
+		},
+		loading: {
+			get() { return this.$store.state.loading },
+			set(v) { this.$store.commit('loading', v) }
 		},
 		needFooter(){
 			return this.util.IsPC() && !this.$route.meta.fullWidth
