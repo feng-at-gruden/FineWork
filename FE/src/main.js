@@ -41,9 +41,10 @@ window.app = app
 Vue.http.interceptors.push(function(request, next) {
     var token = localStorage.getItem("token")
     if (token && request.url.indexOf('token')<0) {
-        request.headers.set('auth', token);
+        request.headers.set('Content-Type', 'application/json; charset=utf-8')
+        request.headers.set('auth', token)
     }
-    next(function(response) {                
+    next(function(response) {
         if (response.status === 401 && response.url.indexOf('token')<0) {            
             this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
         }
