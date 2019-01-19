@@ -10,7 +10,7 @@ export default {
 	login(username, password, callback) {
 		var url = window.app.$route.query['returnUrl']
 		const user = { username, password }
-		window.app.$http.post(config.API_URL + '/token', user, {
+		window.app.$http.post(config.API_URL + '/Token', user, {
 			emulateJSON: true,			
 		}).then(function(res) {
 			var token = JSON.parse(res.bodyText).Token

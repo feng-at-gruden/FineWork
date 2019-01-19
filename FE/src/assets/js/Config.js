@@ -21,11 +21,11 @@ const Theme = Themes[3]
 
 //项目状态
 const ProjectStatus = [
-	{ value: 1, text: '筹备中' },
-	{ value: 2, text: '在建中' },
-	{ value: 3, text: '已竣工' },
-	{ value: 4, text: '已验收' },
-	{ value: 5, text: '已停工' },
+	{ value: '筹备中', text: '筹备中' },
+	{ value: '在建中', text: '在建中' },
+	{ value: '已竣工', text: '已竣工' },
+	{ value: '已验收', text: '已验收' },
+	{ value: '已停工', text: '已停工' },
 ]
 
 //施工阶段
@@ -41,7 +41,7 @@ const ProjcetType = ['新建', '扩建', '改建', '拆建', '恢复', '其他']
 
 
 //任务状态
-const TaskStatus = ['未开始', '进行中', '已完成', '停工中',]
+const TaskStatus = ['未开工', '进行中', '已完成', '停工中',]
 const TaskProgress = ['正常','已延期','已逾期']
 
 

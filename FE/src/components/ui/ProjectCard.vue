@@ -4,12 +4,12 @@
             <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
             <v-card-title primary-title>
                 <div>
-                    <h3 class="headline mb-0">{{$props.project.name}}</h3>
-                    <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
+                    <h3 class="headline mb-0">{{project.Name}}</h3>
+                    <div>{{project.Description}}</div>
                 </div>
             </v-card-title>
             <v-card-actions>
-                <v-btn flat color="primary" @click="gotoDetail" slot="">Share</v-btn>
+                <v-btn flat color="primary" @click="gotoDetail" slot="">项目详情</v-btn>
                 <v-btn flat color="primary">Explore</v-btn>
             </v-card-actions>
         </v-card>
@@ -22,11 +22,10 @@ import util from '../../assets/js/Util'
 
 export default {
     name: 'ProjectCard',
-    props: ['project', 'animIn', 'animOut'],
+    props: ['data', 'animIn', 'animOut'],
     components: { CustomTransition },
     data() {
         return {
-            clicked: false,
             util,
             config
         }
@@ -43,15 +42,14 @@ export default {
                 return this.$props.animOut
             else
                 return this.util.randomOut()
+        },
+        project(){
+            return this.$props.data
         }
-    },
-    created() {
-
     },
     methods: {
         gotoDetail() {
-            //this.clicked = true
-            this.$router.push('/Project/' + this.$props.project.id)
+            this.$router.push('/Project/' + this.project.Id)
         },
         handleAnimEnd() {
             //this.$router.push('/Project/' + this.$props.project.id)

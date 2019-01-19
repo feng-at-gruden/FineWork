@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2019-01-18 15:28:56
+Date: 2019-01-19 13:33:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -66,17 +66,18 @@ CREATE TABLE `Phase` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
   `Description` varchar(255) DEFAULT NULL,
-  `Progress` decimal(10,0) DEFAULT NULL,
+  `Progress` decimal(3,2) DEFAULT NULL,
   `ProjectId` int(11) DEFAULT NULL,
   `StartDate` datetime DEFAULT NULL,
   `EndDate` datetime DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
   `CreatedBy` int(255) DEFAULT NULL,
+  `Status` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `ProjectId` (`ProjectId`),
   KEY `CreatedBy` (`CreatedBy`),
-  CONSTRAINT `phase_ibfk_2` FOREIGN KEY (`CreatedBy`) REFERENCES `User` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `phase_ibfk_1` FOREIGN KEY (`ProjectId`) REFERENCES `Project` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `phase_ibfk_1` FOREIGN KEY (`ProjectId`) REFERENCES `Project` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `phase_ibfk_2` FOREIGN KEY (`CreatedBy`) REFERENCES `User` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -90,13 +91,22 @@ DROP TABLE IF EXISTS `Project`;
 CREATE TABLE `Project` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
+  `Type` varchar(50) DEFAULT NULL,
   `Description` varchar(255) DEFAULT NULL,
+  `No` varchar(50) DEFAULT NULL,
+  `Acreage` decimal(10,2) DEFAULT NULL,
+  `Cost` decimal(10,2) DEFAULT NULL,
+  `ContractNo` varchar(50) DEFAULT NULL,
+  `WarrantNo` varchar(50) DEFAULT NULL,
+  `ArchiveNo` varchar(50) DEFAULT NULL,
+  `Location` varchar(100) DEFAULT NULL,
+  `FirstParty` varchar(100) DEFAULT NULL,
   `StartDate` datetime DEFAULT NULL,
   `EndDate` datetime DEFAULT NULL,
   `Progress` decimal(3,2) DEFAULT NULL,
-  `CreatedBy` int(11) DEFAULT NULL,
+  `Status` varchar(50) DEFAULT NULL,
   `CreatedDate` datetime DEFAULT NULL,
-  `Status` varchar(255) DEFAULT NULL,
+  `CreatedBy` int(11) DEFAULT NULL,
   PRIMARY KEY (`Id`),
   KEY `CreatedBy` (`CreatedBy`),
   CONSTRAINT `Project_ibfk_1` FOREIGN KEY (`CreatedBy`) REFERENCES `User` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -105,9 +115,9 @@ CREATE TABLE `Project` (
 -- ----------------------------
 -- Records of Project
 -- ----------------------------
-INSERT INTO `Project` VALUES ('1', '软件开发项目', null, '2019-01-01 00:00:00', '2019-03-31 00:00:00', '0.10', '1', '2019-01-18 11:08:04', '筹备中');
-INSERT INTO `Project` VALUES ('2', '市南拆迁项目', null, '2019-03-01 00:00:00', '2019-05-31 00:00:00', '0.00', '1', '2019-01-18 14:12:19', '筹备中');
-INSERT INTO `Project` VALUES ('4', '铜陵拆迁项目', null, '2019-03-01 00:00:00', '2019-05-31 00:00:00', '0.00', '1', '2019-01-18 15:15:22', '筹备中');
+INSERT INTO `Project` VALUES ('1', '软件开发项目', null, null, null, null, null, null, null, null, null, null, '2019-01-01 00:00:00', '2019-03-31 00:00:00', '0.10', '筹备中', '2019-01-18 11:08:04', '1');
+INSERT INTO `Project` VALUES ('2', '市南拆迁项目', null, null, null, null, null, null, null, null, null, null, '2019-03-01 00:00:00', '2019-05-31 00:00:00', '0.00', '筹备中', '2019-01-18 14:12:19', '1');
+INSERT INTO `Project` VALUES ('4', '铜陵拆迁项目', null, null, null, null, null, null, null, null, null, null, '2019-03-01 00:00:00', '2019-05-31 00:00:00', '0.00', '筹备中', '2019-01-18 15:15:22', '1');
 
 -- ----------------------------
 -- Table structure for Task
@@ -130,8 +140,8 @@ CREATE TABLE `Task` (
   PRIMARY KEY (`Id`),
   KEY `PhaseId` (`PhaseId`),
   KEY `ParentTaskId` (`ParentTaskId`),
-  CONSTRAINT `task_ibfk_2` FOREIGN KEY (`ParentTaskId`) REFERENCES `Task` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `task_ibfk_1` FOREIGN KEY (`PhaseId`) REFERENCES `Phase` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `task_ibfk_1` FOREIGN KEY (`PhaseId`) REFERENCES `Phase` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `task_ibfk_2` FOREIGN KEY (`ParentTaskId`) REFERENCES `Task` (`Id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

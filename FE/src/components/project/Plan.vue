@@ -3,7 +3,7 @@
 		<!--项目计划甘特图-->
 		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDbClick"></ProjectPlanGantt>
 		<!--项目信息对话框-->
-		<ProjectInfoDialog :project="project" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false"></ProjectInfoDialog>
+		<ProjectInfoDialog :project="detail" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false" @update="handleOnProjectInfoUpdated"></ProjectInfoDialog>
 		<!--项目时间线对话框-->
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @close="openProjectTimeline = false"></ProjectTimeline>
 		<!--添加计划对话框-->
@@ -11,7 +11,7 @@
 		<!--编辑计划对话框-->
 		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
 		<!--删除项目确认对话框-->
-		<DeleteProjectDialog :open="openDeleteProjectDialog"  @close="openDeleteProjectDialog = false" @delete="handleOnDeleteProject"></DeleteProjectDialog>
+		<DeleteProjectDialog :open="openDeleteProjectDialog" @close="openDeleteProjectDialog = false" @delete="handleOnProjectDeleted"></DeleteProjectDialog>
 		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
 			{{snackbarMessage}}
 			<v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -41,9 +41,9 @@ export default {
 			snackbar: false,
 			snackbarMessage: '',
 			snackbarColor: '',
-			project: {},
 			timeline: [],
 			plan: { data: [], lilnks: [] },
+			detail: {},
 			newTask: {
 				start_date: new Date().toISOString().substr(0, 10),
 				end_date: new Date().toISOString().substr(0, 10),
@@ -65,13 +65,16 @@ export default {
 		loading: {
 			get() { return this.$store.state.loading },
 			set(v) { this.$store.commit('loading', v) }
-		}
+		},
+		projectId() {
+			return this.$route.params.id
+		},
 	},
 	watch: {
 		selectedOptionMenu(v) {
 			switch (v.text) {
 				case '工程项目信息':
-					this.openProjectInfoDialog = true
+					this.openProjectDetailDialog()
 					break
 				case '项目时间轴':
 					this.openProjectTimeline = true
@@ -87,7 +90,7 @@ export default {
 					this.showSnackbar('您已退出项目计划编辑模式', 'info')
 					this.editPlan = false
 					break
-				case '删除整个项目':				
+				case '删除整个项目':
 					this.openDeleteProjectDialog = true
 					break
 			}
@@ -100,7 +103,7 @@ export default {
 				this.plan = JSON.parse(res.bodyText)
 				this.loading = false
 			}, function(res) {
-				this.showSnackbar('项目信息加载失败!', 'error')
+				this.showSnackbar('项目计划信息加载失败!', 'error')
 			})
 		},
 		loadRawPlan() {
@@ -109,8 +112,29 @@ export default {
 				this.plan = JSON.parse(res.bodyText)
 				this.loading = false
 			}, function(res) {
+				this.showSnackbar('项目计划信息加载失败!', 'error')
+			})
+		},
+		openProjectDetailDialog() {
+			this.loading = true
+			this.$http.get(this.config.API_URL + '/Project/' + this.projectId).then(function(res) {
+				this.detail = JSON.parse(res.bodyText)
+				this.detail.StartDate = this.detail.StartDate.split('T')[0]
+				this.detail.EndDate = this.detail.EndDate.split('T')[0]
+				this.openProjectInfoDialog = true
+				this.loading = false
+			}, function(res) {
+				this.loading = false
 				this.showSnackbar('项目信息加载失败!', 'error')
 			})
+		},
+		handleOnProjectInfoUpdated(){
+			this.showSnackbar("项目信息更新成功", 'success')
+		},
+		handleOnProjectDeleted() {
+			this.showSnackbar("项目已删除", 'success')
+			this.openDeleteProjectDialog = false
+			setTimeout(() => (this.$router.replace('/Project/List')), 2000)
 		},
 		handleOnGanttBeforeCreateTask(pid) {
 			//获取父节点ID
@@ -244,10 +268,6 @@ export default {
 				//this.plan = Object.assign({}, this.plan) //Not work
 				this.taskToDelete = task.id
 			}
-		},
-		handleOnDeleteProject(id){
-			console.log('delete project');
-			//TODO Call API
 		},
 		findNodeChildren(id, data) {
 			var result = []

@@ -30,11 +30,13 @@
     </v-dialog>
 </template>
 <script>
+import config from '../../assets/js/Config'
 export default {
     name: 'DeleteProjectDialog',
     props: ['open'],
     data() {
         return {
+            config,
             deleteConfirm: false,
             confirmText: '',
             nameRules: [
@@ -56,15 +58,20 @@ export default {
                     this.deleteConfirm = false
                 }
             }
-        }
+        },
+        projectId() {
+            return this.$route.params.id
+        },
     },
     methods: {
         handleDeleteClick() {
             if (this.$refs.deleteForm.validate()) {
-                this.$emit('delete')
-                this.dialog = false
+                this.$http.delete(this.config.API_URL + '/Project/' + this.projectId).then(function(res) {
+                    this.$emit('delete')
+                }, function(res) {
+                    
+                })
             }
-
         }
     }
 }

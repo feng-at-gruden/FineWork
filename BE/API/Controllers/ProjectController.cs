@@ -29,7 +29,11 @@ namespace API.Controllers
                             StartDate = row.StartDate.Value,
                             EndDate = row.EndDate.Value,
                             Progress = row.Progress.Value,
-                            Status = row.Status
+                            Status = row.Status,
+                            Type = row.Type,
+                            No = row.No,
+                            Acreage = row.Acreage.Value,
+                            Cost = row.Cost.Value,
                         };
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
@@ -45,10 +49,21 @@ namespace API.Controllers
                     Id = row.Id,
                     Name = row.Name,
                     Description = row.Description,
+                    CreatedBy = row.CreatedBy.Value,
+                    CreatedDate = row.CreatedDate.Value,
+                    Progress = row.Progress.Value,
                     StartDate = row.StartDate.Value,
                     EndDate = row.EndDate.Value,
-                    Progress = row.Progress.Value,
-                    Status = row.Status
+                    Status = row.Status,
+                    No = row.No,
+                    WarrantNo = row.WarrantNo,
+                    ContractNo = row.ContractNo,
+                    ArchiveNo = row.ArchiveNo,
+                    Acreage = row.Acreage.Value,
+                    Cost = row.Cost.Value,
+                    Location = row.Location,
+                    FirstParty = row.FirstParty,
+                    Type = row.Type,
                 };
                 return Request.CreateResponse(HttpStatusCode.OK, model);
             }
@@ -68,18 +83,40 @@ namespace API.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.Conflict, new APIResponse { Success = false, Message = "已存在同名的项目，请重试。" });
                 }
-                var c = CurrentUser;
+                var u = CurrentUser;
                 var pp = db.Project.Add(new Project
                 {
                     Name = project.Name,
                     Description = project.Description,
-                    CreatedBy = c.Id,
+                    CreatedBy = u.Id,
                     CreatedDate = DateTime.Now,
                     Progress = 0,
                     StartDate = project.StartDate,
                     EndDate = project.EndDate,
                     Status = project.Status,
+                    No = project.No,
+                    WarrantNo = project.WarrantNo,
+                    ContractNo = project.ContractNo,
+                    ArchiveNo = project.ArchiveNo,
+                    Acreage = project.Acreage,
+                    Cost = project.Cost,
+                    Location = project.Location,
+                    FirstParty = project.FirstParty,
+                    Type = project.Type,
                 });
+                string[] phase = project.Phase;
+                foreach(string item in phase)
+                {
+                    db.Phase.Add(new Phase
+                    {
+                        ProjectId = pp.Id,
+                        Name = item,
+                        Progress = 0,
+                        CreatedBy = u.Id,
+                        CreatedDate = DateTime.Now,
+                        Status = "未开工"
+                    });
+                }
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "项目建立成功。", Data = new { Id = pp.Id} });
             }
@@ -104,8 +141,16 @@ namespace API.Controllers
                 p.Description = project.Description;
                 p.StartDate = project.StartDate;
                 p.EndDate = project.EndDate;
-                //p.Progress = project.Progress;  自动计算
                 p.Status = project.Status;
+                p.No = project.No;
+                p.WarrantNo = project.WarrantNo;
+                p.ContractNo = project.ContractNo;
+                p.ArchiveNo = project.ArchiveNo;
+                p.Acreage = project.Acreage;
+                p.Cost = project.Cost;
+                p.Location = project.Location;
+                p.FirstParty = project.FirstParty;
+                p.Type = project.Type;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "项目信息修改成功。" });
             }

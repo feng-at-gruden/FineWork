@@ -35,11 +35,11 @@ namespace API.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     
-        public virtual Phase Phase { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> ChildrenTasks { get; set; }
         public virtual Task ParentTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorkLog> WorkLog { get; set; }
+        public virtual Phase Phase { get; set; }
     }
 }
