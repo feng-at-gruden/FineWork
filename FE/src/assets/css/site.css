@@ -65,6 +65,18 @@ body{
     z-index: 10
 }
 
+.half-right-dialog {
+    width: 480px !important;
+    right: 0;
+    height: auto;
+    max-height: 100% !important;
+    position: fixed;
+    overflow-y: auto !important;
+    top: 65px;
+    bottom: 0px;
+    margin: 0 !important;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }

@@ -57,7 +57,7 @@
                             <v-text-field v-model="projectInfo.Location" :readonly="!editable" label="项目地点"></v-text-field>
                         </v-flex>
                         <v-flex xs12 sm12>
-                            <v-layout justify-center pa-5>
+                            <v-layout justify-center pa-3>
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions v-if="!edit" style="position: absolute;">
                                         <v-spacer></v-spacer>
@@ -136,16 +136,7 @@ export default {
 
 </script>
 <style>
-.half-right-dialog {
-    width: 480px;
-    right: 0;
-    height: auto;
-    max-height: 100%;
-    position: fixed;
-    overflow-y: auto;
-    top: 65px;
-    margin: 0;
-}
+
 
 .dialog-left-transition {}
 

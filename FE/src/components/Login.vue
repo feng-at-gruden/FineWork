@@ -31,7 +31,7 @@
 							</v-card-text>
 							<v-card-actions class="pa-3">
 								<v-spacer></v-spacer>
-								<v-btn color="primary" block @click="handleLoginClick" :loading="logining">登 录</v-btn>
+								<v-btn color="primary" block large @click="handleLoginClick" :loading="logining">登 录</v-btn>
 								<v-spacer></v-spacer>
 							</v-card-actions>
 						</v-card>
@@ -43,17 +43,31 @@
 			</v-container>
 		</v-content>
 		<v-footer dark class="footer fixed login-footer">{{copyright}}</v-footer>
-		<v-fade-transition mode="in-out">
-			<div class="wallpaper" v-if="!wallpaper" transition="fade-transition"></div>
-		</v-fade-transition>
-		<v-fade-transition mode="in-out">
-			<div class="wallpaper2" v-if="wallpaper" transition="fade-transition"></div>
-		</v-fade-transition>
+		<transition name="fade">
+			<div class="wallpaper1" ref="wallpaper1" v-show="!wallpaper" transition="fade-transition"></div>
+		</transition>
+		<transition name="fade">
+			<div class="wallpaper2" ref="wallpaper2" v-show="wallpaper" transition="fade-transition"></div>
+		</transition>
 	</v-app>
 </template>
 <script>
 import BasePage from '../assets/js/BasePage'
 
+const WALLPAPERS = [
+'https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/BM1759_EN-CN5095819877_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/UKSomerset_EN-CN3755440952_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/SaguenayIceFishing_EN-CN3465347871_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/Snowkiters_EN-CN6799323123_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/NapoleonsHat_EN-CN7390815343_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/RainierDawn_EN-CN2623942425_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/SnowyOwlVideo_EN-CN1604085380_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/TwilightHarbin_EN-CN7355954569_1920x1080.jpg'
+]
 export default {
 	extends: BasePage,
 	name: 'Login',
@@ -99,9 +113,19 @@ export default {
 			}
 		},
 		loadWallpaper() {
-			//TODO. call API and set ref class
+			//TODO. call API and set ref class			
+			if(this.picIndex>=WALLPAPERS.length)
+			{
+				this.picIndex = 0
+			}
+			var c = WALLPAPERS[this.picIndex]
+			if(this.wallpaper){
+				this.$refs.wallpaper1.style.backgroundImage = 'url(' + c + ')'
+			}else{								
+				this.$refs.wallpaper2.style.backgroundImage = 'url(' + c + ')'
+			}
+			this.wallpaper = this.picIndex % 2
 			this.picIndex++
-			this.wallpaper = this.picIndex % 2			
 		}
 	},
 	created() {
@@ -127,10 +151,11 @@ body {
 	margin-bottom: 20px;
 	color: black;
 	font-family: KaiTi;
-	font-size: 3.2em;
+	font-size: 3.5em;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	text-shadow: 2px 2px 2px #fff;
 }
 
 .login-h1-mobile {
@@ -138,6 +163,7 @@ body {
 	text-align: center;
 	margin-bottom: 30px;
 	margin-top: 10px;
+	text-shadow: 2px 2px 2px #fff;
 }
 
 .login-container {
@@ -153,28 +179,43 @@ body {
 	bottom: 0px;
 	width: 100%;
 	padding-right: 35px;
+	opacity: 0.8;
 }
 
-.wallpaper,
+.wallpaper1,
 .wallpaper2 {
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	width: 100%;
 	height: 100%;
+	background-size: 100% 100%;
+    background-repeat: no-repeat;
 	background: url('https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg');
 }
-
 .wallpaper2 {
 	background: url('https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg');
 }
 
 .login-gap {
-	height: 60px;
+	height: 50px;
 }
 
 .login-box {
 	margin-bottom: 20px;
+	border-radius: 6px;
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.6s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.6s;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0.1
+}
 </style>

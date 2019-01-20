@@ -6,8 +6,11 @@ const API_URL = "http://103.254.77.30:8001/API"
 //const API_URL = "http://localhost:9909/API"
 //const API_URL = "/API"
 
-const APP_NAME = "中阳集团项目进度跟踪系统"
-const CLIENT_NAME = "中阳集团"
+//const APP_NAME = "中阳集团项目进度跟踪系统"
+//const CLIENT_NAME = "中阳集团"
+const APP_NAME = "Fine.Work"
+const CLIENT_NAME = "Feng Guo"
+
 const WALL_PAPER_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=#INDEX#&n=1&nc=1361089515117&FORM=HYLH1"
 
 const Themes = [

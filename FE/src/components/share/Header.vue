@@ -23,7 +23,7 @@
                     <v-divider v-if="item.text=='Divider'"></v-divider>
                     <template v-else>
                         <v-list-tile v-if="!item.editing" :key="item.text" @click="handleOptionMenuClick(item)">
-                            <v-list-tile-action class="setting-menu-list-tile-action">
+                            <v-list-tile-action class="header-list-action">
                                 <v-icon>{{item.icon}}</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
@@ -32,7 +32,7 @@
                         </v-list-tile>
                         <template v-else>
                             <v-list-tile v-if="editing" :key="item.editing.text" @click="handleOptionMenuClick(item.editing)">
-                                <v-list-tile-action class="setting-menu-list-tile-action">
+                                <v-list-tile-action class="header-list-action">
                                     <v-icon>{{item.editing.icon}}</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-content>
@@ -40,7 +40,7 @@
                                 </v-list-tile-content>
                             </v-list-tile>
                             <v-list-tile v-else :key="item.text" @click="handleOptionMenuClick(item)">
-                                <v-list-tile-action class="setting-menu-list-tile-action">
+                                <v-list-tile-action class="header-list-action">
                                     <v-icon>{{item.icon}}</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-content>

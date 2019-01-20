@@ -18,14 +18,14 @@ Vue.use(Vuetify, { theme: config.Theme })
 Vue.config.productionTip = false
 
 Vue.http.interceptors.push(function(request, next) {
-    var token = localStorage.getItem("token")
-    if (token && request.url.indexOf('token') < 0) {
+    var token = localStorage.getItem("Token")
+    if (token && request.url.indexOf('Token') < 0) {
         request.headers.set('Content-Type', 'application/json; charset=utf-8')
         request.headers.set('auth', token)
         request.headers.set('Access-Control-Allow-Origin', '*')        
     }
     next(function(response) {
-        if (response.status === 401 && response.url.indexOf('token') < 0) {
+        if (response.status === 401 && response.url.indexOf('Token') < 0) {
             this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
         }
     });
