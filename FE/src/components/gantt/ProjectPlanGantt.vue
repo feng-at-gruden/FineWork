@@ -51,8 +51,7 @@ export default {
 					this.$emit('onOpenEditBox', task)
 					return false
 				}))
-				this.ganttEventIds.push(myGantt.attachEvent('onAfterTaskUpdate', (id, task) => {
-					console.log('onAfterTaskUpdate');
+				this.ganttEventIds.push(myGantt.attachEvent('onAfterTaskUpdate', (id, task) => {	
 					this.$emit('onTaskUpdate', task)
 					return false
 				}))

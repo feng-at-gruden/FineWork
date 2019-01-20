@@ -1,19 +1,13 @@
 <template>
     <v-footer app fixed class="footer">
-        <span>&copy; 2019</span>
+        {{copyright}}
     </v-footer>
 </template>
 <script>
+import BasePage from '../../assets/js/BasePage'
 export default {
-    data: () => ({
-
-    })
+    extends: BasePage, 
 }
-
 </script>
 <style>
-.footer {
-    padding-left: 25px;
-
-}
 </style>

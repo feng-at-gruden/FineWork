@@ -34,13 +34,13 @@ app
 		res.json(mockData.projects)
 		console.log('GET /project/list')
 	})
-	.get('/project/plan/raw', (req, res) => {
+	.get('/project/rawplan/:id', (req, res) => {
 		res.json(mockData.projectRawPlan)
-		console.log('GET /project/plan/raw')
+		console.log('GET /project/rawplan')
 	})
-	.get('/project/plan/detail', (req, res) => {
+	.get('/project/detailedplan/:id', (req, res) => {
 		res.json(mockData.projectDetailedPlan)
-		console.log('GET /project/plan/detail')
+		console.log('GET /project/detailedplan')
 	})
 	.get('/phase/plan', (req, res) => {
 		res.json(mockData.tasks)

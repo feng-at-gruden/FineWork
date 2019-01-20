@@ -2,7 +2,7 @@
 	<div>
 		<v-app >
 			<Drawer />
-			<Header @onOptionMenuClick="handleHeaderOptionMenuClick"/>			
+			<Header @onOptionMenuClick="handleHeaderOptionMenuClick" :subHeader="subHeader"/>			
 			<v-content class="v-content-container">
 				<v-container fill-height :class="[fullWidth?'main-container-full':'main-container', '']">
 					<v-layout justify-center fill-height row wrap align-center>
@@ -14,7 +14,8 @@
 					</v-layout>
 				</v-container>
 			</v-content>
-			<Footer v-if="needFooter" />			
+			<Footer v-if="needFooter" />		
+			
 		</v-app>
 		<div class="loader" v-if="loading"></div>
 		<!--<div class="loading" v-show="loading"></div>-->		
@@ -38,14 +39,17 @@ export default {
 	},
 	data() {
 		return {
-			
+			subHeader:''
 		}
 	},
 	methods: {
 		handleHeaderOptionMenuClick(menuItem){
 			this.$store.commit('optionMenuClick', menuItem)
 		}
-	}
+	},
+	mounted () {
+        this.eventBus.$on('subTitleChanged', v=> this.subHeader = v)
+    },
 }
 
 </script>

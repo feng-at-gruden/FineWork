@@ -6,14 +6,15 @@ const API_URL = "http://103.254.77.30:8001/API"
 //const API_URL = "http://localhost:9909/API"
 //const API_URL = "/API"
 
-const APP_NAME = "Fine.Work"
-
+const APP_NAME = "中阳集团项目进度跟踪系统"
+const CLIENT_NAME = "中阳集团"
+const WALL_PAPER_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=#INDEX#&n=1&nc=1361089515117&FORM=HYLH1"
 
 const Themes = [
 	{ primary: colors.purple, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
 	{ primary: colors.amber, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-	{ primary: colors.orange.accent4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-	{ primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+	{ primary: colors.orange.accent4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3,  },
+	{ primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
 ]
 
 const Theme = Themes[3]
@@ -47,7 +48,9 @@ const TaskProgress = ['正常','已延期','已逾期']
 
 export default {
 	APP_NAME,
+	CLIENT_NAME,
 	API_URL,
+	WALL_PAPER_URL,
 	Theme,
 	ProjectStatus,
 	TaskStatus,

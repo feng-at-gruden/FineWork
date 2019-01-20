@@ -4,10 +4,11 @@ import config from './Config'
 
 export default {
 	logout() {
+        localStorage.removeItem("token")
 		window.app.$store.commit('userLogout')
 		router.push('/login')
 	},
-	login(username, password, callback) {
+	login(username, password, successCallback, failedCallback) {
 		var url = window.app.$route.query['returnUrl']
 		const user = { username, password }
 		window.app.$http.post(config.API_URL + '/Token', user, {
@@ -16,20 +17,26 @@ export default {
 			var token = JSON.parse(res.bodyText).Token
             localStorage.setItem("token",token)
 			var identity = {username, token }
-			window.app.$store.commit('userLogin', identity)
-			window.app.$store.commit('loading', false)
+			window.app.$store.commit('userLogin', identity)			
 			if (url)
-				router.push(url)
+				router.replace(url)
 			else
-				router.push('/')
+				router.replace('/')
+            successCallback()
 		}, function(res) {
-			callback(JSON.parse(res.bodyText).Message)
-			window.app.$store.commit('loading', false)
+			failedCallback(JSON.parse(res.bodyText).Message)			
 		});
 	},
-	checkIsLogin(state) {
+	checkIsLogin(state) {        
 		if (!state.identity.token) {
-			return false
+            var token = localStorage.getItem("token")
+            if(token){
+                // var identity = {username:'', token }
+                // window.app.$store.commit('userLogin', identity) 
+                return true
+            }else{                
+    			return false
+            }       
 		}
 		return true
 	}

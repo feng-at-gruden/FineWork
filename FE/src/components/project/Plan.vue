@@ -77,7 +77,7 @@ export default {
 					break
 				case '项目计划调整':
 					this.loadRawPlan()
-					this.showSnackbar('已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
+					this.showSnackbar('您已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
 					this.drawer = false
 					this.editPlan = true
 					break
@@ -93,19 +93,24 @@ export default {
 		}
 	},
 	methods: {
-		loadDetailedPlan() {
+		loadDetailedPlan(){
 			// Call Ajax
-			this.$http.get(this.config.API_URL + '/Project/DetailedPlan/?id=' + this.projectId).then(function(res) {
+			this.loading = true
+			this.$http.get(this.config.API_URL + '/Project/DetailedPlan/?id=' + this.projectId).then(function(res){
 				var json = JSON.parse(res.bodyText)
 				var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
-				if(json.data){
-					for(var i =0; i<json.data.length; i++){
-						if(!json.data[i].start_date){
+				if (json.data) {
+					//日期格式转换
+					for (var i = 0; i < json.data.length; i++) {
+						if (!json.data[i].start_date) {
 							json.data[i].start_date = dateToStr(new Date())
 						}
 					}
-				}
+				}				
+				json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
+				json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
 				this.plan = json
+				this.subTitle = this.plan.name
 				this.loading = false
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')
@@ -113,37 +118,50 @@ export default {
 		},
 		loadRawPlan() {
 			// Call Ajax
+			this.loading = true
 			this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.projectId).then(function(res) {
 				var json = JSON.parse(res.bodyText)
+				//日期格式转换
 				var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
-				if(json.data){
-					for(var i =0; i<json.data.length; i++){
-						if(!json.data[i].start_date){
+				if (json.data) {
+					for (var i = 0; i < json.data.length; i++) {
+						if (!json.data[i].start_date) {
 							json.data[i].start_date = dateToStr(new Date())
 						}
 					}
 				}
+				json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
+				json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
 				this.plan = json
+				this.subTitle = this.plan.name
 				this.loading = false
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')
 			})
-		},
+		},						
 		openProjectDetailDialog() {
+			this.loadProjectDetail(()=>{this.openProjectInfoDialog = true})
+		},
+		loadProjectDetail(callback){
 			this.loading = true
 			this.$http.get(this.config.API_URL + '/Project/' + this.projectId).then(function(res) {
 				this.detail = JSON.parse(res.bodyText)
 				this.detail.StartDate = this.detail.StartDate.split('T')[0]
-				this.detail.EndDate = this.detail.EndDate.split('T')[0]
-				this.openProjectInfoDialog = true
+				this.detail.EndDate = this.detail.EndDate.split('T')[0]				
 				this.loading = false
+				callback()
 			}, function(res) {
 				this.loading = false
 				this.showSnackbar('项目信息加载失败!', 'error')
 			})
 		},
-		handleOnProjectInfoUpdated(){
+		handleOnProjectInfoUpdated() {
 			this.showSnackbar("项目信息更新成功", 'success')
+			if(this.editPlan){
+				this.loadRawPlan()
+			}else{
+				this.loadDetailedPlan()
+			}			
 		},
 		handleOnProjectDeleted() {
 			this.showSnackbar("项目已删除", 'success')

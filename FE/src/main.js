@@ -17,6 +17,20 @@ Vue.use(Vuetify, { theme: config.Theme })
 
 Vue.config.productionTip = false
 
+Vue.http.interceptors.push(function(request, next) {
+    var token = localStorage.getItem("token")
+    if (token && request.url.indexOf('token') < 0) {
+        request.headers.set('Content-Type', 'application/json; charset=utf-8')
+        request.headers.set('auth', token)
+        request.headers.set('Access-Control-Allow-Origin', '*')        
+    }
+    next(function(response) {
+        if (response.status === 401 && response.url.indexOf('token') < 0) {
+            this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
+        }
+    });
+});
+
 /* eslint-disable no-new */
 const app = new Vue({
     el: '#app',
@@ -27,34 +41,15 @@ const app = new Vue({
     config,
     template: '<App/>',
     components: { App },
-    computed: {
-        token() {
-            console.log(this.$store.state.identity)
-            return this.$store.state.identity.token
-        }
+    beforeCreate() {
+        Vue.prototype.eventBus = this
     }
-
 })
 window.app = app
 
-
-Vue.http.interceptors.push(function(request, next) {
-    var token = localStorage.getItem("token")
-    if (token && request.url.indexOf('token')<0) {
-        request.headers.set('Content-Type', 'application/json; charset=utf-8')
-        request.headers.set('auth', token)
-    }
-    next(function(response) {
-        if (response.status === 401 && response.url.indexOf('token')<0) {            
-            this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
-        }
-    });
-});
-
-
 router.beforeEach((to, from, next) => {
     if (to.meta.title) {
-        document.title = config.APP_NAME + " " + to.meta.title
+        document.title = config.APP_NAME + " - " + to.meta.title
     }
     if (to.meta.fullWidth) {
         app.$store.commit('openDrawer', false)

@@ -33,7 +33,7 @@ const store = new Vuex.Store({
 		},
 		optionMenuClick(state,v){			
 			state.selectedOptionMenu = v		
-		}	
+		}
 	}
 })
 
