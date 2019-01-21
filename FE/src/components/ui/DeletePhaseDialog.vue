@@ -44,9 +44,6 @@ export default {
         }
     },
     computed: {
-        projectInfo() {
-            return this.$props.project
-        },
         dialog: {
             get() { return this.$props.open },
             set(v) {
@@ -56,15 +53,20 @@ export default {
                     this.deleteConfirm = false
                 }
             }
-        }
+        },
+        phaseId() {
+            return this.$route.params.id
+        },
     },
     methods: {
         handleDeleteClick() {
             if (this.$refs.deleteForm.validate()) {
-                this.$emit('delete')
-                this.dialog = false
+                this.$http.delete(this.config.API_URL + '/Phase/' + this.phaseId).then(function(res) {
+                    this.$emit('delete')
+                }, function(res) {
+                    
+                })
             }
-
         }
     }
 }

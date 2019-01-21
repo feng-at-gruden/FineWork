@@ -17,5 +17,6 @@ namespace API.Models.JsonModel
         public Int32 parent;
         public string type;
         public bool open;
+        public string description;
     }
 }

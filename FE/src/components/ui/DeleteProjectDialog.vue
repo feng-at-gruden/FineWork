@@ -46,9 +46,6 @@ export default {
         }
     },
     computed: {
-        projectInfo() {
-            return this.$props.project
-        },
         dialog: {
             get() { return this.$props.open },
             set(v) {

@@ -89,8 +89,16 @@ namespace API.Controllers
                             parent = 0,
                             progress = row.Progress.Value,
                             type = "project",
-                            open = true
+                            open = true,
+                            description = row.Description,
                         };
+            foreach (var i in phase)
+            {
+
+                TimeSpan ts = new TimeSpan();
+                ts = i.end_date.Value - i.start_date.Value;
+                i.duration = ts.Days;
+            }
             var p = db.Project.SingleOrDefault(m => m.Id == id);
             var model = new ProjectPlanViewModel
             {
@@ -125,6 +133,13 @@ namespace API.Controllers
                             type = "project",
                             open = true
                         };
+            foreach (var i in phase)
+            {
+
+                TimeSpan ts = new TimeSpan();
+                ts = i.end_date.Value - i.start_date.Value;
+                i.duration = ts.Days;
+            }
             var p = db.Project.SingleOrDefault(m => m.Id == id);
             var model = new ProjectPlanViewModel
             {

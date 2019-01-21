@@ -102,9 +102,8 @@ export default {
 				if (json.data) {
 					//日期格式转换
 					for (var i = 0; i < json.data.length; i++) {
-						if (!json.data[i].start_date) {
-							json.data[i].start_date = dateToStr(new Date())
-						}
+						json.data[i].start_date = json.data[i].start_date?dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))):dateToStr(new Date())
+						json.data[i].end_date = json.data[i].end_date?dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))):dateToStr(new Date())
 					}
 				}				
 				json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
@@ -124,10 +123,10 @@ export default {
 				//日期格式转换
 				var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
 				if (json.data) {
+					//日期格式转换
 					for (var i = 0; i < json.data.length; i++) {
-						if (!json.data[i].start_date) {
-							json.data[i].start_date = dateToStr(new Date())
-						}
+						json.data[i].start_date = json.data[i].start_date?dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))):dateToStr(new Date())
+						json.data[i].end_date = json.data[i].end_date?dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))):dateToStr(new Date())
 					}
 				}
 				json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
@@ -217,6 +216,7 @@ export default {
 		},
 		handleOnGanttTaskUpdate(task) {
 			//TODO Call API save to BE
+			console.log(taks)
 
 			//Update VUE data
 			for (var i = 0; i < this.plan.data.length; i++) {
@@ -265,27 +265,44 @@ export default {
 			//任务编辑窗口SAVE按钮点击
 
 			//TODO CAlL API
+			console.log(task)
+
+		    this.loading = true
+		    this.$http.put(this.config.API_URL + '/Phase/'  + task.id, task).then(function(res) {
+		        var json = JSON.parse(res.bodyText)
+		        this.loading  = false
+		        if(json.Success){
+		        	this.showSnackbar(json.Message, 'success')
+		        	if (true) {
+		        		for (var i = 0; i < this.plan.data.length; i++) {
+		        			if (task.id == this.plan.data[i].id) {
+		        				var editTaskToGantt = {
+		        					id: task.id,
+		        					start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+		        					parent: task.parent,
+		        					text: task.text,
+		        					duration: task.duration,
+		        					description: task.description,
+		        					open: task.open,
+		        					status: task.status,
+		        				}
+		        				this.plan.data[i] = editTaskToGantt
+		        			}
+		        		}
+		        		this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
+		        	}
+		        }
+		    }, function(res) {
+		        var json = JSON.parse(res.bodyText)
+		        this.loading  = false
+		        if(!json.Success){
+		        	this.showSnackbar(json.Message, 'error')
+		        }
+		    });
 
 			//Update to Gantt
 
-			if (true) {
-				for (var i = 0; i < this.plan.data.length; i++) {
-					if (task.id == this.plan.data[i].id) {
-						var editTaskToGantt = {
-							id: task.id,
-							start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-							parent: task.parent,
-							text: task.text,
-							duration: task.duration,
-							description: task.description,
-							open: task.open,
-							status: task.status,
-						}
-						this.plan.data[i] = editTaskToGantt
-					}
-				}
-				this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
-			}
+			
 		},
 		handleOnDeleteTask(task) {
 			//删除任务
