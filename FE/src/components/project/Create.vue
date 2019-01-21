@@ -129,6 +129,8 @@ export default {
             project: {
                 StartDate: new Date().toISOString().substr(0, 10),
                 EndDate: new Date().toISOString().substr(0, 10),
+                Status:'筹备中',
+                Type:'新建',
                 Phase: [],
             },
             snackbar: false,

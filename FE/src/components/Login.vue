@@ -3,14 +3,14 @@
 		<v-content class="login-container">
 			<v-container fluid>
 				<v-layout row wrap align-start justify-center>
-					<v-flex lg12 class="login-gap" v-if="!isMobile"></v-flex>
+					<v-flex lg12 class="login-gap1" v-if="!isMobile"></v-flex>
 					<v-flex sm12 offset-lg1 v-if="!isMobile">
 						<h1 class="login-h1">{{appName}}</h1>
 					</v-flex>
 					<v-flex sm12 offset-lg1 v-else>
 						<h1 class="login-h1-mobile">{{appName}}</h1>
 					</v-flex>
-					<v-flex lg12 class="login-gap" v-if="!isMobile"></v-flex>
+					<v-flex lg12 class="login-gap2" v-if="!isMobile"></v-flex>
 					<v-flex xs11 sm8 md5 lg4 offset-lg4>
 						<v-card class="elevation-12 login-box">
 							<v-toolbar color="primary">
@@ -55,6 +55,7 @@
 import BasePage from '../assets/js/BasePage'
 
 const WALLPAPERS = [
+'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BM1759_EN-CN5095819877_1920x1080.jpg',
@@ -66,7 +67,8 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/RainierDawn_EN-CN2623942425_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/SnowyOwlVideo_EN-CN1604085380_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/TwilightHarbin_EN-CN7355954569_1920x1080.jpg'
+'https://cn.bing.com/az/hprichbg/rb/TwilightHarbin_EN-CN7355954569_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/DivingEmperors_EN-CN9511022538_1920x1080.jpg'
 ]
 export default {
 	extends: BasePage,
@@ -124,13 +126,13 @@ export default {
 			}else{								
 				this.$refs.wallpaper2.style.backgroundImage = 'url(' + c + ')'
 			}
-			this.wallpaper = this.picIndex % 2
 			this.picIndex++
+			this.wallpaper = this.picIndex % 2
 		}
 	},
 	created() {
 		document.body.parentNode.style.overflowY = "hidden";
-		this.timer = setInterval(this.loadWallpaper, 10000);
+		this.timer = setInterval(this.loadWallpaper, 20000);
 	},
 	beforeDestroy() {
 		document.body.parentNode.style.overflowY = "auto";
@@ -190,20 +192,22 @@ body {
 	width: 100%;
 	height: 100%;
 	background-size: 100% 100%;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;	
+}
+.wallpaper1 {
 	background: url('https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg');
 }
-.wallpaper2 {
-	background: url('https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg');
-}
 
-.login-gap {
-	height: 50px;
+.login-gap1 {
+	height: 45px;
 }
-
+.login-gap2{
+	height: 25px;	
+}
 .login-box {
 	margin-bottom: 20px;
 	border-radius: 6px;
+	opacity: 0.8;
 }
 
 .fade-enter-active, .fade-leave-active {

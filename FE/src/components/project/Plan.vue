@@ -47,6 +47,7 @@ export default {
 			newTask: {
 				start_date: new Date().toISOString().substr(0, 10),
 				end_date: new Date().toISOString().substr(0, 10),
+				status: '未开工'
 			},
 			taskToEdit: {},
 			taskToDelete: 0,
@@ -169,6 +170,7 @@ export default {
 		},
 		handleOnGanttBeforeCreateTask(pid) {
 			//获取父节点ID
+			console.log(pid);
 			this.newTask.parent = pid
 			this.openCreateTaskDialog = true
 			//替换成项目开始日期或者父任务开始日期
@@ -176,6 +178,7 @@ export default {
 			//父节点为空则，设置为项目开始日期
 			var strToDate = gantt.date.str_to_date("%d-%m-%Y")
 			var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
+			this.newTask.status = '未开工'
 			if (pid > 0) {
 				var pTask = this.plan.data.filter(t => t.id == pid)[0]
 				this.newTask.start_date = dateToStr(pTask.start_date)
@@ -226,7 +229,8 @@ export default {
 			}
 		},
 		handleOnGanttTaskDbClick(id) {
-			this.$router.push('/Phase/' + id)
+			if(id)
+				this.$router.push('/Phase/' + id)
 			/*
 			var child = this.plan.data.filter(t=>t.parent==id)
 			if(child.length>0)
@@ -239,27 +243,41 @@ export default {
 			//BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Project里找不到，建议Create返回结果为全部数据。
 
 			//TODO Call API, and get task ID
-
-			//Update gantt
-			if (true) {
-				var newTaskToGantt = {
-					id: this.fackIndex++,
-					start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-					parent: task.parent,
-					status: task.status,
-					opne: task.open,
-					description: task.description,
-					text: task.text,
-					duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
-				}
-				this.plan.data.push(newTaskToGantt)
-				this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
-			}
-			//Clear newTask for CreateTaskDialog
-			this.newTask = {
-				start_date: new Date().toISOString().substr(0, 10),
-				end_date: new Date().toISOString().substr(0, 10),
-			}
+			this.loading = true
+			if(!task.parent)
+				task.parent = this.projectId
+		    this.$http.post(this.config.API_URL + '/Phase', task).then(function(res) {
+		        var json = JSON.parse(res.bodyText)
+		        this.loading  = false
+		        if(json.Success){
+		        	this.showSnackbar(json.Message, 'success')
+		        	//Update gantt
+		        	var newId = json.data.id		        	
+	        		var newTaskToGantt = {
+	        			id: newId,
+	        			start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+	        			parent: task.parent,
+	        			status: task.status,
+	        			opne: task.open,
+	        			description: task.description,
+	        			text: task.text,
+	        			duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
+	        		}
+	        		this.plan.data.push(newTaskToGantt)
+	        		this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
+	        	}
+	        	//Clear newTask for CreateTaskDialog
+	        	this.newTask = {
+	        		start_date: new Date().toISOString().substr(0, 10),
+	        		end_date: new Date().toISOString().substr(0, 10),
+	        	}		        
+		    }, function(res) {
+		        var json = JSON.parse(res.bodyText)
+		        this.loading  = false
+		        if(!json.Success){
+		        	this.showSnackbar(json.Message, 'error')
+		        }
+		    });			
 		},
 		handleOnEditTaskSave(task) {
 			//任务编辑窗口SAVE按钮点击

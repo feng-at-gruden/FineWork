@@ -26,6 +26,7 @@ Vue.http.interceptors.push(function(request, next) {
     }
     next(function(response) {
         if (response.status === 401 && response.url.indexOf('Token') < 0) {
+            localStorage.removeItem("Token")
             this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
         }
     });

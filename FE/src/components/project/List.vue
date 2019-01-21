@@ -2,12 +2,12 @@
     <v-container grid-list-xl class="project-list-container">
         <ProjectFilter @filterChange="handleFilterChange" :layout="layout"></ProjectFilter>
         <v-layout row wrap>            
-            <v-flex lg4 md4 sm6 xs12 v-for="p in projects" :key="p.id">
+            <v-flex lg4 md4 sm6 xs12 v-for="p in displayProjects" :key="p.id">
                 <ProjectCard :data="p" :animIn="'animated fadeIn'" :animOut="'animated pulse'"></ProjectCard>
             </v-flex>
         </v-layout>
         <div class="text-xs-center">
-            <v-pagination v-model="page" :total-visible="7" :length="4" circle color="primary"></v-pagination>
+            <v-pagination v-model="page" :total-visible="7" :length="pageCount" v-if="pageCount>1" circle color="primary"></v-pagination>
         </div>
     </v-container>
 </template>
@@ -24,7 +24,12 @@ export default {
     data() {
         return {
             projects: [],
-            page: 2,
+            filteredProjects:[],
+            filter:[],
+            displayProjects:[],
+            pageSize: 6,
+            pageCount:0,
+            page: 0,
             layout: 0,
         }
     },
@@ -33,22 +38,53 @@ export default {
             return this.util.randomIn()
         },
     },
+    watch:{
+        filter(v, ov){
+            this.updateFilteredProjects()
+        },
+        page(v, ov){
+            this.calculatePageDisplay()
+        }
+    },
     methods: {
         loadPorjects() {
             // Call Ajax
-            this.$http.get(this.config.API_URL + '/project/list', { emulateJSON: true }).then(function(res) {
+            this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {
                 this.projects = JSON.parse(res.bodyText)
+                this.updateFilteredProjects()
             }, function(res) {
 
             })
         },
         handleFilterChange(filter){
-            console.log(filter)
+            this.filter = filter
+        },
+        updateFilteredProjects(){
+            if(this.filter.length==0){
+                this.filteredProjects = this.projects
+            }else{
+                this.filteredProjects = this.projects.filter(t=>{
+                    var f = false
+                    for(var i=0;i<this.filter.length;i++){
+                        if(t.Status==this.filter[i])
+                            f = true
+                    }
+                    return f
+                })
+            }
+            this.pageCount = Math.ceil(this.filteredProjects.length / this.pageSize)            
+            this.page = 1
+            this.calculatePageDisplay()
+        },
+        calculatePageDisplay(){
+            var st = (this.page - 1) * this.pageSize
+            var ed = this.page == this.pageCount? this.filteredProjects.length: st + this.pageSize - 1
+            this.displayProjects = this.filteredProjects.filter((t, index)=>{return index>=st && index<=ed})
         }
     },
     created() {
         this.loadPorjects()
-    }
+    }    
 }
 
 </script>
