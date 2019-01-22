@@ -1,4 +1,5 @@
-﻿using API.Models;
+﻿using API.Filters;
+using API.Models;
 using API.Models.JsonModel;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,9 @@ using System.Web.Http;
 
 namespace API.Controllers
 {
+
+    [RoutePrefix("API/Phase")]
+    [ApiAuthorize]
     public class PhaseController : BaseController
     {
 
@@ -65,7 +69,7 @@ namespace API.Controllers
                 var p = db.Phase.Add(new Phase {
                     Name = phase.text,
                     StartDate = phase.start_date,
-                    EndDate = phase.start_date,
+                    EndDate = phase.end_date,
                     Progress = 0,
                     Status = string.IsNullOrWhiteSpace(phase.status)? "未开工" : phase.status,
                     CreatedBy = u.Id,
@@ -74,7 +78,7 @@ namespace API.Controllers
                     Description = phase.description
                 });
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "工程阶段建立成功。", Data = new { Id = p.Id } });
+                return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "项目阶段建立成功。", Data = new { Id = p.Id } });
             }
         }
 
@@ -92,11 +96,11 @@ namespace API.Controllers
                 p.EndDate = phase.start_date.Value.AddDays(phase.duration);
                 p.Status = phase.status;
                 db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "阶段信息修改成功。" });
+                return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "项目阶段信息修改成功。" });
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new APIResponse { Success = false, Message = "输入信息有误，请重试。" });
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new APIResponse { Success = false, Message = "信息输入有误，请重试。" });
             }
         }
 

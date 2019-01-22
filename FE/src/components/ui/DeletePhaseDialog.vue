@@ -60,12 +60,9 @@ export default {
     },
     methods: {
         handleDeleteClick() {
+            console.log('delete')
             if (this.$refs.deleteForm.validate()) {
-                this.$http.delete(this.config.API_URL + '/Phase/' + this.phaseId).then(function(res) {
-                    this.$emit('delete')
-                }, function(res) {
-                    
-                })
+                
             }
         }
     }

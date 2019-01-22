@@ -11,7 +11,7 @@ using System.Web.Http;
 
 namespace API.Controllers
 {
-    [RoutePrefix("api/Project")]
+    [RoutePrefix("API/Project")]
     [ApiAuthorize]
     public class ProjectController : BaseController
     {
@@ -92,13 +92,7 @@ namespace API.Controllers
                             open = true,
                             description = row.Description,
                         };
-            foreach (var i in phase)
-            {
-
-                TimeSpan ts = new TimeSpan();
-                ts = i.end_date.Value - i.start_date.Value;
-                i.duration = ts.Days;
-            }
+            
             var p = db.Project.SingleOrDefault(m => m.Id == id);
             var model = new ProjectPlanViewModel
             {
@@ -111,7 +105,14 @@ namespace API.Controllers
             };
             model.data = phase.ToArray();
             model.links = null;
-            
+            for (var i = 0; i < model.data.Length;i++)
+            {
+                model.data[i].start_date = model.data[i].start_date.HasValue ? model.data[i].start_date : DateTime.Now;
+                model.data[i].end_date = model.data[i].end_date.HasValue ? model.data[i].end_date : model.data[i].start_date.Value.AddDays(1);
+                TimeSpan ts = new TimeSpan();
+                ts = model.data[i].end_date.Value - model.data[i].start_date.Value;
+                model.data[i].duration = ts.Days;
+            }
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
@@ -133,13 +134,6 @@ namespace API.Controllers
                             type = "project",
                             open = true
                         };
-            foreach (var i in phase)
-            {
-
-                TimeSpan ts = new TimeSpan();
-                ts = i.end_date.Value - i.start_date.Value;
-                i.duration = ts.Days;
-            }
             var p = db.Project.SingleOrDefault(m => m.Id == id);
             var model = new ProjectPlanViewModel
             {
@@ -152,6 +146,14 @@ namespace API.Controllers
             };
             model.data = phase.ToArray();
             model.links = null;
+            for (var i = 0; i < model.data.Length; i++)
+            {
+                model.data[i].start_date = model.data[i].start_date.HasValue ? model.data[i].start_date : DateTime.Now;
+                model.data[i].end_date = model.data[i].end_date.HasValue ? model.data[i].end_date : model.data[i].start_date.Value.AddDays(1);
+                TimeSpan ts = new TimeSpan();
+                ts = model.data[i].end_date.Value - model.data[i].start_date.Value;
+                model.data[i].duration = ts.Days;
+            }
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 

@@ -13,7 +13,7 @@ using System.Web.Http;
 
 namespace API.Controllers
 {
-    [RoutePrefix("api/Token")]
+    [RoutePrefix("API/Token")]
     public class TokenController : BaseController
     {
         /// <summary>

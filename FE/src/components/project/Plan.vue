@@ -94,19 +94,19 @@ export default {
 		}
 	},
 	methods: {
-		loadDetailedPlan(){
+		loadDetailedPlan() {
 			// Call Ajax
 			this.loading = true
-			this.$http.get(this.config.API_URL + '/Project/DetailedPlan/?id=' + this.projectId).then(function(res){
+			this.$http.get(this.config.API_URL + '/Project/DetailedPlan/?id=' + this.projectId).then(function(res) {
 				var json = JSON.parse(res.bodyText)
 				var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
 				if (json.data) {
 					//日期格式转换
 					for (var i = 0; i < json.data.length; i++) {
-						json.data[i].start_date = json.data[i].start_date?dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))):dateToStr(new Date())
-						json.data[i].end_date = json.data[i].end_date?dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))):dateToStr(new Date())
+						json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : dateToStr(new Date())
+						json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : dateToStr(new Date())
 					}
-				}				
+				}
 				json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
 				json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
 				this.plan = json
@@ -126,8 +126,8 @@ export default {
 				if (json.data) {
 					//日期格式转换
 					for (var i = 0; i < json.data.length; i++) {
-						json.data[i].start_date = json.data[i].start_date?dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))):dateToStr(new Date())
-						json.data[i].end_date = json.data[i].end_date?dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))):dateToStr(new Date())
+						json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : dateToStr(new Date())
+						json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : dateToStr(new Date())
 					}
 				}
 				json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
@@ -138,16 +138,16 @@ export default {
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')
 			})
-		},						
-		openProjectDetailDialog() {
-			this.loadProjectDetail(()=>{this.openProjectInfoDialog = true})
 		},
-		loadProjectDetail(callback){
+		openProjectDetailDialog() {
+			this.loadProjectDetail(() => { this.openProjectInfoDialog = true })
+		},
+		loadProjectDetail(callback) {
 			this.loading = true
 			this.$http.get(this.config.API_URL + '/Project/' + this.projectId).then(function(res) {
 				this.detail = JSON.parse(res.bodyText)
 				this.detail.StartDate = this.detail.StartDate.split('T')[0]
-				this.detail.EndDate = this.detail.EndDate.split('T')[0]				
+				this.detail.EndDate = this.detail.EndDate.split('T')[0]
 				this.loading = false
 				callback()
 			}, function(res) {
@@ -157,11 +157,11 @@ export default {
 		},
 		handleOnProjectInfoUpdated() {
 			this.showSnackbar("项目信息更新成功", 'success')
-			if(this.editPlan){
+			if (this.editPlan) {
 				this.loadRawPlan()
-			}else{
+			} else {
 				this.loadDetailedPlan()
-			}			
+			}
 		},
 		handleOnProjectDeleted() {
 			this.showSnackbar("项目已删除", 'success')
@@ -218,18 +218,31 @@ export default {
 			this.openEditTaskDialog = true
 		},
 		handleOnGanttTaskUpdate(task) {
-			//TODO Call API save to BE
-			console.log(taks)
-
-			//Update VUE data
-			for (var i = 0; i < this.plan.data.length; i++) {
-				if (task.id == this.plan.data[i].id) {
-					this.plan.data[i] = task
+			//Call API save to BE
+			//console.log(task)
+			this.loading = true
+			this.$http.put(this.config.API_URL + '/Phase/' + task.id, task).then(function(res) {
+				var json = JSON.parse(res.bodyText)
+				this.loading = false
+				if (json.Success) {
+					//this.showSnackbar(json.Message, 'success')
+					//Update VUE data
+					for (var i = 0; i < this.plan.data.length; i++) {
+						if (task.id == this.plan.data[i].id) {
+							this.plan.data[i] = task
+						}
+					}
 				}
-			}
+			}, function(res) {
+				var json = JSON.parse(res.bodyText)
+				this.loading = false
+				if (!json.Success) {
+					this.showSnackbar(json.Message, 'error')
+				}
+			});
 		},
 		handleOnGanttTaskDbClick(id) {
-			if(id)
+			if (id)
 				this.$router.push('/Phase/' + id)
 			/*
 			var child = this.plan.data.filter(t=>t.parent==id)
@@ -242,90 +255,93 @@ export default {
 			//新建任务窗口SAVE按钮点击
 			//BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Project里找不到，建议Create返回结果为全部数据。
 
-			//TODO Call API, and get task ID
+			//Call API, and get task ID
 			this.loading = true
-			if(!task.parent)
+			if (!task.parent)
 				task.parent = this.projectId
-		    this.$http.post(this.config.API_URL + '/Phase', task).then(function(res) {
-		        var json = JSON.parse(res.bodyText)
-		        this.loading  = false
-		        if(json.Success){
-		        	this.showSnackbar(json.Message, 'success')
-		        	//Update gantt
-		        	var newId = json.data.id		        	
-	        		var newTaskToGantt = {
-	        			id: newId,
-	        			start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-	        			parent: task.parent,
-	        			status: task.status,
-	        			opne: task.open,
-	        			description: task.description,
-	        			text: task.text,
-	        			duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
-	        		}
-	        		this.plan.data.push(newTaskToGantt)
-	        		this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
-	        	}
-	        	//Clear newTask for CreateTaskDialog
-	        	this.newTask = {
-	        		start_date: new Date().toISOString().substr(0, 10),
-	        		end_date: new Date().toISOString().substr(0, 10),
-	        	}		        
-		    }, function(res) {
-		        var json = JSON.parse(res.bodyText)
-		        this.loading  = false
-		        if(!json.Success){
-		        	this.showSnackbar(json.Message, 'error')
-		        }
-		    });			
+			this.$http.post(this.config.API_URL + '/Phase', task).then(function(res) {
+				var json = JSON.parse(res.bodyText)
+				this.loading = false
+				if (json.Success) {
+					this.showSnackbar(json.Message, 'success')
+					//Update gantt
+					var newId = json.Data.Id
+					var newTaskToGantt = {
+						id: newId,
+						start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+						parent: 0, //项目阶段parent为空task.parent,
+						status: task.status,
+						open: task.open,
+						description: task.description,
+						text: task.text,
+						duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
+					}
+					this.plan.data.push(newTaskToGantt)
+					this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
+				}
+				//Clear newTask for CreateTaskDialog
+				this.newTask = {
+					start_date: new Date().toISOString().substr(0, 10),
+					end_date: new Date().toISOString().substr(0, 10),
+				}
+			}, function(res) {
+				var json = JSON.parse(res.bodyText)
+				this.loading = false
+				if (!json.Success) {
+					this.showSnackbar(json.Message, 'error')
+				}
+			});
 		},
 		handleOnEditTaskSave(task) {
 			//任务编辑窗口SAVE按钮点击
-
-			//TODO CAlL API
-			console.log(task)
-
-		    this.loading = true
-		    this.$http.put(this.config.API_URL + '/Phase/'  + task.id, task).then(function(res) {
-		        var json = JSON.parse(res.bodyText)
-		        this.loading  = false
-		        if(json.Success){
-		        	this.showSnackbar(json.Message, 'success')
-		        	if (true) {
-		        		for (var i = 0; i < this.plan.data.length; i++) {
-		        			if (task.id == this.plan.data[i].id) {
-		        				var editTaskToGantt = {
-		        					id: task.id,
-		        					start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-		        					parent: task.parent,
-		        					text: task.text,
-		        					duration: task.duration,
-		        					description: task.description,
-		        					open: task.open,
-		        					status: task.status,
-		        				}
-		        				this.plan.data[i] = editTaskToGantt
-		        			}
-		        		}
-		        		this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
-		        	}
-		        }
-		    }, function(res) {
-		        var json = JSON.parse(res.bodyText)
-		        this.loading  = false
-		        if(!json.Success){
-		        	this.showSnackbar(json.Message, 'error')
-		        }
-		    });
-
-			//Update to Gantt
-
-			
+			//CAlL API
+			this.loading = true
+			this.$http.put(this.config.API_URL + '/Phase/' + task.id, task).then(function(res) {
+				var json = JSON.parse(res.bodyText)
+				this.loading = false
+				if (json.Success) {
+					this.showSnackbar(json.Message, 'success')
+					//Update to Gantt
+					for (var i = 0; i < this.plan.data.length; i++) {
+						if (task.id == this.plan.data[i].id) {
+							var editTaskToGantt = {
+								id: task.id,
+								start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+								parent: task.parent,
+								text: task.text,
+								duration: task.duration,
+								description: task.description,
+								open: task.open,
+								status: task.status,
+							}
+							this.plan.data[i] = editTaskToGantt
+						}
+					}
+					this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
+				}
+			}, function(res) {
+				var json = JSON.parse(res.bodyText)
+				this.loading = false
+				if (!json.Success) {
+					this.showSnackbar(json.Message, 'error')
+				}
+			});
 		},
 		handleOnDeleteTask(task) {
 			//删除任务
-
-			//TODO Call API
+			//Call API
+			this.$http.delete(this.config.API_URL + '/Phase/' + task.id).then(function(res) {
+				this.$emit('delete')
+				var json = JSON.parse(res.bodyText)
+				if (json.Success) {
+					this.showSnackbar(json.Message, 'success')
+				}
+			}, function(res) {
+				var json = JSON.parse(res.bodyText)
+				if (!json.Success) {
+					this.showSnackbar(json.Message, 'error')
+				}
+			})
 
 			//Update to Gantt
 			if (true) {
