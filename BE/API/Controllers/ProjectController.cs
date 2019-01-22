@@ -21,6 +21,7 @@ namespace API.Controllers
         public HttpResponseMessage List()
         {
             var model = from row in db.Project
+                        orderby row.CreatedDate descending
                         select new ProjectViewModel
                         {
                             Id = row.Id,
@@ -34,6 +35,7 @@ namespace API.Controllers
                             No = row.No,
                             Acreage = row.Acreage.Value,
                             Cost = row.Cost.Value,
+                            CreatedDate = row.CreatedDate.Value
                         };
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
