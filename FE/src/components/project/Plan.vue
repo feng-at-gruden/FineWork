@@ -219,7 +219,7 @@ export default {
 		},
 		handleOnGanttTaskUpdate(task) {
 			//Call API save to BE
-			//console.log(task)
+			console.log(task)
 			this.loading = true
 			this.$http.put(this.config.API_URL + '/Phase/' + task.id, task).then(function(res) {
 				var json = JSON.parse(res.bodyText)

@@ -11,7 +11,7 @@
 						<h1 class="login-h1-mobile">{{appName}}</h1>
 					</v-flex>
 					<v-flex lg12 class="login-gap2" v-if="!isMobile"></v-flex>
-					<v-flex xs11 sm8 md5 lg4 offset-lg4>
+					<v-flex xs11 sm8 md5 lg4 offset-lg5>
 						<v-card class="elevation-12 login-box">
 							<v-toolbar color="primary">
 								<v-toolbar-title>{{title}}</v-toolbar-title>
@@ -199,15 +199,16 @@ body {
 }
 
 .login-gap1 {
-	height: 45px;
+	height: 10%;
 }
 .login-gap2{
-	height: 25px;	
+	height: 10%;	
 }
 .login-box {
 	margin-bottom: 20px;
 	border-radius: 6px;
 	opacity: 0.8;
+	max-width: 450px;
 }
 
 .fade-enter-active, .fade-leave-active {
