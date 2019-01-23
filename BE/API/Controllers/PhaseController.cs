@@ -34,19 +34,28 @@ namespace API.Controllers
                     Message = "没有找到相关项目阶段信息"
                 });
             }
-            List<TaskViewModel> model = new List<TaskViewModel>();
-
+            List<TaskViewModel> data = new List<TaskViewModel>();
             foreach (var t in phase.Task)
             {
-                model = (List<TaskViewModel>)model.Concat(GetChildrenTask(t));
+                data.AddRange(GetChildrenTask(t));
             }
-            foreach(TaskViewModel i in model)
+            foreach (TaskViewModel i in data)
             {
                 TimeSpan ts = new TimeSpan();
                 ts = i.end_date.Value - i.start_date.Value;
                 i.duration = ts.Days;
             }
-            return Request.CreateResponse(HttpStatusCode.OK, model.ToArray());
+            var model = new GanttViewModel{
+                id = phase.Id,
+                name = phase.Name,
+                start_date = phase.StartDate.Value,
+                end_date = phase.EndDate.Value,
+                progress = phase.Progress.Value,
+                status = phase.Status,
+                data = data.ToArray(),
+                links = null,
+            };
+            return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
 
@@ -137,23 +146,23 @@ namespace API.Controllers
         private List<TaskViewModel> GetChildrenTask(Task task)
         {
             List<TaskViewModel> result = new List<TaskViewModel>();
-
+            result.Add(new TaskViewModel
+            {
+                id = task.Id,
+                text = task.Name,
+                start_date = task.PlanStartDate.HasValue ? task.PlanStartDate : DateTime.Now,
+                end_date = task.PlanEndDate.HasValue ? task.PlanEndDate : DateTime.Now,
+                status = task.Status,
+                parent = task.ParentTaskId.HasValue?task.ParentTaskId.Value:0,
+                phaseId = task.PhaseId.Value,
+                progress = task.Progress.Value,
+                type = task.ChildrenTasks.Count > 0 ? "project" : "task",
+                open = task.ChildrenTasks.Count > 0 ? true : false,
+            });
             foreach (var row in task.ChildrenTasks)
             {
-                result.Add(new TaskViewModel
-                {
-                    id = row.Id,
-                    text = row.Name,
-                    start_date = row.PlanStartDate.HasValue ? row.PlanStartDate : DateTime.Now,
-                    end_date = row.PlanEndDate.HasValue ? row.PlanEndDate : DateTime.Now,
-                    status = row.Status,
-                    parent = task.Id,
-                    phaseId = task.PhaseId.Value,
-                    progress = row.Progress.Value,
-                    type = row.ChildrenTasks.Count > 0 ? "project" : "task",
-                    open = row.ChildrenTasks.Count > 0 ? true : false,
-                });
-                result.Concat(GetChildrenTask(row));
+                if(row.ChildrenTasks.Count>0)
+                    result.AddRange(GetChildrenTask(row));
             }
 
             return result;

@@ -5,13 +5,16 @@ using System.Web;
 
 namespace API.Models.JsonModel
 {
-    public class ProjectPlanViewModel
+    public class GanttViewModel
     {
-        public Int32 id;
+        public int id;
         public string name;
         public DateTime start_date;
         public DateTime end_date;
-        public decimal progress;
         public string status;
+        public decimal progress;
+
+        public TaskViewModel[] data;
+        public object[] links;
     }
 }

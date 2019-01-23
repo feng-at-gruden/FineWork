@@ -52,7 +52,6 @@ export default {
 			taskToEdit: {},
 			taskToDelete: 0,
 			mainContainerCSS: 'main-container-gantt',
-			fackIndex: 2019,
 		}
 	},
 	computed: {
@@ -82,7 +81,7 @@ export default {
 					this.drawer = false
 					this.editPlan = true
 					break
-				case '退出编辑模式':
+				case '退出编辑':
 					this.loadDetailedPlan()
 					this.showSnackbar('已退出项目计划编辑模式', 'info')
 					this.editPlan = false
@@ -377,13 +376,10 @@ export default {
 	}
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */
-//TODO, 项目整体移动
-
 </script>
 <style scoped>
 .m-footer {
 	display: none;
 	border: 10px solid #f00;
 }
-
 </style>

@@ -230,6 +230,7 @@
     <Compile Include="Models\Department.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\JsonModel\GanttViewModel.cs" />
     <Compile Include="Models\JsonModel\ProjectPlanViewModel.cs" />
     <Compile Include="Models\JsonModel\TaskViewModel.cs" />
     <Compile Include="Models\JsonModel\UserViewModel.cs" />

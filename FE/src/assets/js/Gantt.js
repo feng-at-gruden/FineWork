@@ -1,5 +1,13 @@
 const denseDateFmt = gantt.date.date_to_str("%Y/%m/%d")
 const denseDateFmtS = gantt.date.date_to_str("%m/%d")
+
+var colHeader = '<div class="gantt_grid_head_cell gantt_grid_head_add" onclick="gantt.createTask()"></div>'
+var colContent = function(task) {
+	return ('<i class="fa gantt_button_grid gantt_grid_edit fa-pencil" onclick="clickGridButton(' + task.id + ', \'edit\')"></i>' +
+		'<i class="fa gantt_button_grid gantt_grid_add fa-plus" onclick="clickGridButton(' + task.id + ', \'add\')"></i>' +
+		'<i class="fa gantt_button_grid gantt_grid_delete fa-times" onclick="clickGridButton(' + task.id + ', \'delete\')"></i>');
+}
+
 const projectReadonlyColumns = [
 	{ name: "text", label: "项目阶段", tree: false, align: "center", width: "*" },
 	{
@@ -52,13 +60,6 @@ const projectReadonlyColumns = [
 		}
 	}
 ];
-
-var colHeader = '<div class="gantt_grid_head_cell gantt_grid_head_add" onclick="gantt.createTask()"></div>'
-var colContent = function(task) {
-	return ('<i class="fa gantt_button_grid gantt_grid_edit fa-pencil" onclick="clickGridButton(' + task.id + ', \'edit\')"></i>' +
-		'<i class="fa gantt_button_grid gantt_grid_add fa-plus" onclick="clickGridButton(' + task.id + ', \'add\')"></i>' +
-		'<i class="fa gantt_button_grid gantt_grid_delete fa-times" onclick="clickGridButton(' + task.id + ', \'delete\')"></i>');
-};
 const projectEditingColumns = [
 	{ name: "text", label: "项目阶段", tree: false, align: "center", width: "*" },
 	{
@@ -84,6 +85,83 @@ const projectEditingColumns = [
 	{ name: "buttons", label: colHeader, width: "25",template: function(task){return ''} }
 ];
 
+
+const phaseReadonlyColumns = [
+	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*" },
+	{
+		name: "start_date",
+		label: "施工周期",
+		align: "center",
+		width: "95",
+		template(obj) {
+			if (obj.progress > 0) {
+				var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
+			} else {
+				var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+			}
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{
+		name: "duration",
+		label: "天",
+		align: "center",
+		width: "25",
+		template(obj) {
+			if (obj.progress > 0) {
+				var str = '<div>' + obj.plan_duration + '</div>'
+				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
+			} else {
+				var str = '<div class="oneline">' + obj.duration + '</div>'
+			}
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{
+		name: "progress",
+		label: "状态",
+		align: "center",
+		width: "48",
+		template: function(obj) {
+			var str
+			if (obj.status == "停工中") {
+				str = "停工中"
+			} else if (obj.progress == 1) {
+				str = "已完工"
+			} else if (obj.progress == 0) {
+				str = "未开工"
+			} else {
+				str = obj.progress * 100 + "%"
+			}
+			return "<div class=\"gantt-content-left-status " + (obj.exceed ? 'project-delayed' : '') + '\">' + str + "</div>"
+		}
+	}
+];
+const phaseEditingColumns = [
+	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*" },
+	{
+		name: "start_date",
+		label: "施工周期",
+		align: "center",
+		width: "95",
+		template(obj) {
+			var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{
+		name: "duration",
+		label: "天",
+		align: "center",
+		width: "25",
+		template(obj) {
+			var str = '<div class="oneline">' + obj.duration + '</div>'
+			return '<div class="gantt-content-samll">' + str + '</div>'
+		}
+	},
+	{ name: "add", label: colHeader, width: "25"}
+];
 
 
 
@@ -316,11 +394,10 @@ export default {
 		];
 
 		//切换编辑和只读模式
-		//TODO
 		if (editable) {
-			gantt.config.columns = projectEditingColumns
+			gantt.config.columns = phaseEditingColumns
 		} else {
-			gantt.config.columns = projectReadonlyColumns
+			gantt.config.columns = phaseReadonlyColumns
 		}
 
 		gantt.templates.task_class = function(start, end, task) {

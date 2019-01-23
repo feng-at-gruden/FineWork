@@ -1,18 +1,14 @@
 <template>
     <v-layout justify-center fill-height align-center>
         <!--阶段计划甘特图-->
-        <PhasePlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDbClick"></PhasePlanGantt>
-        
+        <PhasePlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDblClick"></PhasePlanGantt>
         <!--添加计划对话框-->
-        <CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'阶段计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
-
+        <CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'施工项目'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
         <!--编辑计划对话框-->
-        <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
-        
-        <!--删除确认对话框-->
-        <DeletePhaseDialog :open="openDeletePahseDialog"  @close="openDeletePahseDialog = false" @delete="handleOnDeleteProject"></DeletePhaseDialog>
-        
-        <v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
+        <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'施工项目'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
+        <!--删除阶段确认对话框-->
+        <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
+        <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
             <v-btn dark flat @click="snackbar = false">确定</v-btn>
         </v-snackbar>
@@ -27,27 +23,27 @@ import DeletePhaseDialog from '../ui/DeletePhaseDialog'
 
 export default {
     extends: BasePage,
-    name: 'PhasePlan',
+    name: 'ProjectPlan',
     components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog },
     data() {
         return {
             openCreateTaskDialog: false,
             openEditTaskDialog: false,
-            openDeletePahseDialog: false,
+            openDeletePhaseDialog: false,
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
-            project: {},
             timeline: [],
-            plan: { data: [], lilnks: [] },
+            plan: { data: [], links: [] },
+            detail: {},
             newTask: {
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
+                status: '未开工'
             },
             taskToEdit: {},
             taskToDelete: 0,
             mainContainerCSS: 'main-container-gantt',
-            fackIndex: 2019,
         }
     },
     computed: {
@@ -65,19 +61,19 @@ export default {
     watch: {
         selectedOptionMenu(v) {
             switch (v.text) {
-                case '阶段计划调整':
+                case '计划调整':
                     this.loadRawPlan()
-                    this.showSnackbar('您已进入计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
+                    this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行计划调整。', 'info')
                     this.drawer = false
                     this.editPlan = true
                     break
-                case '退出编辑模式':
+                case '退出编辑':
                     this.loadDetailedPlan()
-                    this.showSnackbar('您已退出计划编辑模式', 'info')
+                    this.showSnackbar('已退出计划编辑模式', 'info')
                     this.editPlan = false
                     break
-                case '删除阶段计划':              
-                    this.openDeletePahseDialog = true
+                case '删除阶段':
+                    this.openDeleteProjectDialog = true
                     break
             }
         }
@@ -85,8 +81,21 @@ export default {
     methods: {
         loadDetailedPlan() {
             // Call Ajax
+            this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
-                this.plan = JSON.parse(res.bodyText)
+                var json = JSON.parse(res.bodyText)
+                var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
+                if (json.data) {
+                    //日期格式转换
+                    for (var i = 0; i < json.data.length; i++) {
+                        json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : dateToStr(new Date())
+                        json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : dateToStr(new Date())
+                    }
+                }
+                json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
+                json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
+                this.plan = json
+                this.subTitle = this.plan.name
                 this.loading = false
             }, function(res) {
                 this.showSnackbar('阶段计划信息加载失败!', 'error')
@@ -94,15 +103,35 @@ export default {
         },
         loadRawPlan() {
             // Call Ajax
+            this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
-                this.plan = JSON.parse(res.bodyText)
+                var json = JSON.parse(res.bodyText)
+                //日期格式转换
+                var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
+                if (json.data) {
+                    //日期格式转换
+                    for (var i = 0; i < json.data.length; i++) {
+                        json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : dateToStr(new Date())
+                        json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : dateToStr(new Date())
+                    }
+                }
+                json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
+                json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
+                this.plan = json
+                this.subTitle = this.plan.name
                 this.loading = false
             }, function(res) {
                 this.showSnackbar('阶段计划信息加载失败!', 'error')
             })
         },
+        handleOnPhaseDeleted() {
+            this.showSnackbar("项目阶段已删除", 'success')
+            this.openDeleteProjectDialog = false
+            setTimeout(() => (this.$router.replace('/Project/List')), 2000)
+        },
         handleOnGanttBeforeCreateTask(pid) {
             //获取父节点ID
+            console.log(pid);
             this.newTask.parent = pid
             this.openCreateTaskDialog = true
             //替换成项目开始日期或者父任务开始日期
@@ -110,6 +139,9 @@ export default {
             //父节点为空则，设置为项目开始日期
             var strToDate = gantt.date.str_to_date("%d-%m-%Y")
             var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
+            this.newTask.status = '未开工'
+            this.newTask.text = ''
+            this.newTask.phaseId = this.phaseId
             if (pid > 0) {
                 var pTask = this.plan.data.filter(t => t.id == pid)[0]
                 this.newTask.start_date = dateToStr(pTask.start_date)
@@ -149,92 +181,130 @@ export default {
             this.openEditTaskDialog = true
         },
         handleOnGanttTaskUpdate(task) {
-            //TODO Call API save to BE
-
-            //Update VUE data
-            for (var i = 0; i < this.plan.data.length; i++) {
-                if (task.id == this.plan.data[i].id) {
-                    this.plan.data[i] = task
+            //Call API save to BE
+            this.loading = true
+            this.$http.put(this.config.API_URL + '/Task/' + task.id, task).then(function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                if (json.Success) {
+                    //this.showSnackbar(json.Message, 'success')
+                    //Update VUE data
+                    for (var i = 0; i < this.plan.data.length; i++) {
+                        if (task.id == this.plan.data[i].id) {
+                            this.plan.data[i] = task
+                        }
+                    }
                 }
-            }
+            }, function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                if (!json.Success) {
+                    this.showSnackbar(json.Message, 'error')
+                }
+            });
         },
-        handleOnGanttTaskDbClick(id) {          
-            var child = this.plan.data.filter(t=>t.parent==id)
-            if(child.length>0)
-            {
-                this.$route.push('/Phase/' + id + '/Plan')
-            }
+        handleOnGanttTaskDblClick(id) {
+            //进入阶段详情页
+            
         },
         handleOnCreateTaskSave(task) {
             //新建任务窗口SAVE按钮点击
             //BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Project里找不到，建议Create返回结果为全部数据。
 
-            //TODO Call API, and get task ID
-
-            //Update gantt
-            if (true) {
-                var newTaskToGantt = {
-                    id: this.fackIndex++,
-                    start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-                    parent: task.parent,
-                    status: task.status,
-                    opne: task.open,
-                    description: task.description,
-                    text: task.text,
-                    duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
+            //console.log(task)
+            //Call API, and get task ID
+            this.loading = true
+            //if (!task.parent)
+            //    task.parent = this.phaseId
+            this.$http.post(this.config.API_URL + '/Task', task).then(function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                if (json.Success) {
+                    this.showSnackbar(json.Message, 'success')
+                    //Update gantt
+                    var newId = json.Data.Id
+                    var newTaskToGantt = {
+                        id: newId,
+                        start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+                        parent: task.parent, //项目阶段parent为空task.parent,
+                        status: task.status,
+                        open: task.open,
+                        description: task.description,
+                        text: task.text,
+                        duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
+                    }
+                    this.plan.data.push(newTaskToGantt)
+                    this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
                 }
-                this.plan.data.push(newTaskToGantt)
-                this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
-            }
-            //Clear newTask for CreateTaskDialog
-            this.newTask = {
-                start_date: new Date().toISOString().substr(0, 10),
-                end_date: new Date().toISOString().substr(0, 10),
-            }
+                //Clear newTask for CreateTaskDialog
+                this.newTask = {
+                    start_date: new Date().toISOString().substr(0, 10),
+                    end_date: new Date().toISOString().substr(0, 10),
+                }
+            }, function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                if (!json.Success) {
+                    this.showSnackbar(json.Message, 'error')
+                }
+            });
         },
         handleOnEditTaskSave(task) {
             //任务编辑窗口SAVE按钮点击
-
-            //TODO CAlL API
-
-            //Update to Gantt
-
-            if (true) {
-                for (var i = 0; i < this.plan.data.length; i++) {
-                    if (task.id == this.plan.data[i].id) {
-                        var editTaskToGantt = {
-                            id: task.id,
-                            start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-                            parent: task.parent,
-                            text: task.text,
-                            duration: task.duration,
-                            description: task.description,
-                            open: task.open,
-                            status: task.status,
+            //CAlL API
+            this.loading = true
+            this.$http.put(this.config.API_URL + '/Task/' + task.id, task).then(function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                if (json.Success) {
+                    this.showSnackbar(json.Message, 'success')
+                    //Update to Gantt
+                    for (var i = 0; i < this.plan.data.length; i++) {
+                        if (task.id == this.plan.data[i].id) {
+                            var editTaskToGantt = {
+                                id: task.id,
+                                start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
+                                parent: task.parent,
+                                text: task.text,
+                                duration: task.duration,
+                                description: task.description,
+                                open: task.open,
+                                status: task.status,
+                            }
+                            this.plan.data[i] = editTaskToGantt
                         }
-                        this.plan.data[i] = editTaskToGantt
                     }
+                    this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
                 }
-                this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
-            }
+            }, function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                if (!json.Success) {
+                    this.showSnackbar(json.Message, 'error')
+                }
+            });
         },
         handleOnDeleteTask(task) {
             //删除任务
-
-            //TODO Call API
-
-            //Update to Gantt
-            if (true) {
-                var ids = this.findNodeChildren(task.id, this.plan.data)
-                this.plan.data = this.plan.data.filter(t => ids.indexOf(t.id) == -1)
-                //console.log(this.plan.data);
-                //this.plan = Object.assign({}, this.plan) //Not work
-                this.taskToDelete = task.id
-            }
-        },
-        handleOnDeleteProject(id){
-            console.log('delete phase');
-            //TODO Call API
+            //Call API
+            this.$http.delete(this.config.API_URL + '/Task/' + task.id).then(function(res) {
+                this.$emit('delete')
+                var json = JSON.parse(res.bodyText)
+                if (json.Success) {
+                    this.showSnackbar(json.Message, 'success')
+                    //Update to Gantt
+                    var ids = this.findNodeChildren(task.id, this.plan.data)
+                    this.plan.data = this.plan.data.filter(t => ids.indexOf(t.id) == -1)
+                    //console.log(this.plan.data);
+                    //this.plan = Object.assign({}, this.plan) //Not work
+                    this.taskToDelete = task.id
+                }
+            }, function(res) {
+                var json = JSON.parse(res.bodyText)
+                if (!json.Success) {
+                    this.showSnackbar(json.Message, 'error')
+                }
+            })
         },
         findNodeChildren(id, data) {
             var result = []
@@ -261,6 +331,9 @@ export default {
         this.editPlan = false
     }
 }
+/* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */
+//TODO, 项目整体移动
+
 </script>
 <style scoped>
 .m-footer {

@@ -98,7 +98,7 @@ namespace API.Controllers
                             open = true,
                             description = row.Description,
                         };
-            var model = new ProjectPlanViewModel
+            var model = new GanttViewModel
             {
                 id = p.Id,
                 name = p.Name,
@@ -141,8 +141,8 @@ namespace API.Controllers
                             type = "project",
                             open = true
                         };
-            
-            var model = new ProjectPlanViewModel
+
+            var model = new GanttViewModel
             {
                 id = p.Id,
                 name = p.Name,

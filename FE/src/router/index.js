@@ -61,7 +61,7 @@ export default new Router({
                         { icon: 'info', text: '项目信息', }, 
                         { icon: 'timeline', text: '时间轴' }, 
                         { icon: '', text: 'Divider' }, 
-                        { icon: 'edit', text: '计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
+                        { icon: 'edit', text: '计划调整', editing: { icon: 'save', text: '退出编辑'} },
                         { icon: 'delete', text: '删除项目' }, 
                         ] },
                     component: ProjectPlan
@@ -77,8 +77,8 @@ export default new Router({
                 meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true,
                     showOptionMenu: true, 
                     optionMenu: [
-                    { icon: 'edit', text: '阶段计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
-                    { icon: 'delete', text: '删除阶段计划' }, 
+                    { icon: 'edit', text: '计划调整', editing: { icon: 'save', text: '退出编辑'} },
+                    { icon: 'delete', text: '删除阶段' }, 
                     ] },                 
                 component: PhasePlan
             }, ]
