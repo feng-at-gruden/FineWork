@@ -25,29 +25,28 @@ namespace API.Controllers
         [Route("RawPlan")]
         public HttpResponseMessage RawPlan(int id)
         {
-            var plan = from row in db.Phase
-                        where row.Id == id
-                        select new TaskViewModel
-                        {
-                            id = row.Id,
-                            text = row.Name,
-                            start_date = row.StartDate.HasValue ? row.StartDate : DateTime.Now,
-                            end_date = row.EndDate.HasValue?row.EndDate:DateTime.Now,
-                            status = row.Status,
-                            parent = 0,
-                            progress = row.Progress.Value,
-                            type = row.Task.Count>0?"project":"task",
-                            open = row.Task.Count>0? true : false,
-                        };
-            var model = plan.ToArray();
-            foreach(var i in model)
+            var phase = db.Phase.SingleOrDefault(m => m.Id == id);
+            if (phase == null)
             {
-                
+                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse
+                {
+                    Success = false,
+                    Message = "没有找到相关项目阶段信息"
+                });
+            }
+            List<TaskViewModel> model = new List<TaskViewModel>();
+
+            foreach (var t in phase.Task)
+            {
+                model = (List<TaskViewModel>)model.Concat(GetChildrenTask(t));
+            }
+            foreach(TaskViewModel i in model)
+            {
                 TimeSpan ts = new TimeSpan();
                 ts = i.end_date.Value - i.start_date.Value;
                 i.duration = ts.Days;
             }
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            return Request.CreateResponse(HttpStatusCode.OK, model.ToArray());
         }
 
 
@@ -71,7 +70,7 @@ namespace API.Controllers
                     StartDate = phase.start_date.Value.ToLocalTime(),
                     EndDate = phase.end_date.Value.ToLocalTime(),
                     Progress = 0,
-                    Status = string.IsNullOrWhiteSpace(phase.status)? "未开工" : phase.status,
+                    Status = string.IsNullOrWhiteSpace(phase.status)? Configurations.TASK_INIT_STATUS : phase.status,
                     CreatedBy = u.Id,
                     CreatedDate = DateTime.Now.ToLocalTime(),
                     ProjectId = phase.parent,
@@ -133,6 +132,31 @@ namespace API.Controllers
                 return "请选择项目阶段结束日期";
 
             return "";
+        }
+
+        private List<TaskViewModel> GetChildrenTask(Task task)
+        {
+            List<TaskViewModel> result = new List<TaskViewModel>();
+
+            foreach (var row in task.ChildrenTasks)
+            {
+                result.Add(new TaskViewModel
+                {
+                    id = row.Id,
+                    text = row.Name,
+                    start_date = row.PlanStartDate.HasValue ? row.PlanStartDate : DateTime.Now,
+                    end_date = row.PlanEndDate.HasValue ? row.PlanEndDate : DateTime.Now,
+                    status = row.Status,
+                    parent = task.Id,
+                    phaseId = task.PhaseId.Value,
+                    progress = row.Progress.Value,
+                    type = row.ChildrenTasks.Count > 0 ? "project" : "task",
+                    open = row.ChildrenTasks.Count > 0 ? true : false,
+                });
+                result.Concat(GetChildrenTask(row));
+            }
+
+            return result;
         }
     }
 }

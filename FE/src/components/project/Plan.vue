@@ -1,18 +1,18 @@
 <template>
 	<v-layout justify-center fill-height align-center>
 		<!--项目计划甘特图-->
-		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskClick="handleOnGanttTaskClick"></ProjectPlanGantt>
+		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDblClick"></ProjectPlanGantt>
 		<!--项目信息对话框-->
 		<ProjectInfoDialog :project="detail" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false" @update="handleOnProjectInfoUpdated"></ProjectInfoDialog>
 		<!--项目时间线对话框-->
 		<ProjectTimeline :timeline="timeline" :open="openProjectTimeline" @close="openProjectTimeline = false"></ProjectTimeline>
 		<!--添加计划对话框-->
-		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'阶段计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
+		<CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'项目阶段'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
 		<!--编辑计划对话框-->
-		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'阶段计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
+		<EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'项目阶段'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
 		<!--删除项目确认对话框-->
 		<DeleteProjectDialog :open="openDeleteProjectDialog" @close="openDeleteProjectDialog = false" @delete="handleOnProjectDeleted"></DeleteProjectDialog>
-		<v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
+		<v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
 			{{snackbarMessage}}
 			<v-btn dark flat @click="snackbar = false">确定</v-btn>
 		</v-snackbar>
@@ -70,24 +70,24 @@ export default {
 	watch: {
 		selectedOptionMenu(v) {
 			switch (v.text) {
-				case '工程项目信息':
+				case '项目信息':
 					this.openProjectDetailDialog()
 					break
-				case '项目时间轴':
+				case '时间轴':
 					this.openProjectTimeline = true
 					break
-				case '项目计划调整':
+				case '计划调整':
 					this.loadRawPlan()
-					this.showSnackbar('您已进入项目计划编辑模式，您可以通过拖拽、双击等方式进行计划调整。', 'info')
+					this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行计划调整。', 'info')
 					this.drawer = false
 					this.editPlan = true
 					break
 				case '退出编辑模式':
 					this.loadDetailedPlan()
-					this.showSnackbar('您已退出项目计划编辑模式', 'info')
+					this.showSnackbar('已退出项目计划编辑模式', 'info')
 					this.editPlan = false
 					break
-				case '删除整个项目':
+				case '删除项目':
 					this.openDeleteProjectDialog = true
 					break
 			}
@@ -170,7 +170,7 @@ export default {
 		},
 		handleOnGanttBeforeCreateTask(pid) {
 			//获取父节点ID
-			console.log(pid);
+			//console.log(pid);
 			this.newTask.parent = pid
 			this.openCreateTaskDialog = true
 			//替换成项目开始日期或者父任务开始日期
@@ -179,6 +179,7 @@ export default {
 			var strToDate = gantt.date.str_to_date("%d-%m-%Y")
 			var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
 			this.newTask.status = '未开工'
+			this.newTask.text = ''
 			if (pid > 0) {
 				var pTask = this.plan.data.filter(t => t.id == pid)[0]
 				this.newTask.start_date = dateToStr(pTask.start_date)
@@ -219,7 +220,6 @@ export default {
 		},
 		handleOnGanttTaskUpdate(task) {
 			//Call API save to BE
-			console.log(task.start_date)
 			this.loading = true
 			this.$http.put(this.config.API_URL + '/Phase/' + task.id, task).then(function(res) {
 				var json = JSON.parse(res.bodyText)
@@ -241,7 +241,7 @@ export default {
 				}
 			});
 		},
-		handleOnGanttTaskClick(id) {
+		handleOnGanttTaskDblClick(id) {
 			//进入阶段详情页
 			var task = this.plan.data.filter(t=>t.id==id)[0]
 			//var child = this.plan.data.filter(t=>t.parent==id)

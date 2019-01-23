@@ -1,18 +1,18 @@
 const denseDateFmt = gantt.date.date_to_str("%Y/%m/%d")
 const denseDateFmtS = gantt.date.date_to_str("%m/%d")
 const projectReadonlyColumns = [
-	{ name: "text", label: "施工任务", tree: true, width: "*" },
+	{ name: "text", label: "项目阶段", tree: false, align: "center", width: "*" },
 	{
 		name: "start_date",
-		label: "施工周期",
+		label: "阶段周期",
 		align: "center",
-		width: "90",
+		width: "95",
 		template(obj) {
 			if (obj.progress > 0) {
-				var str = '<div>' + obj.plan_start + " - " + obj.plan_end + '</div>'
+				var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
 			} else {
-				var str = '<div class="oneline">' + obj.plan_start + " - " + obj.plan_end + '</div>'
+				var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 			}
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
@@ -21,13 +21,13 @@ const projectReadonlyColumns = [
 		name: "duration",
 		label: "天",
 		align: "center",
-		width: "23",
+		width: "25",
 		template(obj) {
 			if (obj.progress > 0) {
 				var str = '<div>' + obj.plan_duration + '</div>'
 				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
 			} else {
-				var str = '<div class="oneline">' + obj.plan_duration + '</div>'
+				var str = '<div class="oneline">' + obj.duration + '</div>'
 			}
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
@@ -39,8 +39,8 @@ const projectReadonlyColumns = [
 		width: "48",
 		template: function(obj) {
 			var str
-			if (obj.status == "pending") {
-				str = "停工"
+			if (obj.status == "停工中") {
+				str = "停工中"
 			} else if (obj.progress == 1) {
 				str = "已完工"
 			} else if (obj.progress == 0) {
@@ -53,13 +53,19 @@ const projectReadonlyColumns = [
 	}
 ];
 
+var colHeader = '<div class="gantt_grid_head_cell gantt_grid_head_add" onclick="gantt.createTask()"></div>'
+var colContent = function(task) {
+	return ('<i class="fa gantt_button_grid gantt_grid_edit fa-pencil" onclick="clickGridButton(' + task.id + ', \'edit\')"></i>' +
+		'<i class="fa gantt_button_grid gantt_grid_add fa-plus" onclick="clickGridButton(' + task.id + ', \'add\')"></i>' +
+		'<i class="fa gantt_button_grid gantt_grid_delete fa-times" onclick="clickGridButton(' + task.id + ', \'delete\')"></i>');
+};
 const projectEditingColumns = [
-	{ name: "text", label: "阶段计划", tree: true, width: "*" },
+	{ name: "text", label: "项目阶段", tree: false, align: "center", width: "*" },
 	{
 		name: "start_date",
-		label: "施工周期",
+		label: "阶段周期",
 		align: "center",
-		width: "90",
+		width: "95",
 		template(obj) {
 			var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 			return '<div class="gantt-content-samll">' + str + '</div>'
@@ -69,14 +75,17 @@ const projectEditingColumns = [
 		name: "duration",
 		label: "天",
 		align: "center",
-		width: "23",
+		width: "25",
 		template(obj) {
 			var str = '<div class="oneline">' + obj.duration + '</div>'
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
 	},
-	{ name: "add", label: "", width: "30" }
+	{ name: "buttons", label: colHeader, width: "25",template: function(task){return ''} }
 ];
+
+
+
 
 function limitMoveLeft(task, limit) {
 	var dur = task.end_date - task.start_date;
@@ -146,10 +155,10 @@ export default {
 		if (project.start_date != '')
 			this.markerIds.push(this.addMarker(project.start_date, '开工', 'start-work'))
 		if (project.end_date != '')
-			this.markerIds.push(this.addMarker(project.end_date, '竣工', 'end-work'))		
+			this.markerIds.push(this.addMarker(project.end_date, '竣工', 'end-work'))
 		this.addTodayMarker()
 	},
-	addTodayMarker: function(){
+	addTodayMarker: function() {
 		var date_to_str = gantt.date.date_to_str("%d-%m-%Y")
 		this.markerIds.push(this.addMarker(date_to_str(new Date()), '今天', 'today'))
 	},
@@ -187,7 +196,7 @@ export default {
 		gantt.config.drag_links = false;
 		gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
-		
+
 		gantt.config.drag_project = false; //Project自动计算并整体可拖拽
 
 		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
@@ -195,7 +204,7 @@ export default {
 			return !task.locked && task.progress != 1;
 		});
 
-		gantt.attachEvent("onTaskDrag", function (id, mode, task, original, e) {
+		gantt.attachEvent("onTaskDrag", function(id, mode, task, original, e) {
 			var parent = task.parent ? gantt.getTask(task.parent) : null,
 				children = gantt.getChildren(id),
 				modes = gantt.config.drag_mode;
@@ -254,10 +263,10 @@ export default {
 		}
 
 		gantt.templates.task_class = function(start, end, task) {
-			var c = ''			
+			var c = ''
 			if (task.progress == 1) {
 				c += ' finished'
-			} else if (task.progress == 0){
+			} else if (task.progress == 0) {
 				c += ' not_start'
 			} else {
 				switch (task.status) {
@@ -294,13 +303,13 @@ export default {
 		};
 		gantt.templates.task_class = function(st, end, item) {
 			return item.exceed == 1 ? "high" : ""
-		};		
+		};
 
 		gantt.config.scale_unit = "month";
 		gantt.config.step = 1;
 		gantt.config.date_scale = "%Y %F";
 		gantt.config.round_dnd_dates = true;
-		
+
 		gantt.config.subscales = [
 			{ unit: "week", step: 1, template: this.weekScaleTemplate },
 			{ unit: "day", step: 1, date: "%j", css: this.daysStyle }

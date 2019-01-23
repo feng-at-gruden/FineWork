@@ -4,17 +4,17 @@
             <v-card-title class="grey lighten-4 py-4 title">
                 添加{{unitName}}
             </v-card-title>
-            <v-form v-model="formValid" ref="createTaskForm">
+            <v-form v-model="formValid" lazy-validation ref="createTaskForm">
                 <v-container fluid>
                     <v-layout wrap>
                         <v-flex xs8 md8>
-                            <v-text-field v-model="task.text" :counter="25" label="阶段计划名称" :rules="nameRules" required  append-icon="business"></v-text-field>
+                            <v-text-field v-model="task.text" :counter="25" :label="unitLabel" :rules="nameRules" required  append-icon="business"></v-text-field>
                         </v-flex>
                         <v-flex xs4 md4>
                             <v-select v-model="task.status" :items="config.TaskStatus" label="计划状态"></v-select>
                         </v-flex>
                         <v-flex xs12 md12>
-                            <v-text-field v-model="task.description" :counter="50" label="施工简介"></v-text-field>
+                            <v-text-field v-model="task.description" :counter="50" label="工作内容介绍"></v-text-field>
                         </v-flex>
                         <v-flex xs6 md6>
                             <v-menu :close-on-content-click="false" v-model="dateMenu1" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
@@ -68,6 +68,9 @@ export default {
         unitName(){
             return this.$props.unit
         },
+        unitLabel(){
+            return this.$props.unit + "名称"
+        },
         min_date(){
             return this.$props.newTask.min_date
         },
@@ -84,7 +87,7 @@ export default {
     methods: {        
         handleSaveClick() {
             if (this.$refs.createTaskForm.validate()){
-                this.formValid = true
+                //this.formValid = true
                 this.dialog = false                
                 this.$emit('save', this.task)
             }            

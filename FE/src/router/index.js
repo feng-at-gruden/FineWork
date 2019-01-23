@@ -58,11 +58,11 @@ export default new Router({
                     meta: { requiresAuth: true, level: 2, title: "项目计划", fullWidth: true, autoLoading: true, 
                         showOptionMenu: true, 
                         optionMenu: [
-                        { icon: 'info', text: '工程项目信息', }, 
-                        { icon: 'timeline', text: '项目时间轴' }, 
+                        { icon: 'info', text: '项目信息', }, 
+                        { icon: 'timeline', text: '时间轴' }, 
                         { icon: '', text: 'Divider' }, 
-                        { icon: 'edit', text: '项目计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
-                        { icon: 'delete', text: '删除整个项目' }, 
+                        { icon: 'edit', text: '计划调整', editing: { icon: 'save', text: '退出编辑模式'} },
+                        { icon: 'delete', text: '删除项目' }, 
                         ] },
                     component: ProjectPlan
                 },

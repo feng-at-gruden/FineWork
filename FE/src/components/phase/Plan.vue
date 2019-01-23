@@ -58,10 +58,9 @@ export default {
             get() { return this.$store.state.editPlan },
             set(v) { this.$store.commit('editPlan', v) }
         },
-        loading: {
-            get() { return this.$store.state.loading },
-            set(v) { this.$store.commit('loading', v) }
-        }
+        phaseId() {
+            return this.$route.params.id
+        },
     },
     watch: {
         selectedOptionMenu(v) {
@@ -86,7 +85,7 @@ export default {
     methods: {
         loadDetailedPlan() {
             // Call Ajax
-            this.$http.get(this.config.API_URL + '/project/plan/detail', { emulateJSON: true }).then(function(res) {
+            this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
                 this.plan = JSON.parse(res.bodyText)
                 this.loading = false
             }, function(res) {
@@ -95,7 +94,7 @@ export default {
         },
         loadRawPlan() {
             // Call Ajax
-            this.$http.get(this.config.API_URL + '/project/plan/raw', { emulateJSON: true }).then(function(res) {
+            this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
                 this.plan = JSON.parse(res.bodyText)
                 this.loading = false
             }, function(res) {

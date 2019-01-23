@@ -15,6 +15,7 @@ namespace API.Models.JsonModel
         public decimal progress;
         public string status;
         public Int32 parent;
+        public Int32 phaseId;
         public string type;
         public bool open;
         public string description;

@@ -62,14 +62,10 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/BM1759_EN-CN5095819877_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UKSomerset_EN-CN3755440952_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/SaguenayIceFishing_EN-CN3465347871_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/Snowkiters_EN-CN6799323123_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/NapoleonsHat_EN-CN7390815343_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/RainierDawn_EN-CN2623942425_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/SnowyOwlVideo_EN-CN1604085380_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/TwilightHarbin_EN-CN7355954569_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/DivingEmperors_EN-CN9511022538_1920x1080.jpg'
 ]
 export default {
 	extends: BasePage,
@@ -196,6 +192,8 @@ body {
     background-repeat: no-repeat;	
 }
 .wallpaper1 {
+	background-size: 100% 100%;
+    background-repeat: no-repeat;	
 	background: url('https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg');
 }
 
@@ -208,7 +206,7 @@ body {
 .login-box {
 	margin-bottom: 20px;
 	border-radius: 6px;
-	opacity: 0.8;
+	opacity: 0.85;
 	max-width: 450px;
 }
 

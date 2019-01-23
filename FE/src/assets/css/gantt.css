@@ -13,6 +13,13 @@
 .gantt_split_parent {
     visibility: hidden;
 }
+.gantt_cell{
+    padding:0px;
+}
+.gantt_grid_scale{
+    font-size: 15px;
+}
+
 
 .plan {
     background: #807e7e;
@@ -86,9 +93,10 @@
     display: block;
 }
 .gantt-content-samll{
-    font-size: 0.75em;
+    font-size:10px;
+    -webkit-transform:scale(0.85);
     line-height: 12px;
-    padding: 6px 0 5px 0;
+    padding: 5px 0 5px 0;
     font-style: italic;
     text-align: center;
 }
@@ -97,10 +105,11 @@
 }
 .gantt-content-samll .oneline
 {
-    padding-top: 8px
+    padding-top: 7px;
 }
 .gantt-content-left-status{
-    font-size: 0.85em;
+    font-size:10px;
+    -webkit-transform:scale(0.85);
     font-style: italic;
 }
 

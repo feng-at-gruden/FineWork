@@ -2,8 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 //const API_URL = "http://127.0.0.1:3000"
 //const API_URL = "http://192.168.31.33:3000"
-//const API_URL = "http://103.254.77.30:8001/API"
-const API_URL = "http://localhost:9909/API"
+const API_URL = "http://103.254.77.30:8001/API"
+//const API_URL = "http://localhost:9909/API"
 //const API_URL = "/API"
 
 //const APP_NAME = "中阳集团项目进度跟踪系统"
@@ -20,7 +20,7 @@ const Themes = [
 	{ primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
 ]
 
-const Theme = Themes[3]
+const Theme = Themes[1]
 //"amber" "orange accent-4"//"pink accent-2"//"amber" orange
 
 //项目状态

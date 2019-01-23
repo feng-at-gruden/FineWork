@@ -17,5 +17,7 @@ namespace API.Models
             public const string MANAGE_DEPARTMENT = "System-Department";
             public const string MANAGE_USER = "System-User";
         }
+
+        public const string TASK_INIT_STATUS = "未开工";
     }
 }
