@@ -68,12 +68,12 @@ namespace API.Controllers
                 var u = CurrentUser;
                 var p = db.Phase.Add(new Phase {
                     Name = phase.text,
-                    StartDate = phase.start_date,
-                    EndDate = phase.end_date,
+                    StartDate = phase.start_date.Value.ToLocalTime(),
+                    EndDate = phase.end_date.Value.ToLocalTime(),
                     Progress = 0,
                     Status = string.IsNullOrWhiteSpace(phase.status)? "未开工" : phase.status,
                     CreatedBy = u.Id,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToLocalTime(),
                     ProjectId = phase.parent,
                     Description = phase.description
                 });
@@ -92,8 +92,8 @@ namespace API.Controllers
                 p.Name = phase.text.Trim();
                 p.Progress = phase.progress;
                 p.Description = phase.description;
-                p.StartDate = phase.start_date;
-                p.EndDate = phase.start_date.Value.AddDays(phase.duration);
+                p.StartDate = phase.start_date.Value.ToLocalTime();
+                p.EndDate = phase.start_date.Value.ToLocalTime().AddDays(phase.duration);
                 p.Status = phase.status;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "项目阶段信息修改成功。" });

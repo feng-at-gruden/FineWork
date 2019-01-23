@@ -79,6 +79,10 @@ namespace API.Controllers
         [Route("RawPlan")]
         public HttpResponseMessage RawPlan(int id)
         {
+            var p = db.Project.SingleOrDefault(m => m.Id == id);
+            if (p == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse { Success = false, Message = "没有找到相关项目信息，请重试。" });
+
             var phase = from row in db.Phase
                         where row.ProjectId == id
                         select new TaskViewModel
@@ -94,8 +98,6 @@ namespace API.Controllers
                             open = true,
                             description = row.Description,
                         };
-            
-            var p = db.Project.SingleOrDefault(m => m.Id == id);
             var model = new ProjectPlanViewModel
             {
                 id = p.Id,
@@ -122,6 +124,9 @@ namespace API.Controllers
         [Route("DetailedPlan")]
         public HttpResponseMessage DetailedPlan(int id)
         {
+            var p = db.Project.SingleOrDefault(m => m.Id == id);
+            if(p==null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse { Success = false, Message = "没有找到相关项目信息，请重试。" });
             var phase = from row in db.Phase
                         where row.ProjectId == id
                         select new TaskViewModel
@@ -136,7 +141,7 @@ namespace API.Controllers
                             type = "project",
                             open = true
                         };
-            var p = db.Project.SingleOrDefault(m => m.Id == id);
+            
             var model = new ProjectPlanViewModel
             {
                 id = p.Id,
@@ -175,10 +180,10 @@ namespace API.Controllers
                     Name = project.Name,
                     Description = project.Description,
                     CreatedBy = u.Id,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.Now.ToLocalTime(),
                     Progress = 0,
-                    StartDate = project.StartDate,
-                    EndDate = project.EndDate,
+                    StartDate = project.StartDate.ToLocalTime(),
+                    EndDate = project.EndDate.ToLocalTime(),
                     Status = project.Status,
                     No = project.No,
                     WarrantNo = project.WarrantNo,
@@ -199,7 +204,7 @@ namespace API.Controllers
                         Name = item,
                         Progress = 0,
                         CreatedBy = u.Id,
-                        CreatedDate = DateTime.Now,
+                        CreatedDate = DateTime.Now.ToLocalTime(),
                         Status = "未开工"
                     });
                 }
@@ -225,8 +230,8 @@ namespace API.Controllers
                 var c = CurrentUser;
                 p.Name = project.Name;
                 p.Description = project.Description;
-                p.StartDate = project.StartDate;
-                p.EndDate = project.EndDate;
+                p.StartDate = project.StartDate.ToLocalTime();
+                p.EndDate = project.EndDate.ToLocalTime();
                 p.Status = project.Status;
                 p.No = project.No;
                 p.WarrantNo = project.WarrantNo;

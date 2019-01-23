@@ -1,7 +1,7 @@
 <template>
 	<v-layout justify-center fill-height align-center>
 		<!--项目计划甘特图-->
-		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDbClick"></ProjectPlanGantt>
+		<ProjectPlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskClick="handleOnGanttTaskClick"></ProjectPlanGantt>
 		<!--项目信息对话框-->
 		<ProjectInfoDialog :project="detail" :open="openProjectInfoDialog" @close="openProjectInfoDialog = false" @update="handleOnProjectInfoUpdated"></ProjectInfoDialog>
 		<!--项目时间线对话框-->
@@ -219,7 +219,7 @@ export default {
 		},
 		handleOnGanttTaskUpdate(task) {
 			//Call API save to BE
-			console.log(task)
+			console.log(task.start_date)
 			this.loading = true
 			this.$http.put(this.config.API_URL + '/Phase/' + task.id, task).then(function(res) {
 				var json = JSON.parse(res.bodyText)
@@ -241,15 +241,14 @@ export default {
 				}
 			});
 		},
-		handleOnGanttTaskDbClick(id) {
-			if (id)
-				this.$router.push('/Phase/' + id)
-			/*
-			var child = this.plan.data.filter(t=>t.parent==id)
-			if(child.length>0)
+		handleOnGanttTaskClick(id) {
+			//进入阶段详情页
+			var task = this.plan.data.filter(t=>t.id==id)[0]
+			//var child = this.plan.data.filter(t=>t.parent==id)
+			if(task && !task.parent>0)
 			{
-				
-			}*/
+				this.$router.push('/Phase/' + id)
+			}
 		},
 		handleOnCreateTaskSave(task) {
 			//新建任务窗口SAVE按钮点击
