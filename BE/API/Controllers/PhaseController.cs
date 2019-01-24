@@ -156,6 +156,7 @@ namespace API.Controllers
                 parent = task.ParentTaskId.HasValue?task.ParentTaskId.Value:0,
                 phaseId = task.PhaseId.Value,
                 progress = task.Progress.Value,
+                description = task.Description,
                 type = task.ChildrenTasks.Count > 0 ? "project" : "task",
                 open = task.ChildrenTasks.Count > 0 ? true : false,
             });
