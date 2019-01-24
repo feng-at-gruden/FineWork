@@ -204,8 +204,10 @@ namespace API.Controllers
                         Name = item,
                         Progress = 0,
                         CreatedBy = u.Id,
+                        StartDate = project.StartDate.ToLocalTime(),
+                        EndDate = project.StartDate.ToLocalTime().AddDays(7),
                         CreatedDate = DateTime.Now.ToLocalTime(),
-                        Status = "未开工"
+                        Status = Configurations.TASK_INIT_STATUS,
                     });
                 }
                 db.SaveChanges();

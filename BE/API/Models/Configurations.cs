@@ -18,6 +18,6 @@ namespace API.Models
             public const string MANAGE_USER = "System-User";
         }
 
-        public const string TASK_INIT_STATUS = "未开工";
+        public const string TASK_INIT_STATUS = "未开始";
     }
 }

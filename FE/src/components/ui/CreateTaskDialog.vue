@@ -14,18 +14,18 @@
                             <v-select v-model="task.status" :items="config.TaskStatus" label="计划状态"></v-select>
                         </v-flex>
                         <v-flex xs12 md12>
-                            <v-text-field v-model="task.description" :counter="50" label="工作内容介绍"></v-text-field>
+                            <v-text-field v-model="task.description" :counter="50" label="工作内容描述"></v-text-field>
                         </v-flex>
                         <v-flex xs6 md6>
                             <v-menu :close-on-content-click="false" v-model="dateMenu1" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
                                 <v-text-field slot="activator" v-model="task.start_date" label="开始日期" prepend-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="task.start_date" :min="min_date" :max="max_date" @input="dateMenu1 = false"></v-date-picker>
+                                <v-date-picker v-model="task.start_date" :min="task.min_date" :max="task.max_date" @input="dateMenu1 = false"></v-date-picker>
                             </v-menu>
                         </v-flex>
                         <v-flex xs6 md6>
                             <v-menu :close-on-content-click="false" v-model="dateMenu2" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
                                 <v-text-field slot="activator" v-model="task.end_date" label="结束日期" prepend-icon="event" readonly></v-text-field>
-                                <v-date-picker v-model="task.end_date" :min="min_date" :max="max_date" @input="dateMenu2 = false"></v-date-picker>
+                                <v-date-picker v-model="task.end_date" :min="task.min_date" :max="task.max_date" @input="dateMenu2 = false"></v-date-picker>
                             </v-menu>
                         </v-flex>
                         
@@ -71,12 +71,6 @@ export default {
         unitLabel(){
             return this.$props.unit + "名称"
         },
-        min_date(){
-            return this.$props.newTask.min_date
-        },
-        max_date(){
-            return this.$props.newTask.max_date
-        },
         dialog: {
             get() { return this.$props.open },
             set(v) {
@@ -92,7 +86,7 @@ export default {
                 this.$emit('save', this.task)
             }            
         }
-    }
+    },
 }
 
 </script>

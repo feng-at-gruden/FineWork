@@ -3,9 +3,9 @@
         <!--阶段计划甘特图-->
         <PhasePlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDblClick"></PhasePlanGantt>
         <!--添加计划对话框-->
-        <CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'施工项目'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
+        <CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'任务计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
         <!--编辑计划对话框-->
-        <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'施工项目'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
+        <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'任务计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
         <!--删除阶段确认对话框-->
         <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
@@ -57,19 +57,24 @@ export default {
         phaseId() {
             return this.$route.params.id
         },
+        displaySubTitle(){
+            var dateToStr = gantt.date.date_to_str("%M%d日")
+            var strToDate = gantt.date.str_to_date("%d-%m-%Y")
+            return this.plan.name + '(' + dateToStr(strToDate(this.plan.start_date)) + " - " + dateToStr(strToDate(this.plan.end_date)) + ')'
+        }
     },
     watch: {
         selectedOptionMenu(v) {
             switch (v.text) {
                 case '计划调整':
                     this.loadRawPlan()
-                    this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行计划调整。', 'info')
+                    this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行任务编辑。', 'info')
                     this.drawer = false
                     this.editPlan = true
                     break
                 case '退出编辑':
                     this.loadDetailedPlan()
-                    this.showSnackbar('已退出计划编辑模式', 'info')
+                    this.showSnackbar('已退出编辑模式', 'info')
                     this.editPlan = false
                     break
                 case '删除阶段':
@@ -95,10 +100,10 @@ export default {
                 json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
                 json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
                 this.plan = json
-                this.subTitle = this.plan.name
+                this.subTitle = this.displaySubTitle
                 this.loading = false
             }, function(res) {
-                this.showSnackbar('阶段计划信息加载失败!', 'error')
+                this.showSnackbar('阶段计划加载失败!', 'error')
             })
         },
         loadRawPlan() {
@@ -118,10 +123,10 @@ export default {
                 json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
                 json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
                 this.plan = json
-                this.subTitle = this.plan.name
+                this.subTitle = this.displaySubTitle
                 this.loading = false
             }, function(res) {
-                this.showSnackbar('阶段计划信息加载失败!', 'error')
+                this.showSnackbar('阶段计划加载失败!', 'error')
             })
         },
         handleOnPhaseDeleted() {
@@ -139,7 +144,7 @@ export default {
             //父节点为空则，设置为项目开始日期
             var strToDate = gantt.date.str_to_date("%d-%m-%Y")
             var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
-            this.newTask.status = '未开工'
+            this.newTask.status = '未开始'
             this.newTask.text = ''
             this.newTask.phaseId = this.phaseId
             if (pid > 0) {
@@ -329,6 +334,7 @@ export default {
     },
     beforeDestroy() {
         this.editPlan = false
+        this.plan = { data: [], links: [] }
     }
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */

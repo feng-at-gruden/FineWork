@@ -1,5 +1,5 @@
 <template>
-	<v-flex xs12 fill-height id="my-gantt-container" ref="container"></v-flex>
+	<v-flex xs12 fill-height id="my-project-gantt" ref="container"></v-flex>
 </template>
 <script>
 import 'dhtmlx-gantt'
@@ -35,7 +35,7 @@ export default {
 		}
 	},
 	methods: {
-		clearAttachedGanttEvents(){
+		clearAttachedGanttEvents() {
 			this.ganttEventIds.forEach(t => { myGantt.detachEvent(t) })
 		},
 		attachGanttEvents() {
@@ -51,16 +51,39 @@ export default {
 					this.$emit('onOpenEditBox', task)
 					return false
 				}))
-				this.ganttEventIds.push(myGantt.attachEvent('onAfterTaskUpdate', (id, task) => {	
+				this.ganttEventIds.push(myGantt.attachEvent('onAfterTaskUpdate', (id, task) => {
 					this.$emit('onTaskUpdate', task)
 					return false
+				}))
+				//Task drag restriction
+				this.ganttEventIds.push(myGantt.attachEvent("onBeforeTaskDrag", (id, mode, e) => {
+					var task = gantt.getTask(id);
+					return !task.locked && task.progress != 1
+				}))
+				this.ganttEventIds.push(myGantt.attachEvent("onTaskDrag", (id, mode, task, original, e) => {
+					var modes = gantt.config.drag_mode;
+					var str_to_date = gantt.date.str_to_date("%d-%m-%Y")
+					var leftLimit = str_to_date(this.myPlan.start_date), rightLimit = str_to_date(this.myPlan.end_date);
+					if (mode == modes.move || mode == modes.resize) {
+						var diff = original.duration*(1000*60*60*24)
+						if(task.end_date > rightLimit){
+				            task.end_date = new Date(rightLimit)
+				            if(mode == modes.move)
+				                task.start_date = new Date(task.end_date - diff)
+				            }
+				        if(task.start_date < leftLimit){
+				            task.start_date = new Date(leftLimit)
+				            if(mode == modes.move)
+				                task.end_date = new Date(+task.start_date + diff)
+				        }
+					}
 				}))
 			} else {
 				this.ganttEventIds.push(myGantt.attachEvent('onTaskDblClick', (id, event) => {
 					//按ctrl键点击task进入阶段计划
-					if(event.ctrlKey)
+					if (event.ctrlKey)
 						this.$emit('onTaskDblClick', id)
-					return false					
+					return false
 				}))
 			}
 		},
@@ -70,8 +93,8 @@ export default {
 		document.getElementById("viewport").setAttribute('content', 'user-scalable=yes, width=device-width, initial-scale=0.5')
 	},
 	mounted() {
-		document.getElementById('my-gantt-container').style.height = document.body.clientHeight - 64
-		document.getElementById('my-gantt-container').style.width = document.body.clientWidth
+		document.getElementById('my-project-gantt').style.height = document.body.clientHeight - 64
+		document.getElementById('my-project-gantt').style.width = document.body.clientWidth
 		myGantt.initProjectGantt(this.$refs.container, this.edit)
 		this.attachGanttEvents()
 		gantt.parse(this.myPlan)
@@ -81,6 +104,7 @@ export default {
 		document.getElementById("viewport").setAttribute('content', 'user-scalable=no, width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=1');
 		document.body.parentNode.style.overflowY = "auto";
 		this.clearAttachedGanttEvents()
+		gantt.clearAll()
 	},
 	watch: {
 		myPlan: {

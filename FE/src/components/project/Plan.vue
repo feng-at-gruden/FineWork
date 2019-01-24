@@ -177,7 +177,7 @@ export default {
 			//父节点为空则，设置为项目开始日期
 			var strToDate = gantt.date.str_to_date("%d-%m-%Y")
 			var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
-			this.newTask.status = '未开工'
+			this.newTask.status = '未开始'
 			this.newTask.text = ''
 			if (pid > 0) {
 				var pTask = this.plan.data.filter(t => t.id == pid)[0]
@@ -373,6 +373,7 @@ export default {
 	},
 	beforeDestroy() {
 		this.editPlan = false
+		this.plan = { data: [], links: [] }
 	}
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */

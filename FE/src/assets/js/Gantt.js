@@ -274,50 +274,6 @@ export default {
 		gantt.config.drag_links = false;
 		gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
-
-		gantt.config.drag_project = false; //Project自动计算并整体可拖拽
-
-		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
-			var task = gantt.getTask(id);
-			return !task.locked && task.progress != 1;
-		});
-
-		gantt.attachEvent("onTaskDrag", function(id, mode, task, original, e) {
-			var parent = task.parent ? gantt.getTask(task.parent) : null,
-				children = gantt.getChildren(id),
-				modes = gantt.config.drag_mode;
-
-			var limitLeft = null,
-				limitRight = null;
-
-			if (!(mode == modes.move || mode == modes.resize)) return;
-
-			if (mode == modes.move) {
-				limitLeft = limitMoveLeft;
-				limitRight = limitMoveRight;
-			} else if (mode == modes.resize) {
-				limitLeft = limitResizeLeft;
-				limitRight = limitResizeRight;
-			}
-
-			//check parents constraints
-			if (parent && +parent.end_date < +task.end_date) {
-				limitLeft(task, parent);
-			}
-			if (parent && +parent.start_date > +task.start_date) {
-				limitRight(task, parent);
-			}
-
-			//check children constraints
-			for (var i = 0; i < children.length; i++) {
-				var child = gantt.getTask(children[i]);
-				if (+task.end_date < +child.end_date) {
-					limitLeft(task, child);
-				} else if (+task.start_date > +child.start_date) {
-					limitRight(task, child)
-				}
-			}
-		});
 	},
 
 	initProjectGantt: function(id, editable) {
@@ -400,6 +356,8 @@ export default {
 			gantt.config.columns = phaseReadonlyColumns
 		}
 
+		gantt.config.drag_project = true; //Project自动计算并整体可拖拽
+
 		gantt.templates.task_class = function(start, end, task) {
 			var c = ''
 			if (task.type == 'plan')
@@ -431,10 +389,48 @@ export default {
 			}
 			return c
 		};
-		gantt.attachEvent("onBeforeTaskDrag", function(id, mode, e) {
-			var task = gantt.getTask(id);
-			return !task.locked && task.progress != 1;
+		
+
+		//Drag restriction
+		/*
+		gantt.attachEvent("onTaskDrag", function(id, mode, task, original, e) {
+			var parent = task.parent ? gantt.getTask(task.parent) : null,
+				children = gantt.getChildren(id),
+				modes = gantt.config.drag_mode;
+
+			var limitLeft = null,
+				limitRight = null;
+
+			if (!(mode == modes.move || mode == modes.resize)) return;
+
+			if (mode == modes.move) {
+				limitLeft = limitMoveLeft;
+				limitRight = limitMoveRight;
+			} else if (mode == modes.resize) {
+				limitLeft = limitResizeLeft;
+				limitRight = limitResizeRight;
+			}
+
+			//check parents constraints
+			if (parent && +parent.end_date < +task.end_date) {
+				limitLeft(task, parent);
+			}
+			if (parent && +parent.start_date > +task.start_date) {
+				limitRight(task, parent);
+			}
+
+			//check children constraints
+			for (var i = 0; i < children.length; i++) {
+				var child = gantt.getTask(children[i]);
+				if (+task.end_date < +child.end_date) {
+					limitLeft(task, child);
+				} else if (+task.start_date > +child.start_date) {
+					limitRight(task, child)
+				}
+			}
 		});
+		*/
+
 		gantt.init(id);
 	},
 
