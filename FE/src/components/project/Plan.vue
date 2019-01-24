@@ -254,9 +254,13 @@ export default {
 			//BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Project里找不到，建议Create返回结果为全部数据。
 
 			//Call API, and get task ID
+			console.log(task)
 			this.loading = true
 			if (!task.parent)
 				task.parent = this.projectId
+			if(task.start_date==task.end_date){
+				task.duration = 1
+			}
 			this.$http.post(this.config.API_URL + '/Phase', task).then(function(res) {
 				var json = JSON.parse(res.bodyText)
 				this.loading = false
@@ -293,6 +297,9 @@ export default {
 		handleOnEditTaskSave(task) {
 			//任务编辑窗口SAVE按钮点击
 			//CAlL API
+			console.log(task)
+			if(task.start_date==task.end_date && task.duration==0)
+				task.duration = 1
 			this.loading = true
 			this.$http.put(this.config.API_URL + '/Phase/' + task.id, task).then(function(res) {
 				var json = JSON.parse(res.bodyText)

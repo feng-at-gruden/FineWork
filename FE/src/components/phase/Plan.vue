@@ -136,7 +136,7 @@ export default {
         },
         handleOnGanttBeforeCreateTask(pid) {
             //获取父节点ID
-            console.log(pid);
+            //console.log(pid);
             this.newTask.parent = pid
             this.openCreateTaskDialog = true
             //替换成项目开始日期或者父任务开始日期
@@ -219,8 +219,8 @@ export default {
             //console.log(task)
             //Call API, and get task ID
             this.loading = true
-            //if (!task.parent)
-            //    task.parent = this.phaseId
+            if(task.start_date==task.end_date && task.duration==0)
+                task.duration = 1
             this.$http.post(this.config.API_URL + '/Task', task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
@@ -258,6 +258,8 @@ export default {
             //任务编辑窗口SAVE按钮点击
             //CAlL API
             this.loading = true
+            if(task.start_date==task.end_date && task.duration==0)
+                task.duration = 1
             this.$http.put(this.config.API_URL + '/Task/' + task.id, task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
