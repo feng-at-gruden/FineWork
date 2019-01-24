@@ -23,7 +23,7 @@ import DeletePhaseDialog from '../ui/DeletePhaseDialog'
 
 export default {
     extends: BasePage,
-    name: 'ProjectPlan',
+    name: 'PhasePlan',
     components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog },
     data() {
         return {
@@ -78,7 +78,7 @@ export default {
                     this.editPlan = false
                     break
                 case '删除阶段':
-                    this.openDeleteProjectDialog = true
+                    this.openDeletePhaseDialog = true
                     break
             }
         }
@@ -131,7 +131,8 @@ export default {
         },
         handleOnPhaseDeleted() {
             this.showSnackbar("项目阶段已删除", 'success')
-            this.openDeleteProjectDialog = false
+            this.openDeletePhaseDialog = false
+            //TODO, Redirect to Project
             setTimeout(() => (this.$router.replace('/Project/List')), 2000)
         },
         handleOnGanttBeforeCreateTask(pid) {
@@ -150,12 +151,12 @@ export default {
             if (pid > 0) {
                 var pTask = this.plan.data.filter(t => t.id == pid)[0]
                 this.newTask.start_date = dateToStr(pTask.start_date)
-                this.newTask.end_date = this.newTask.start_date
+                this.newTask.end_date = dateToStr(new Date(strToDate(this.newTask.start_date).getTime() + 1000*60*60*24*1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(pTask.end_date)
             } else {
                 this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
-                this.newTask.end_date = this.newTask.start_date
+                this.newTask.end_date = dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000*60*60*24*1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(strToDate(this.plan.end_date))
             }
@@ -214,9 +215,8 @@ export default {
         },
         handleOnCreateTaskSave(task) {
             //新建任务窗口SAVE按钮点击
-            //BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Project里找不到，建议Create返回结果为全部数据。
+            //BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Plan里找不到，
 
-            //console.log(task)
             //Call API, and get task ID
             this.loading = true
             if(task.start_date==task.end_date && task.duration==0)

@@ -91,12 +91,16 @@ export default {
     },
     watch:{
         startDate(v, ov){
+            //var d = this.strToDate(this.task.end_date).getTime() - this.strToDate(ov).getTime() 
             var d = this.strToDate(this.task.end_date).getTime() - this.strToDate(this.task.start_date).getTime() 
+            //var dmx = this.strToDate(this.task.max_date).getTime()
             if(d<=0){
                 d = 1000*60*60*24*1
             }
-            var d2 = new Date(this.strToDate(this.task.start_date).getTime() + d)
-            this.task.end_date = this.dateToStr(d2)
+            var d2 = this.strToDate(this.task.start_date).getTime() + d
+            //if(d2>dmx)
+            //    d2 = dmx
+            this.task.end_date = this.dateToStr(new Date(d2))
         }
     },
     methods: {        

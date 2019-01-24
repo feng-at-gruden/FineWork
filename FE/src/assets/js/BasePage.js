@@ -38,7 +38,15 @@ export default {
 		drawer: {
 			get() { this.$store.state.drawer },
 			set(v) { this.$store.commit('openDrawer', v) }
-		}
+		},
+		selectedProject:{
+        	get(){return this.$store.state.selectedProject},
+        	set(v){
+	    		this.$store.commit('updateSelectedPorject', v)
+	    		this.eventBus.$emit('selectedProjectChanged',v)
+	    		console.log('selectedProjectChanged',v)
+        	}
+        }
 	},
 	watch: {
 		subTitle(v, ov) {

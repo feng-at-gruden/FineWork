@@ -118,8 +118,8 @@ export default {
             if(d<=0){
                 d = 1000*60*60*24*1
             }
-            var d2 = new Date(this.strToDate(this.task.start_date).getTime() + d)
-            this.task.end_date = this.dateToStr(d2)
+            var d2 = this.strToDate(this.task.start_date).getTime() + d
+            this.task.end_date = this.dateToStr(new Date(d2))
         }
     },
     methods: {

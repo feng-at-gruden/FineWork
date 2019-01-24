@@ -49,6 +49,7 @@ const app = new Vue({
 window.app = app
 
 router.beforeEach((to, from, next) => {
+    
     if (to.meta.title) {
         document.title = config.APP_NAME + " - " + to.meta.title
     }
@@ -58,6 +59,5 @@ router.beforeEach((to, from, next) => {
     if (to.meta.autoLoading) {
         //app.$store.commit('loading', true)
     }
-    //app.$store.commit('editing', false)
     next()
 })

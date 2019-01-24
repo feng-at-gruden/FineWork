@@ -90,6 +90,11 @@ export default {
 					this.openDeleteProjectDialog = true
 					break
 			}
+		},
+		'$route'(v, ov){
+			if(this.editPlan)
+				this.editPlan = false
+			this.loadDetailedPlan()
 		}
 	},
 	methods: {
@@ -111,6 +116,12 @@ export default {
 				this.plan = json
 				this.subTitle = this.plan.name
 				this.loading = false
+				if(this.selectedProject != this.projectId)
+				{
+					console.log('loaded detail', this.selectedProject, this.projectId)
+					this.selectedProject = this.projectId
+				}
+				
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')
 			})
@@ -254,7 +265,6 @@ export default {
 			//BUG FIX，新建的任务再编辑会不生效， 因为新增的task id在原Project里找不到，建议Create返回结果为全部数据。
 
 			//Call API, and get task ID
-			console.log(task)
 			this.loading = true
 			if (!task.parent)
 				task.parent = this.projectId
@@ -297,7 +307,7 @@ export default {
 		handleOnEditTaskSave(task) {
 			//任务编辑窗口SAVE按钮点击
 			//CAlL API
-			console.log(task)
+			//console.log(task)
 			if(task.start_date==task.end_date && task.duration==0)
 				task.duration = 1
 			this.loading = true
@@ -375,7 +385,6 @@ export default {
 		},
 	},
 	created() {
-		this.loading = true
 		this.loadDetailedPlan()
 	},
 	beforeDestroy() {

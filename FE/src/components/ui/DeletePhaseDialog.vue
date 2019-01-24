@@ -8,7 +8,7 @@
                     <v-slide-y-transition mode="in-out"><span v-show="deleteConfirm" style="position: absolute;left:40px;">二次确认</span></v-slide-y-transition>
                 </v-card-title>
                 <v-card-text>
-                    <span class="delete-project-desc">您确定要删除这个项目阶段吗？删除后该阶段相关任务及工作汇报都将被删除！</span>
+                    <span class="delete-project-desc">您确定要删除这个项目阶段吗？删除后本阶段相关任务及工作汇报都将被删除！</span>
                     <v-expand-transition mode="in-out">
                         <v-text-field class="delete-project-input" v-if="deleteConfirm" v-model="confirmText" :rules="nameRules" required placeholder="输入[确认]以删除"></v-text-field>
                     </v-expand-transition>
@@ -30,11 +30,13 @@
     </v-dialog>
 </template>
 <script>
+import config from '../../assets/js/Config'
 export default {
     name: 'DeletePhasetDialog',
     props: ['open'],
     data() {
         return {
+            config,
             deleteConfirm: false,
             confirmText: '',
             nameRules: [
@@ -60,9 +62,12 @@ export default {
     },
     methods: {
         handleDeleteClick() {
-            console.log('delete')
             if (this.$refs.deleteForm.validate()) {
-                
+                this.$http.delete(this.config.API_URL + '/Phase/' + this.phaseId).then(function(res) {
+                    this.$emit('delete')
+                }, function(res) {
+                    
+                })
             }
         }
     }

@@ -9,6 +9,8 @@ const store = new Vuex.Store({
 		loading: false,
 		editPlan: false,
 		selectedOptionMenu:null,
+		openProjects:[],
+		selectedProject:null,
 		identity: {
 			username: '',
 			realname:'',
@@ -33,7 +35,13 @@ const store = new Vuex.Store({
 		},
 		optionMenuClick(state,v){			
 			state.selectedOptionMenu = v		
-		}
+		},
+		updateOpenProjects(state, v) {
+			state.openProjects = v
+		},
+		updateSelectedPorject(state, v) {
+			state.selectedProject = v
+		},
 	}
 })
 
