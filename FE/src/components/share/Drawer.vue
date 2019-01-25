@@ -16,7 +16,7 @@
                 <template v-else-if="item.title=='PROJECT-DROPDOWN'" v-show="openProjects.length>0">
                     <v-list-tile :key="i" v-show="openProjects.length>0">
                         <v-list-tile-content class="drawer-projects-box">
-                            <v-select :items="openProjects" v-model="selectedProjectId" @change="handleProjectDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id"></v-select>
+                            <v-select :items="openProjects" v-model="selectedProjectId" @change="handleProjectDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id" class="project-select"></v-select>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-divider dark class="my-3" v-show="openProjects.length>0"></v-divider>
@@ -195,7 +195,7 @@ export default {
     text-align: center;
     margin-left: 23px;
     /*margin-top: 4px;*/
-    color: rgba(0,0,0,.87);
+    color: rgba(0,0,0,.87) !important;
 }
 .drawer-phase-box .v-list__tile__title
 {
@@ -204,6 +204,9 @@ export default {
 
 .drawer-phase-box .v-input__append-outer, .drawer-phase-box .v-input__prepend-outer {
     margin-top: 7px;
+}
+.project-select{
+    width: 100%;
 }
 .phase-select{
     font-size: 13px;
