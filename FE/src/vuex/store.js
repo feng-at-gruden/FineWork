@@ -11,6 +11,8 @@ const store = new Vuex.Store({
 		selectedOptionMenu:null,
 		openProjects:[],
 		selectedProject:null,
+		projectPhases:[],
+		selectedPhase:null,
 		identity: {
 			username: '',
 			realname:'',
@@ -41,6 +43,12 @@ const store = new Vuex.Store({
 		},
 		updateSelectedPorject(state, v) {
 			state.selectedProject = parseInt(v + '')
+		},
+		updateProjectPhases(state, v) {
+			state.projectPhases = v
+		},
+		updateSelectedPhase(state, v) {
+			state.selectedPhase = parseInt(v + '')
 		},
 	}
 })

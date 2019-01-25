@@ -16,10 +16,17 @@
                 <template v-else-if="item.title=='PROJECT-DROPDOWN'" v-show="openProjects.length>0">
                     <v-list-tile :key="i" v-show="openProjects.length>0">
                         <v-list-tile-content class="drawer-projects-box">
-                            <v-select :items="openProjects" v-model="selectedProjectId" ref="openProjectsDropdown" @change="handleDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id"></v-select>
+                            <v-select :items="openProjects" v-model="selectedProjectId" @change="handleProjectDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id"></v-select>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-divider dark class="my-3" v-show="openProjects.length>0"></v-divider>
+                </template>
+                <template v-else-if="item.title=='PHASE-DROPDOWN'" v-show="projectPhases.length>0">
+                    <v-list-tile :key="i" v-show="projectPhases.length>0">
+                        <v-list-tile-content class="drawer-phase-box">
+                            <v-select :items="projectPhases" v-model="selectedPhaseId" @change="handlePhaseDropdownChange" label="阶段计划" hide-details prepend-icon="playlist_add_check" single-line item-text="Name" item-value="Id" class="phase-select"></v-select>
+                        </v-list-tile-content>
+                    </v-list-tile>                    
                 </template>
                 <v-list-tile :key="i" v-else @click="goto(item)">
                     <v-list-tile-action>
@@ -44,7 +51,9 @@ export default {
         return {
             mini: false,
             selectedProjectId: 0,
+            selectedPhaseId: 0,
             projectSelectedFromOuter: false,
+            phaseSelectedFromOuter: false,
             items: [
                 /*{ title: '登录', link: '/login', icon: 'supervisor_account' },*/
                 /*{ title: '主页', link: '/', icon: 'home' },*/
@@ -56,7 +65,8 @@ export default {
                 { divider: true },
                 { heading: '计划管理' },
                 { title: '项目计划', link: '/Project/', icon: 'subject' },
-                { title: '阶段计划', link: '/Phase/Plan', icon: 'playlist_add_check' },
+                /*{ title: '阶段计划', link: '/Phase/Plan', icon: 'playlist_add_check' },*/
+                { title: 'PHASE-DROPDOWN', link: '/Phase/Plan', icon: 'playlist_add_check' },
                 { divider: true },
                 { heading: '进度管理' },
                 { title: '施工进度', link: '/work/daily', icon: 'assignment' },
@@ -82,6 +92,9 @@ export default {
         openProjects() {
             return this.$store.state.openProjects
         },
+        projectPhases() {
+            return this.$store.state.projectPhases
+        },
     },
     methods: {
         goto(item) {
@@ -96,8 +109,11 @@ export default {
         handleInput(v) {
             this.$store.commit('openDrawer', v)
         },
-        handleDropdownChange(v) {
+        handleProjectDropdownChange(v) {
             this.projectSelectedFromOuter = false
+        },
+        handlePhaseDropdownChange(v) {
+            this.phaseSelectedFromOuter = false
         }
     },
     watch: {
@@ -111,7 +127,17 @@ export default {
                     }
                 }
             }
-        }
+        },        
+        selectedPhaseId(v, ov) {
+            if (v != ov) {
+                if (this.projectPhases.filter(t => t.Id == v).length > 0) {
+                    if (!this.phaseSelectedFromOuter){
+                        this.$router.push('/Phase/' + v)
+                        this.$store.commit('updateSelectedPhase', v)
+                    }                                   
+                }
+            }
+        },
     },
     mounted() {
         this.eventBus.$on('selectedProjectChanged', v => {
@@ -120,8 +146,15 @@ export default {
                 this.selectedProjectId = parseInt(v + '')
             }
         })
+        this.eventBus.$on('selectedPhaseChanged', v => {
+            if (this.selectedPhaseId != v) {
+                this.phaseSelectedFromOuter = true
+                this.selectedPhaseId = parseInt(v + '')                
+            }
+        })
     },
     beforeDestroy() {
+        this.eventBus.$off("selectedPhaseChanged")
         this.eventBus.$off("selectedProjectChanged")
     }
 }
@@ -137,7 +170,43 @@ export default {
 }
 
 .drawer-projects-box {
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.drawer-projects-box .v-input{
+    align-items: center    
 }
 
+.drawer-phase-box {
+    margin-top: 10px;
+}
+
+.drawer-phase-box .v-input__slot{
+    height: 40px;
+}
+.drawer-phase-box .v-text-field{
+    padding-top: 0px;
+    margin-top: 0px; 
+}
+.drawer-phase-box .v-select-list,
+.drawer-phase-box .v-select__selection--comma,
+.drawer-phase-box .v-label
+{
+    font-size: 13px;
+    text-align: center;
+    margin-left: 23px;
+    /*margin-top: 4px;*/
+    color: rgba(0,0,0,.87);
+}
+.drawer-phase-box .v-list__tile__title
+{
+    font-size: 13px;
+}
+
+.drawer-phase-box .v-input__append-outer, .drawer-phase-box .v-input__prepend-outer {
+    margin-top: 7px;
+}
+.phase-select{
+    font-size: 13px;
+    width: 100%;
+}
 </style>

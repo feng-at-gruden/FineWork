@@ -81,6 +81,11 @@ export default {
                     this.openDeletePhaseDialog = true
                     break
             }
+        },
+        '$route'(v, ov) {
+            if (this.editPlan)
+                this.editPlan = false
+            this.loadDetailedPlan()
         }
     },
     methods: {
@@ -102,6 +107,7 @@ export default {
                 this.plan = json
                 this.subTitle = this.displaySubTitle
                 this.loading = false
+                this.selectedPhase = parseInt(this.plan.id)
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -125,6 +131,7 @@ export default {
                 this.plan = json
                 this.subTitle = this.displaySubTitle
                 this.loading = false
+                this.selectedPhase = parseInt(this.plan.id)
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -337,6 +344,7 @@ export default {
     beforeDestroy() {
         this.editPlan = false
         this.plan = { data: [], links: [] }
+        this.selectedPhase = 0
     }
 }
 /* [Gantt event get task info] -> [Generate UI data for dialog] -> [Dialog save event, save to API, update Gantto props] -> [Gantt watch and update UI]  */

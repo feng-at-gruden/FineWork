@@ -116,6 +116,7 @@ export default {
                 this.plan = json
                 this.subTitle = this.plan.name
                 this.loading = false
+                this.updateProjectPhases()
             }, function(res) {
                 this.showSnackbar('项目计划信息加载失败!', 'error')
             })
@@ -139,6 +140,7 @@ export default {
                 this.plan = json
                 this.subTitle = this.plan.name
                 this.loading = false
+                this.updateProjectPhases()
             }, function(res) {
                 this.showSnackbar('项目计划信息加载失败!', 'error')
             })
@@ -364,6 +366,14 @@ export default {
                 //this.plan = Object.assign({}, this.plan) //Not work
                 this.taskToDelete = task.id
             }
+        },
+        updateProjectPhases() {
+            var phases = [];
+            for(var i=0; i<this.plan.data.length; i++)
+            {                
+                phases.push({Name:this.plan.data[i].text, Id:this.plan.data[i].id})
+            }
+             this.$store.commit('updateProjectPhases', phases)             
         },
         findNodeChildren(id, data) {
             var result = []

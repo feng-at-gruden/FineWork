@@ -45,6 +45,13 @@ export default {
 	    		this.$store.commit('updateSelectedPorject', v)
 	    		this.eventBus.$emit('selectedProjectChanged',v)
         	}
+        },
+        selectedPhase:{
+        	get(){return this.$store.state.selectedPhase},
+        	set(v){
+	    		this.$store.commit('updateSelectedPhase', v)
+	    		this.eventBus.$emit('selectedPhaseChanged',v)
+        	}
         }
 	},
 	watch: {
