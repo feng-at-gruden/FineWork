@@ -40,7 +40,7 @@ const store = new Vuex.Store({
 			state.openProjects = v
 		},
 		updateSelectedPorject(state, v) {
-			state.selectedProject = v
+			state.selectedProject = parseInt(v + '')
 		},
 	}
 })

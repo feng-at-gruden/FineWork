@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-app >
-			<Drawer :selectedProject="selectedProjectId" />
+			<Drawer />
 			<Header @onOptionMenuClick="handleHeaderOptionMenuClick" :subHeader="subHeader"/>			
 			<v-content class="v-content-container">
 				<v-container fill-height :class="[fullWidth?'main-container-full':'main-container', '']">
@@ -40,7 +40,6 @@ export default {
 	data() {
 		return {
 			subHeader:'',
-			selectedProjectId:0,
 		}
 	},
 	methods: {
@@ -48,10 +47,12 @@ export default {
 			this.$store.commit('optionMenuClick', menuItem)
 		}
 	},
-	mounted () {
+	mounted() {
         this.eventBus.$on('subTitleChanged', v=> this.subHeader = v)
-        this.eventBus.$on('selectedProjectChanged', v=> this.selectedProjectId = v)
     },
+    beforeDestroy() {
+    	this.eventBus.$off('subTitleChanged')
+    }
 }
 
 </script>

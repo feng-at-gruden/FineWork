@@ -13,11 +13,14 @@
                     </v-flex>
                 </v-layout>
                 <v-divider dark v-else-if="item.divider" class="my-3" :key="i"></v-divider>
-                <v-list-tile :key="i" v-else-if="item.title=='PROJECT-DROPDOWN'" v-show="openProjects.length>0">
-                    <v-list-tile-content class="drawer-projects-box">
-                        <v-select :items="openProjects" v-model="selectedProjectId" menu-props="auto" :label="lableDisp" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id"></v-select>
-                    </v-list-tile-content>
-                </v-list-tile>
+                <template v-else-if="item.title=='PROJECT-DROPDOWN'" v-show="openProjects.length>0">
+                    <v-list-tile :key="i" v-show="openProjects.length>0">
+                        <v-list-tile-content class="drawer-projects-box">
+                            <v-select :items="openProjects" v-model="selectedProjectId" ref="openProjectsDropdown" @change="handleDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id"></v-select>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-divider dark class="my-3" v-show="openProjects.length>0"></v-divider>
+                </template>
                 <v-list-tile :key="i" v-else @click="goto(item)">
                     <v-list-tile-action>
                         <v-icon>{{ item.icon }}</v-icon>
@@ -40,21 +43,23 @@ export default {
     data() {
         return {
             mini: false,
+            selectedProjectId: 0,
+            projectSelectedFromOuter: false,
             items: [
                 /*{ title: '登录', link: '/login', icon: 'supervisor_account' },*/
                 /*{ title: '主页', link: '/', icon: 'home' },*/
                 { title: 'PROJECT-DROPDOWN', link: '/', icon: 'home' },
-                { divider: true },
+
                 { heading: '项目管理' },
                 { title: '新建项目', link: '/Project/Create', icon: 'library_add' },
                 { title: '项目一览', link: '/Project/List', icon: 'location_city' },
                 { divider: true },
                 { heading: '计划管理' },
-                { title: '项目计划', link: '/Project/1', icon: 'subject' },
+                { title: '项目计划', link: '/Project/', icon: 'subject' },
                 { title: '阶段计划', link: '/Phase/Plan', icon: 'playlist_add_check' },
                 { divider: true },
-                { heading: '工作汇报' },
-                { title: '施工日志', link: '/work/daily', icon: 'assignment' },
+                { heading: '进度管理' },
+                { title: '施工进度', link: '/work/daily', icon: 'assignment' },
                 { divider: true },
                 { heading: '系统管理' },
                 { title: '账号管理', link: '/Setting/Account', icon: 'supervisor_account' },
@@ -77,40 +82,47 @@ export default {
         openProjects() {
             return this.$store.state.openProjects
         },
-        selectedProjectId: {
-            get() { return this.$props.selectedProject },
-            set(v) {
-                //if (v != this.selectedProjectId) {
-                    this.$router.push('/Project/' + v)
-                    this.$store.commit('updateSelectedPorject', v)
-                //}else{
-                //	console.log('set from outside ', v)
-                //}
-            }
-        },
-        lableDisp(){
-        	return '在建项目' + this.selectedProjectId
-        }
     },
     methods: {
         goto(item) {
             if (item.link == 'logout') {
                 this.auth.logout()
+            } else if (item.title == '项目计划') {
+                this.$router.push(item.link + this.selectedProjectId)
             } else {
                 this.$router.push(item.link)
             }
         },
         handleInput(v) {
             this.$store.commit('openDrawer', v)
+        },
+        handleDropdownChange(v) {
+            this.projectSelectedFromOuter = false
         }
     },
     watch: {
-        selectedProject(v, ov) {
+        selectedProjectId(v, ov) {
             if (v != ov) {
-            	console.log('watch', v)
-                this.selectedProjectId = v
+                if (this.openProjects.filter(t => t.Id == v).length > 0) {
+                    if (!this.projectSelectedFromOuter) {
+                        //通过下拉列表选择的
+                        this.$router.push('/Project/' + v)
+                        this.$store.commit('updateSelectedPorject', v)
+                    }
+                }
             }
         }
+    },
+    mounted() {
+        this.eventBus.$on('selectedProjectChanged', v => {
+            if (this.selectedProjectId != v) {
+                this.projectSelectedFromOuter = true
+                this.selectedProjectId = parseInt(v + '')
+            }
+        })
+    },
+    beforeDestroy() {
+        this.eventBus.$off("selectedProjectChanged")
     }
 }
 

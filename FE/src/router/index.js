@@ -23,7 +23,7 @@ export default new Router({
         },
         {
             path: '/',
-            redirect: '/Dashboard',
+            redirect: '/Project/List',
             meta: { requiresAuth: true, level: 1, title: "DASHBOARD", },
             component: Main,
         },

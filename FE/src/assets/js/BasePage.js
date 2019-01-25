@@ -44,7 +44,6 @@ export default {
         	set(v){
 	    		this.$store.commit('updateSelectedPorject', v)
 	    		this.eventBus.$emit('selectedProjectChanged',v)
-	    		console.log('selectedProjectChanged',v)
         	}
         }
 	},

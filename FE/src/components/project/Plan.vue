@@ -63,7 +63,7 @@ export default {
 			set(v) { this.$store.commit('editPlan', v) }
 		},
 		projectId() {
-			return this.$route.params.id
+			return parseInt(this.$route.params.id)
 		},
 	},
 	watch: {
@@ -116,12 +116,6 @@ export default {
 				this.plan = json
 				this.subTitle = this.plan.name
 				this.loading = false
-				if(this.selectedProject != this.projectId)
-				{
-					console.log('loaded detail', this.selectedProject, this.projectId)
-					this.selectedProject = this.projectId
-				}
-				
 			}, function(res) {
 				this.showSnackbar('项目计划信息加载失败!', 'error')
 			})
@@ -386,6 +380,12 @@ export default {
 	},
 	created() {
 		this.loadDetailedPlan()
+	},
+	updated() {
+		if(this.selectedProject != this.projectId)
+		{
+			this.selectedProject = this.projectId
+		}
 	},
 	beforeDestroy() {
 		this.editPlan = false
