@@ -21,10 +21,10 @@
                             <v-text-field v-model="projectInfo.Description" :disabled="!editable" :counter="50" label="项目简介"></v-text-field>
                         </v-flex>
                         <v-flex xs3 md3>
-                            <v-text-field v-model="projectInfo.Acreage" :disabled="!editable" mask="##########" label="施工面积（㎡）"></v-text-field>
+                            <v-text-field v-model="projectInfo.Acreage" :disabled="!editable" mask="########" label="施工面积（㎡）"></v-text-field>
                         </v-flex>
                         <v-flex xs3 md3>
-                            <v-text-field v-model="projectInfo.Cost" :disabled="!editable" mask="#######" label="工程造价(万元)" append-icon="attach_money"></v-text-field>
+                            <v-text-field v-model="projectInfo.Cost" :disabled="!editable" mask="#########" label="工程造价(万元)" prefix="￥"></v-text-field>
                         </v-flex>
                         <v-flex xs4 md4>
                             <v-text-field v-model="projectInfo.ContractNo" :disabled="!editable" label="施工合同编号"></v-text-field>
@@ -136,7 +136,5 @@ export default {
 </script>
 <style>
 
-
-.dialog-left-transition {}
 
 </style>
