@@ -12,15 +12,15 @@
 					</v-flex>
 					<v-flex lg12 class="login-gap2" v-if="!isMobile"></v-flex>
 					<v-flex xs11 sm8 md5 lg4 offset-lg5>
-						<v-card class="elevation-12 login-box">
+						<v-card class="elevation-12 login-box" @keydown.enter="login">
 							<v-toolbar color="primary">
 								<v-toolbar-title>{{title}}</v-toolbar-title>
 								<v-spacer></v-spacer>
 								<v-tooltip bottom>
-									<v-btn icon large target="_blank" slot="activator">
-										<v-icon large>code</v-icon>
+									<v-btn icon large slot="activator">
+										<v-icon large>face</v-icon>
 									</v-btn>
-									<span>Help</span>
+									<span>{{currentTime}}</span>
 								</v-tooltip>
 							</v-toolbar>
 							<v-card-text>
@@ -31,7 +31,7 @@
 							</v-card-text>
 							<v-card-actions class="pa-3">
 								<v-spacer></v-spacer>
-								<v-btn color="primary" block large @click="handleLoginClick" :loading="logining">登 录</v-btn>
+								<v-btn color="primary" block large @click="login" :loading="logining"> <v-icon dark class="login-button-icon">cloud_upload</v-icon>登 录</v-btn>
 								<v-spacer></v-spacer>
 							</v-card-actions>
 						</v-card>
@@ -55,6 +55,7 @@
 import BasePage from '../assets/js/BasePage'
 
 const WALLPAPERS = [
+'https://cn.bing.com/az/hprichbg/rb/KukeriCostume_EN-CN6866832286_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BodegasYsios_EN-CN6930432309_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg',
@@ -94,9 +95,12 @@ export default {
 		isMobile() {
 			return !this.util.IsPC()
 		},
+		currentTime() {
+			return this.util.dateFormat('yyyy年M月d日 h:m',new Date())
+		}
 	},
 	methods: {
-		handleLoginClick() {
+		login() {
 			if (this.$refs.loginForm.validate()) {
 				this.alert = false
 				this.logining = true
@@ -137,7 +141,7 @@ export default {
 		this.timer = null
 	}
 }
-//https://cn.bing.com/HPImageArchive.aspx?format=js&idx=4&n=1&nc=1361089515117&FORM=HYLH1
+//https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&nc=1361089515117&FORM=HYLH1
 
 </script>
 <style scoped>
@@ -221,5 +225,8 @@ body {
 
 .fade-enter, .fade-leave-active {
   opacity: 0.1
+}
+.login-button-icon{
+	margin-right: 5px;
 }
 </style>

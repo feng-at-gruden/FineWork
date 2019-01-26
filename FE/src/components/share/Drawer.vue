@@ -177,7 +177,7 @@ export default {
 }
 
 .drawer-phase-box {
-    margin-top: 10px;
+    margin-top: 1px;
 }
 
 .drawer-phase-box .v-input__slot{

@@ -140,7 +140,7 @@ export default {
             this.showSnackbar("项目阶段已删除", 'success')
             this.openDeletePhaseDialog = false
             //TODO, Redirect to Project
-            setTimeout(() => (this.$router.replace('/Project/List')), 2000)
+            setTimeout(() => (this.$router.replace('/Project/' + this.selectedProject)), 2000)
         },
         handleOnGanttBeforeCreateTask(pid) {
             //获取父节点ID
