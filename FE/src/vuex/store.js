@@ -9,6 +9,7 @@ const store = new Vuex.Store({
 		loading: false,
 		editPlan: false,
 		selectedOptionMenu:null,
+		allProjects:[],
 		openProjects:[],
 		selectedProject:null,
 		projectPhases:[],
@@ -37,6 +38,9 @@ const store = new Vuex.Store({
 		},
 		optionMenuClick(state,v){			
 			state.selectedOptionMenu = v		
+		},
+		updateAllProjects(state, v) {
+			state.allProjects = v
 		},
 		updateOpenProjects(state, v) {
 			state.openProjects = v

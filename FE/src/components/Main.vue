@@ -17,7 +17,7 @@
 			<Footer v-if="needFooter" />		
 			
 		</v-app>
-		<div class="loader" v-if="loading"></div>
+		<div :class="loaderCss" v-if="loading"></div>
 		<!--<div class="loading" v-show="loading"></div>-->		
 	</div>
 </template>
@@ -40,6 +40,16 @@ export default {
 	data() {
 		return {
 			subHeader:'',
+		}
+	},
+	computed:{
+		loaderCss(){
+			var path = this.$route.name
+			if(path=='ProjectPlan' || path=='PhasePlan')
+				return 'gantt-loader'
+			else
+				return 'loader'
+
 		}
 	},
 	methods: {

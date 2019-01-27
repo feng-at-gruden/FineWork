@@ -17,8 +17,8 @@
 								<v-toolbar-title>{{title}}</v-toolbar-title>
 								<v-spacer></v-spacer>
 								<v-tooltip bottom>
-									<v-btn icon large slot="activator">
-										<v-icon large>face</v-icon>
+									<v-btn icon slot="activator">
+										<v-icon>access_time</v-icon>
 									</v-btn>
 									<span>{{currentTime}}</span>
 								</v-tooltip>
@@ -55,6 +55,7 @@
 import BasePage from '../assets/js/BasePage'
 
 const WALLPAPERS = [
+'https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/KukeriCostume_EN-CN6866832286_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BodegasYsios_EN-CN6930432309_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',
@@ -198,7 +199,7 @@ body {
 .wallpaper1 {
 	background-size: 100% 100%;
     background-repeat: no-repeat;	
-	background: url('https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg');
+	background: url('https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg');
 }
 
 .login-gap1 {

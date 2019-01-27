@@ -137,5 +137,4 @@ export default {
 <style>
 @import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
 @import "../../assets/css/gantt.css"
-
 </style>

@@ -4,11 +4,11 @@
             <v-card-title class="grey lighten-4 py-4 title">
                 添加{{unitName}}
             </v-card-title>
-            <v-form v-model="formValid" lazy-validation ref="createTaskForm">
+            <v-form lazy-validation ref="createTaskForm">
                 <v-container fluid>
                     <v-layout wrap>
                         <v-flex xs8 md8>
-                            <v-text-field v-model="task.text" :counter="25" :label="unitLabel" :rules="nameRules" required  append-icon="business"></v-text-field>
+                            <v-text-field v-model="task.text" :counter="25" :label="unitLabel" :rules="nameRules" append-icon="business"></v-text-field>
                         </v-flex>
                         <v-flex xs4 md4>
                             <v-select v-model="task.status" :items="config.TaskStatus" label="计划状态"></v-select>
@@ -32,8 +32,8 @@
                         <v-flex>
                             <v-layout align-end justify-center row fill-height>
                                     <v-spacer></v-spacer>
-                                    <v-btn @click="dialog = false">取消</v-btn>
-                                    <v-btn color="primary" @click="handleSaveClick" :disabled="!formValid">确定</v-btn>
+                                    <v-btn @click="handleCancelClick">取消</v-btn>
+                                    <v-btn color="primary" @click="handleSaveClick">确定</v-btn>
                             </v-layout>
                         </v-flex>
                     </v-layout>
@@ -44,15 +44,12 @@
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
-import config from '../../assets/js/Config'
 export default {
     extends: BasePage,
     name: 'CreateTaskDialog',
     props: ['open', 'newTask', 'unit'],
     data() {
         return {
-            config,            
-            formValid: true,
             dateMenu1: false,
             dateMenu2: false,
             nameRules: [
@@ -76,12 +73,13 @@ export default {
         dialog: {
             get() { return this.$props.open },
             set(v) {
+                this.$refs.createTaskForm.resetValidation()
                 this.$emit('close')
             }
         },
         minEndDate(){
-            //var 
-            //var d1 = strToDate(this.task.min_date)
+            if(!this.task.start_date)
+                return ''
             var d2 = new Date(this.strToDate(this.task.start_date).getTime() + 1000*60*60*24*1)
             return this.dateToStr(d2)
         },
@@ -91,6 +89,8 @@ export default {
     },
     watch:{
         startDate(v, ov){
+            if(!v)
+                return
             //var d = this.strToDate(this.task.end_date).getTime() - this.strToDate(ov).getTime() 
             var d = this.strToDate(this.task.end_date).getTime() - this.strToDate(this.task.start_date).getTime() 
             //var dmx = this.strToDate(this.task.max_date).getTime()
@@ -106,10 +106,12 @@ export default {
     methods: {        
         handleSaveClick() {
             if (this.$refs.createTaskForm.validate()){
-                //this.formValid = true
-                this.dialog = false                
                 this.$emit('save', this.task)
-            }            
+                this.dialog = false 
+            }
+        },
+        handleCancelClick() {
+            this.dialog = false
         }
     },
 }

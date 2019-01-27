@@ -73,7 +73,7 @@ export default new Router({
             component: Main,
             children: [{
                 path: ':id',
-                name: 'Plan',
+                name: 'PhasePlan',
                 meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true,
                     showOptionMenu: true, 
                     optionMenu: [

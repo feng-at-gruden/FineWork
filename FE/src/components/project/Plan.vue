@@ -47,7 +47,8 @@ export default {
             newTask: {
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
-                status: '未开工'
+                status: '未开工',
+                text:''
             },
             taskToEdit: {},
             taskToDelete: 0,
@@ -165,8 +166,7 @@ export default {
             this.showSnackbar("项目信息更新成功", 'success')
             //Update open project dorpdown
             this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {
-                var openProjects = JSON.parse(res.bodyText).filter(t => { return t.Status == this.config.ProjectStatus[1].value })
-                this.$store.commit('updateOpenProjects', openProjects)
+                this.$store.commit('updateAllProjects', JSON.parse(res.bodyText))
             })
             if (this.editPlan) {
                 this.loadRawPlan()
@@ -183,7 +183,6 @@ export default {
             //获取父节点ID
             //console.log(pid);
             this.newTask.parent = pid
-            this.openCreateTaskDialog = true
             //替换成项目开始日期或者父任务开始日期
             //限制时间MAX/MIN不能超过或者低于父节点计划
             //父节点为空则，设置为项目开始日期
@@ -194,15 +193,16 @@ export default {
             if (pid > 0) {
                 var pTask = this.plan.data.filter(t => t.id == pid)[0]
                 this.newTask.start_date = dateToStr(pTask.start_date)
-                this.newTask.end_date = this.newTask.start_date
+                this.newTask.end_date = dateToStr(new Date(strToDate(pTask.start_date).getTime() + 1000*60*60*24*1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(pTask.end_date)
             } else {
                 this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
-                this.newTask.end_date = this.newTask.start_date
+                this.newTask.end_date =  dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000*60*60*24*1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(strToDate(this.plan.end_date))
             }
+            this.openCreateTaskDialog = true
         },
         handleOnGanttOpenEditBox(task) {
             //填充UI data
@@ -292,10 +292,6 @@ export default {
                     this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
                 }
                 //Clear newTask for CreateTaskDialog
-                this.newTask = {
-                    start_date: new Date().toISOString().substr(0, 10),
-                    end_date: new Date().toISOString().substr(0, 10),
-                }
             }, function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
@@ -373,7 +369,7 @@ export default {
             {                
                 phases.push({Name:this.plan.data[i].text, Id:this.plan.data[i].id})
             }
-             this.$store.commit('updateProjectPhases', phases)             
+             this.$store.commit('updateProjectPhases', phases)
         },
         findNodeChildren(id, data) {
             var result = []

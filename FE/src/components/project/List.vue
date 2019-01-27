@@ -51,8 +51,9 @@ export default {
             // Call Ajax
             this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {
                 this.projects = JSON.parse(res.bodyText)
-                var openProjects = this.projects.filter(t=>{return t.Status==this.config.ProjectStatus[1].value})
-                this.$store.commit('updateOpenProjects', openProjects)
+                /*var openProjects = this.projects.filter(t=>{return t.Status==this.config.ProjectStatus[1].value})
+                this.$store.commit('updateOpenProjects', openProjects)*/
+                this.$store.commit('updateAllProjects', this.projects)
                 this.updateFilteredProjects()
             }, function(res) {
 

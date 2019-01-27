@@ -24,7 +24,7 @@
                 <template v-else-if="item.title=='PHASE-DROPDOWN'" v-show="projectPhases.length>0">
                     <v-list-tile :key="i" v-show="projectPhases.length>0">
                         <v-list-tile-content class="drawer-phase-box">
-                            <v-select :items="projectPhases" v-model="selectedPhaseId" @change="handlePhaseDropdownChange" label="阶段计划" hide-details prepend-icon="playlist_add_check" single-line item-text="Name" item-value="Id" class="phase-select"></v-select>
+                            <v-select :items="projectPhases" v-model="selectedPhaseId" @change="handlePhaseDropdownChange" label="阶段计划" dense hide-details prepend-icon="playlist_add_check" single-line item-text="Name" item-value="Id" class="phase-select"></v-select>
                         </v-list-tile-content>
                     </v-list-tile>                    
                 </template>
@@ -44,28 +44,26 @@
 </template>
 <script>
 import auth from '../../assets/js/Auth'
+import config from '../../assets/js/Config'
 export default {
     name: 'Drawer',
-    props: ['selectedProject'],
+    props: [],
     data() {
         return {
+            config,
             mini: false,
             selectedProjectId: 0,
             selectedPhaseId: 0,
             projectSelectedFromOuter: false,
             phaseSelectedFromOuter: false,
             items: [
-                /*{ title: '登录', link: '/login', icon: 'supervisor_account' },*/
-                /*{ title: '主页', link: '/', icon: 'home' },*/
                 { title: 'PROJECT-DROPDOWN', link: '/', icon: 'home' },
-
-                { heading: '项目管理' },
+                { heading: '项目管理'},
                 { title: '新建项目', link: '/Project/Create', icon: 'library_add' },
                 { title: '项目一览', link: '/Project/List', icon: 'location_city' },
                 { divider: true },
                 { heading: '计划管理' },
                 { title: '项目计划', link: '/Project/', icon: 'subject' },
-                /*{ title: '阶段计划', link: '/Phase/Plan', icon: 'playlist_add_check' },*/
                 { title: 'PHASE-DROPDOWN', link: '/Phase/Plan', icon: 'playlist_add_check' },
                 { divider: true },
                 { heading: '进度管理' },
@@ -90,7 +88,7 @@ export default {
             }
         },
         openProjects() {
-            return this.$store.state.openProjects
+            return this.$store.state.allProjects.filter(t => t.Status == this.config.ProjectStatus[1].value)
         },
         projectPhases() {
             return this.$store.state.projectPhases
@@ -101,7 +99,8 @@ export default {
             if (item.link == 'logout') {
                 this.auth.logout()
             } else if (item.title == '项目计划') {
-                this.$router.push(item.link + this.selectedProjectId)
+                if(this.selectedProjectId)
+                    this.$router.push(item.link + this.selectedProjectId)
             } else {
                 this.$router.push(item.link)
             }
@@ -207,6 +206,8 @@ export default {
 }
 .project-select{
     width: 100%;
+    margin-top: 0px !important;
+    padding-top: 8px !important;
 }
 .phase-select{
     font-size: 13px;
