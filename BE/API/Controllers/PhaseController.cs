@@ -47,6 +47,47 @@ namespace API.Controllers
             }
             var model = new GanttViewModel{
                 id = phase.Id,
+                projectId = phase.ProjectId.Value,
+                name = phase.Name,
+                start_date = phase.StartDate.Value,
+                end_date = phase.EndDate.Value,
+                progress = phase.Progress.Value,
+                status = phase.Status,
+                data = data.ToArray(),
+                links = null,
+            };
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
+
+
+        [HttpGet]
+        [Route("DetailPlan")]
+        public HttpResponseMessage DetailPlan(int id)
+        {
+            var phase = db.Phase.SingleOrDefault(m => m.Id == id);
+            if (phase == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse
+                {
+                    Success = false,
+                    Message = "没有找到相关项目阶段信息"
+                });
+            }
+            List<TaskViewModel> data = new List<TaskViewModel>();
+            foreach (var t in phase.Task)
+            {
+                data.AddRange(GetChildrenTask(t));
+            }
+            foreach (TaskViewModel i in data)
+            {
+                TimeSpan ts = new TimeSpan();
+                ts = i.end_date.Value - i.start_date.Value;
+                i.duration = ts.Days;
+            }
+            var model = new GanttViewModel
+            {
+                id = phase.Id,
+                projectId = phase.ProjectId.Value,
                 name = phase.Name,
                 start_date = phase.StartDate.Value,
                 end_date = phase.EndDate.Value,
@@ -112,6 +153,7 @@ namespace API.Controllers
             }
         }
 
+
         [HttpDelete]
         public HttpResponseMessage Delete(int id)
         {
@@ -142,6 +184,7 @@ namespace API.Controllers
 
             return "";
         }
+
 
         private List<TaskViewModel> GetChildrenTask(Task task)
         {

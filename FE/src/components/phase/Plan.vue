@@ -108,6 +108,10 @@ export default {
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
+                if(!this.selectedProject && json.projectId){
+                    this.selectedProject = parseInt(json.projectId)
+                }
+
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -132,6 +136,8 @@ export default {
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
+                if(!this.selectedProject && json.projectId)
+                    this.selectedProject = parseInt(json.projectId)
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })

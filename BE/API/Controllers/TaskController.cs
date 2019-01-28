@@ -16,7 +16,6 @@ namespace API.Controllers
     public class TaskController : BaseController
     {
 
-
         [HttpPost]
         public HttpResponseMessage Create([FromBody]TaskViewModel task)
         {
@@ -78,6 +77,7 @@ namespace API.Controllers
             }
         }
 
+
         [HttpDelete]
         public HttpResponseMessage Delete(int id)
         {
@@ -94,6 +94,7 @@ namespace API.Controllers
             }
         }
 
+
         private List<Task> GetChildrenTask(Task task)
         {
             List<Task> result = new List<Task>();
@@ -107,6 +108,7 @@ namespace API.Controllers
             }
             return result;
         }
+
 
         private string ValidCreatePhaseRequest(TaskViewModel task)
         {

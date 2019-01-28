@@ -8,6 +8,7 @@ namespace API.Models.JsonModel
     public class GanttViewModel
     {
         public int id;
+        public int projectId;
         public string name;
         public DateTime start_date;
         public DateTime end_date;
