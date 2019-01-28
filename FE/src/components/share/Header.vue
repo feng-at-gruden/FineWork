@@ -113,11 +113,14 @@ export default {
             if(all.length){
                 for (var i = 0; i < this.config.ProjectStatus.length; i++) {
                     var s = this.config.ProjectStatus[i]
-                    result.push({ header: s.text })
-                    result = result.concat(all.filter(t => t.Status == s.value))
-                    if (i != this.config.ProjectStatus.length - 1)
+                    if(all.filter(t => t.Status == s.value).length){
+                        result.push({ header: s.text })
+                        result = result.concat(all.filter(t => t.Status == s.value))
                         result.push({ divider: true })
+                    }
                 }
+                if(result.length)
+                    result.pop()
             }else{
                 // Call Ajax
                 this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {

@@ -92,7 +92,7 @@ export default {
         loadDetailedPlan() {
             // Call Ajax
             this.loading = true
-            this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
+            this.$http.get(this.config.API_URL + '/Phase/DetailPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
                 if (json.data) {
@@ -111,7 +111,6 @@ export default {
                 if(!this.selectedProject && json.projectId){
                     this.selectedProject = parseInt(json.projectId)
                 }
-
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
