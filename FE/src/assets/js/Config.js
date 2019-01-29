@@ -45,7 +45,7 @@ const ProjcetType = ['新建', '扩建', '改建', '拆建', '恢复', '其他']
 
 
 //任务状态
-const TaskStatus = ['未开始', '进行中', '已完成', '停工中',]
+const TaskStatus = ['未开工', '施工中', '已完工', '已停工',]
 const TaskProgress = ['正常','已延期','已逾期']
 
 

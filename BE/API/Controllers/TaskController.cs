@@ -37,7 +37,7 @@ namespace API.Controllers
                     PlanStartDate = task.start_date.Value.ToLocalTime(),
                     PlanEndDate = task.end_date.Value.ToLocalTime(),
                     Progress = 0,
-                    Status = string.IsNullOrWhiteSpace(task.status) ? Configurations.TASK_INIT_STATUS : task.status,
+                    Status = string.IsNullOrWhiteSpace(task.status) ? Configurations.TASK_STATUS[0] : task.status,
                     CreatedBy = u.Id,
                     CreatedDate = DateTime.Now.ToLocalTime(),
                     PhaseId = task.phaseId,

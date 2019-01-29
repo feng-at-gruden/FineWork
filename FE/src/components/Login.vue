@@ -68,6 +68,7 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/NapoleonsHat_EN-CN7390815343_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/RainierDawn_EN-CN2623942425_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/FortRajgad_EN-CN7910178011_1920x1080.jpg',
 ]
 export default {
 	extends: BasePage,
@@ -199,7 +200,7 @@ body {
 .wallpaper1 {
 	background-size: 100% 100%;
     background-repeat: no-repeat;	
-	background: url('https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg');
+	background: url('https://cn.bing.com/az/hprichbg/rb/FortRajgad_EN-CN7910178011_1920x1080.jpg');
 }
 
 .login-gap1 {

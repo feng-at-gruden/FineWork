@@ -115,7 +115,7 @@ namespace API.Controllers
                     StartDate = phase.start_date.Value.ToLocalTime(),
                     EndDate = phase.end_date.Value.ToLocalTime(),
                     Progress = 0,
-                    Status = string.IsNullOrWhiteSpace(phase.status)? Configurations.TASK_INIT_STATUS : phase.status,
+                    Status = string.IsNullOrWhiteSpace(phase.status)? Configurations.TASK_STATUS[0] : phase.status,
                     CreatedBy = u.Id,
                     CreatedDate = DateTime.Now.ToLocalTime(),
                     ProjectId = phase.parent,
@@ -193,7 +193,7 @@ namespace API.Controllers
                 status = task.Status,
                 parent = task.ParentTaskId.HasValue?task.ParentTaskId.Value:0,
                 phaseId = task.PhaseId.Value,
-                progress = task.Progress.Value,
+                progress = 0,//task.Progress.Value,
                 description = task.Description,
                 type = task.ChildrenTasks.Count > 0 ? "project" : "task",
                 open = task.ChildrenTasks.Count > 0 ? true : false,
@@ -215,11 +215,10 @@ namespace API.Controllers
             if (task.ChildrenTasks.Count > 0)
             {
                 //父节点，普通处理
-                result.Add(new TaskViewModel {
+                var parentTask = new TaskViewModel
+                {
                     id = task.Id,
                     text = task.Name,
-                    start_date = task.PlanStartDate.HasValue ? task.PlanStartDate : DateTime.Now,
-                    end_date = task.PlanEndDate.HasValue ? task.PlanEndDate : DateTime.Now,
                     status = task.Status,
                     parent = task.ParentTaskId.HasValue ? task.ParentTaskId.Value : 0,
                     phaseId = task.PhaseId.Value,
@@ -227,7 +226,17 @@ namespace API.Controllers
                     description = task.Description,
                     type = "project",
                     open = true,
-                });
+                };
+                /*
+                var st1 = task.ChildrenTasks.Min(m => m.PlanStartDate);
+                var st2 = task.ChildrenTasks.Where(m=> m.ActualStartDate != null).Min(m => m.ActualStartDate);
+                var ed1 = task.ChildrenTasks.Max(m => m.PlanEndDate);
+                var ed2 = task.ChildrenTasks.Where(m => m.ActualEndDate != null).Max(m => m.ActualEndDate);
+                parentTask.start_date = st2 == null? st1 : (st1<st2 ? st1 : st2);
+                parentTask.end_date = ed2 == null ? ed1 : (ed1 > ed2 ? ed1 : ed2);
+                parentTask.duration = (parentTask.end_date.Value - parentTask.start_date.Value).Days;
+                */
+                result.Add(parentTask);
             }
             else
             {
@@ -244,9 +253,10 @@ namespace API.Controllers
                     parent = task.ParentTaskId.HasValue ? task.ParentTaskId.Value : 0,
                     description = task.Description,
                     render = "split",
+                    start_date = task.PlanStartDate,
+                    end_date = task.PlanEndDate,
+                    duration = (task.PlanEndDate.Value - task.PlanStartDate.Value).Days,
                     //open = task.ChildrenTasks.Count > 0 ? true : false,
-                    //start_date = task.PlanStartDate.HasValue ? task.PlanStartDate : DateTime.Now,
-                    //end_date = task.PlanEndDate.HasValue ? task.PlanEndDate : DateTime.Now
                 };
                 //2. Add plan task
                 var planTask = new TaskViewModel
@@ -294,7 +304,7 @@ namespace API.Controllers
                     }
                     else
                     {
-                        planTask.text = "未开工";
+                        planTask.text = Configurations.TASK_STATUS[0];
                         notStartAndNotDelay = true;
                     }
                 }
@@ -303,24 +313,25 @@ namespace API.Controllers
                     actualTask.start_date = task.ActualStartDate;
                     if (task.Progress.Value >= 1)
                     {
-                        actualTask.text = "已完工";
+                        actualTask.text = Configurations.TASK_STATUS[2];
                         actualTask.end_date = task.ActualEndDate;
                         actualTask.duration = (task.ActualEndDate.Value - task.ActualStartDate.Value).Days;
                     }
-                    else if(task.Status=="已停工"){
+                    else if(task.Status== Configurations.TASK_STATUS[3])    //已停工
+                    {
                         //考虑停工后复工的显示方式
                         //TODO, get last day from work log
-                        var latestWorkDate = task.ActualStartDate.Value.AddDays(3);
+                        var latestWorkDate = task.ActualStartDate.Value.AddDays(5);
                         actualTask.end_date = latestWorkDate;
                         actualTask.duration = (latestWorkDate - task.ActualStartDate.Value).Days;
                         var pendingDays = (nowTime - latestWorkDate).Days;
-                        actualTask.text  = "已停工" + pendingDays + "天";
+                        actualTask.text  = Configurations.TASK_STATUS[3] + pendingDays + "天";
                     }
                     else
                     {
                         //施工中
                         //TODO, get last day from work log
-                        var latestWorkDate = task.ActualStartDate.Value.AddDays(3);
+                        var latestWorkDate = task.ActualStartDate.Value.AddDays(7);
                         actualTask.end_date = latestWorkDate;
                         actualTask.duration = (latestWorkDate - task.ActualStartDate.Value).Days;
                         if(task.ActualStartDate>task.PlanStartDate){
@@ -330,11 +341,13 @@ namespace API.Controllers
                             {
                                 //延期并逾期
                                 actualTask.text += "逾期" + (latestWorkDate - task.PlanEndDate.Value).Days + "天";
+                                actualTask.exceed = true;
+                                actualTask.delayed = true;
                             }
                             else
                             {
                                 //正常状态
-                                actualTask.text = "施工中";
+                                actualTask.text = Configurations.TASK_STATUS[1];    // "施工中";
                             }
                         }
                         else
@@ -344,14 +357,18 @@ namespace API.Controllers
                             {
                                 //逾期
                                 actualTask.text = "已逾期" + (latestWorkDate - task.PlanEndDate.Value).Days + "天";
+                                actualTask.exceed = true;
                             }
                             else
                             {
                                 //正常状态
-                                actualTask.text = "施工中";
+                                actualTask.text = Configurations.TASK_STATUS[1];    // "施工中";
                             }
                         }
                     }
+                    holderTask.actual_start = actualTask.start_date.Value.ToString("yyyy/MM/dd");
+                    holderTask.actual_end = actualTask.end_date.Value.ToString("MM/dd");
+                    holderTask.actual_duration = actualTask.duration;
                 }
 
                 result.Add(holderTask);

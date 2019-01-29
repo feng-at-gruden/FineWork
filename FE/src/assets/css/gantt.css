@@ -95,8 +95,8 @@
 .gantt-content-samll{
     font-size:10px;
     -webkit-transform:scale(0.85);
-    line-height: 12px;
-    padding: 5px 0 5px 0;
+    line-height: 11px;
+    padding: 6px 0 5px 0;
     font-style: italic;
     text-align: center;
 }

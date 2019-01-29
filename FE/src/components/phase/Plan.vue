@@ -94,17 +94,7 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/DetailPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
-                var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
-                if (json.data) {
-                    //日期格式转换
-                    for (var i = 0; i < json.data.length; i++) {
-                        json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : dateToStr(new Date())
-                        json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : dateToStr(new Date())
-                    }
-                }
-                json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
-                json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
-                this.plan = json
+                this.plan = this.refineTaskDate(json)
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
@@ -120,18 +110,7 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
-                //日期格式转换
-                var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
-                if (json.data) {
-                    //日期格式转换
-                    for (var i = 0; i < json.data.length; i++) {
-                        json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : dateToStr(new Date())
-                        json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : dateToStr(new Date())
-                    }
-                }
-                json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
-                json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
-                this.plan = json
+                this.plan = this.refineTaskDate(json)
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
@@ -324,6 +303,25 @@ export default {
                     this.showSnackbar(json.Message, 'error')
                 }
             })
+        },
+        refineTaskDate(json){
+            var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
+            //var denseDateFmt = gantt.date.date_to_str("%Y/%m/%d")
+            //var denseDateFmtS = gantt.date.date_to_str("%m/%d")
+
+            if (json.data) {
+                //日期格式转换
+                for (var i = 0; i < json.data.length; i++) {
+                    json.data[i].start_date = json.data[i].start_date?dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))):''
+                    json.data[i].end_date = json.data[i].end_date?dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))):''
+                    //json.data[i].actual_start = json.data[i].actual_start?denseDateFmt(json.data[i].actual_start):''
+                    //json.data[i].actual_end = json.data[i].actual_end?denseDateFmtS(json.data[i].actual_end):''
+                }
+            }
+            json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
+            json.end_date = dateToStr(new Date(Date.parse(json.end_date.split('T')[0])))
+            //console.log(json)
+            return json
         },
         findNodeChildren(id, data) {
             var result = []

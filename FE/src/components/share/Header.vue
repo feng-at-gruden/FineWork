@@ -68,7 +68,7 @@
                 </template>
             </v-list>
         </v-menu>
-        <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15">
+        <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15" offset-x nudge-left="110">
             <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>
             </v-btn>

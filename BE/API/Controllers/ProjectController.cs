@@ -207,7 +207,7 @@ namespace API.Controllers
                         StartDate = project.StartDate.ToLocalTime(),
                         EndDate = project.StartDate.ToLocalTime().AddDays(7),
                         CreatedDate = DateTime.Now.ToLocalTime(),
-                        Status = Configurations.TASK_INIT_STATUS,
+                        Status = Configurations.TASK_STATUS[0],
                     });
                 }
                 db.SaveChanges();
