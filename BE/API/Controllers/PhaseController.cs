@@ -133,11 +133,12 @@ namespace API.Controllers
             var p = db.Phase.SingleOrDefault(t => t.Id == id);
             if (p != null)
             {
+                var startDate = DateTime.Parse(phase.start_date.Value.ToLocalTime().ToShortDateString());
                 p.Name = phase.text.Trim();
                 //p.Progress = phase.progress;
                 p.Description = phase.description;
-                p.StartDate = DateTime.Parse(phase.start_date.Value.ToLocalTime().ToShortDateString());
-                p.EndDate = phase.start_date.Value.ToLocalTime().AddDays(phase.duration);
+                p.StartDate = startDate;
+                p.EndDate =startDate.AddDays(phase.duration);
                 p.Status = phase.status;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "项目阶段信息修改成功。" });
@@ -240,7 +241,7 @@ namespace API.Controllers
             }
             else
             {
-                var nowTime = DateTime.Now.ToLocalTime();
+                var nowTime = DateTime.Parse(DateTime.Now.ToLocalTime().ToShortDateString()); //忽略小时
 
                 //1. Add split fack task
                 var holderTask = new TaskViewModel
@@ -307,6 +308,7 @@ namespace API.Controllers
                         planTask.text = Configurations.TASK_STATUS[0];
                         notStartAndNotDelay = true;
                     }
+                    holderTask.delayed = actualTask.delayed;
                 }
                 else
                 {
@@ -327,6 +329,10 @@ namespace API.Controllers
                         actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
                         var pendingDays = (nowTime - latestWorkDate.Value).Days;
                         actualTask.text  = Configurations.TASK_STATUS[3] + pendingDays + "天";
+                        if (nowTime > task.PlanEndDate.Value)
+                        {
+                            actualTask.exceed = true;
+                        }
                     }
                     else
                     {
@@ -376,6 +382,8 @@ namespace API.Controllers
                     holderTask.actual_start = actualTask.start_date.Value.ToString("yyyy/MM/dd");
                     holderTask.actual_end = actualTask.end_date.Value.ToString("MM/dd");
                     holderTask.actual_duration = actualTask.duration;
+                    holderTask.exceed = actualTask.exceed;
+                    holderTask.delayed = actualTask.delayed;
                 }
 
                 result.Add(holderTask);

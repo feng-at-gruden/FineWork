@@ -55,6 +55,7 @@
 import BasePage from '../assets/js/BasePage'
 
 const WALLPAPERS = [
+'https://cn.bing.com/az/hprichbg/rb/UpHellyAa_EN-CN4575576413_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/KukeriCostume_EN-CN6866832286_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BodegasYsios_EN-CN6930432309_1920x1080.jpg',
@@ -69,6 +70,7 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/RainierDawn_EN-CN2623942425_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/FortRajgad_EN-CN7910178011_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/IcePalaceStPaul_EN-CN6045646793_1920x1080.jpg',
 ]
 export default {
 	extends: BasePage,
@@ -98,7 +100,7 @@ export default {
 			return !this.util.IsPC()
 		},
 		currentTime() {
-			return this.util.dateFormat('yyyy年M月d日 h:m',new Date())
+			return this.util.dateFormat('yyyy年M月d日 h:mm',new Date())
 		}
 	},
 	methods: {

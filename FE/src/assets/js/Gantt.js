@@ -16,12 +16,14 @@ const projectReadonlyColumns = [
 		align: "center",
 		width: "95",
 		template(obj) {
-			if (obj.progress > 0) {
+			/*if (obj.progress > 0) {
 				var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
 			} else {
 				var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 			}
+			return '<div class="gantt-content-samll">' + str + '</div>'*/
+			var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
 	},
@@ -31,12 +33,14 @@ const projectReadonlyColumns = [
 		align: "center",
 		width: "25",
 		template(obj) {
-			if (obj.progress > 0) {
+			/*if (obj.progress > 0) {
 				var str = '<div>' + obj.plan_duration + '</div>'
 				str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
 			} else {
 				var str = '<div class="oneline">' + obj.duration + '</div>'
 			}
+			return '<div class="gantt-content-samll">' + str + '</div>'*/
+			var str = '<div class="oneline">' + obj.duration + '</div>'
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
 	},
@@ -47,8 +51,8 @@ const projectReadonlyColumns = [
 		width: "48",
 		template: function(obj) {
 			var str
-			if (obj.status == "停工中") {
-				str = "停工中"
+			if (obj.status == "已停工") {
+				str = "已停工"
 			} else if (obj.progress == 1) {
 				str = "已完工"
 			} else if (obj.progress == 0) {
@@ -131,8 +135,8 @@ const phaseReadonlyColumns = [
 		width: "48",
 		template: function(obj) {
 			var str
-			if (obj.status == "停工中") {
-				str = "停工中"
+			if (obj.status == "已停工") {
+				str = "已停工"
 			} else if (obj.progress == 1) {
 				str = "已完工"
 			} else if (obj.progress == 0) {
@@ -140,7 +144,7 @@ const phaseReadonlyColumns = [
 			} else {
 				str = obj.progress * 100 + "%"
 			}
-			return "<div class=\"gantt-content-left-status " + (obj.exceed ? 'project-delayed' : '') + '\">' + str + "</div>"
+			return "<div class=\"gantt-content-left-status " + ((obj.exceed || obj.delayed) ? 'project-delayed' : '') + '\">' + str + "</div>"
 		}
 	}
 ];
@@ -310,16 +314,16 @@ export default {
 				c += ' not_start'
 			} else {
 				switch (task.status) {
-					case "working":
+					case "施工中":
 						c += ' working'
 						break
-					case "pending":
+					case "已停工":
 						c += ' pending'
 						break
-					case "finished":
+					case "已完工":
 						c += ' finished'
 						break
-					case "not_start":
+					case "未开工":
 						c += ' not_start'
 						break
 				}
@@ -355,46 +359,48 @@ export default {
 			{ unit: "day", step: 1, date: "%j", css: this.daysStyle }
 		];
 
+		gantt.config.drag_project = true; //Project自动计算并整体可拖拽
+
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = phaseEditingColumns
 		} else {
 			gantt.config.columns = phaseReadonlyColumns
+			gantt.templates.task_class = function(start, end, task) {
+				var c = ''
+				if (task.type == 'plan')
+					c += ' plan'
+				if (task.type == 'actual')
+					c += ' actual'
+
+				if (task.progress == 1) {
+					c += ' finished'
+				} else if(task.type!='plan') {
+					switch (task.status) {
+						case "施工中":
+							c += ' working'
+							break
+						case "已停工":
+							c += ' pending'
+							break
+						case "已完工":
+							c += ' finished'
+							break
+						case "未开工":
+							c += ' not_start'
+							break
+					}
+					if (task.delayed)
+						c = ' delayed'
+					if (task.exceed && task.status!='已停工')
+						c = ' exceed'
+				}
+				return c
+			};
 		}
 
-		gantt.config.drag_project = true; //Project自动计算并整体可拖拽
+		
 
-		gantt.templates.task_class = function(start, end, task) {
-			var c = ''
-			if (task.type == 'plan')
-				c += ' plan'
-			if (task.type == 'actual')
-				c += ' actual'
-
-			if (task.progress == 1) {
-				c += ' finished'
-			} else {
-				switch (task.status) {
-					case "working":
-						c += ' working'
-						break
-					case "pending":
-						c += ' pending'
-						break
-					case "finished":
-						c += ' finished'
-						break
-					case "not_start":
-						c += ' not_start'
-						break
-				}
-				if (task.exceed)
-					c = ' exceed'
-				if (task.delayed)
-					c = ' delayed'
-			}
-			return c
-		};
 		
 
 		//Drag restriction

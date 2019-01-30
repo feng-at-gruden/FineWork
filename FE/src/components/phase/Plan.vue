@@ -136,7 +136,7 @@ export default {
             //父节点为空则，设置为项目开始日期
             var strToDate = gantt.date.str_to_date("%d-%m-%Y")
             var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
-            this.newTask.status = '未开始'
+            this.newTask.status = this.config.TaskStatus[0]
             this.newTask.text = ''
             this.newTask.phaseId = this.phaseId
             if (pid > 0) {

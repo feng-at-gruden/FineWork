@@ -62,11 +62,12 @@ namespace API.Controllers
             var p = db.Task.SingleOrDefault(t => t.Id == id);
             if (p != null)
             {
+                var startDate = DateTime.Parse(task.start_date.Value.ToLocalTime().ToShortDateString());
                 p.Name = task.text.Trim();
                 //p.Progress = task.progress;
                 p.Description = task.description;
-                p.PlanStartDate = DateTime.Parse(task.start_date.Value.ToLocalTime().ToShortDateString());
-                p.PlanEndDate = task.start_date.Value.ToLocalTime().AddDays(task.duration);
+                p.PlanStartDate = startDate;
+                p.PlanEndDate = startDate.AddDays(task.duration);
                 p.Status = task.status;
                 db.SaveChanges();
                 return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "任务修改成功。" });
