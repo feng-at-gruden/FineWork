@@ -198,6 +198,7 @@
     <Compile Include="Controllers\PhaseController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\WorklogController.cs" />
     <Compile Include="Extensions\Extension.cs" />
     <Compile Include="Filters\ApiAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -232,6 +233,7 @@
     </Compile>
     <Compile Include="Models\JsonModel\GanttViewModel.cs" />
     <Compile Include="Models\JsonModel\ProjectPlanViewModel.cs" />
+    <Compile Include="Models\JsonModel\WorklogViewModel.cs" />
     <Compile Include="Models\JsonModel\TaskViewModel.cs" />
     <Compile Include="Models\JsonModel\UserViewModel.cs" />
     <Compile Include="Models\Permission.cs">

@@ -19,7 +19,7 @@ namespace API.Controllers
         [HttpPost]
         public HttpResponseMessage Create([FromBody]TaskViewModel task)
         {
-            var msg = ValidCreatePhaseRequest(task);
+            var msg = ValidCreateRequest(task);
             if (msg != "")
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, new APIResponse
@@ -34,8 +34,8 @@ namespace API.Controllers
                 var np = new Task
                 {
                     Name = task.text,
-                    PlanStartDate = task.start_date.Value.ToLocalTime(),
-                    PlanEndDate = task.end_date.Value.ToLocalTime(),
+                    PlanStartDate = DateTime.Parse(task.start_date.Value.ToLocalTime().ToShortDateString()),
+                    PlanEndDate = DateTime.Parse(task.end_date.Value.ToLocalTime().ToShortDateString()),
                     Progress = 0,
                     Status = string.IsNullOrWhiteSpace(task.status) ? Configurations.TASK_STATUS[0] : task.status,
                     CreatedBy = u.Id,
@@ -63,9 +63,9 @@ namespace API.Controllers
             if (p != null)
             {
                 p.Name = task.text.Trim();
-                p.Progress = task.progress;
+                //p.Progress = task.progress;
                 p.Description = task.description;
-                p.PlanStartDate = task.start_date.Value.ToLocalTime();
+                p.PlanStartDate = DateTime.Parse(task.start_date.Value.ToLocalTime().ToShortDateString());
                 p.PlanEndDate = task.start_date.Value.ToLocalTime().AddDays(task.duration);
                 p.Status = task.status;
                 db.SaveChanges();
@@ -110,7 +110,7 @@ namespace API.Controllers
         }
 
 
-        private string ValidCreatePhaseRequest(TaskViewModel task)
+        private string ValidCreateRequest(TaskViewModel task)
         {
             if (String.IsNullOrWhiteSpace(task.text))
                 return "请输入任务名称";

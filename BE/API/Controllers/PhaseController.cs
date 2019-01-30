@@ -28,7 +28,7 @@ namespace API.Controllers
             var phase = db.Phase.SingleOrDefault(m => m.Id == id);
             if (phase == null)
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new APIResponse
                 {
                     Success = false,
                     Message = "没有找到相关项目阶段信息"
@@ -112,8 +112,8 @@ namespace API.Controllers
                 var u = CurrentUser;
                 var p = db.Phase.Add(new Phase {
                     Name = phase.text,
-                    StartDate = phase.start_date.Value.ToLocalTime(),
-                    EndDate = phase.end_date.Value.ToLocalTime(),
+                    StartDate = DateTime.Parse(phase.start_date.Value.ToLocalTime().ToShortDateString()),
+                    EndDate = DateTime.Parse(phase.end_date.Value.ToLocalTime().ToShortDateString()),
                     Progress = 0,
                     Status = string.IsNullOrWhiteSpace(phase.status)? Configurations.TASK_STATUS[0] : phase.status,
                     CreatedBy = u.Id,
@@ -134,9 +134,9 @@ namespace API.Controllers
             if (p != null)
             {
                 p.Name = phase.text.Trim();
-                p.Progress = phase.progress;
+                //p.Progress = phase.progress;
                 p.Description = phase.description;
-                p.StartDate = phase.start_date.Value.ToLocalTime();
+                p.StartDate = DateTime.Parse(phase.start_date.Value.ToLocalTime().ToShortDateString());
                 p.EndDate = phase.start_date.Value.ToLocalTime().AddDays(phase.duration);
                 p.Status = phase.status;
                 db.SaveChanges();
@@ -313,6 +313,7 @@ namespace API.Controllers
                     actualTask.start_date = task.ActualStartDate;
                     if (task.Progress.Value >= 1)
                     {
+                        //已完工
                         actualTask.text = Configurations.TASK_STATUS[2];
                         actualTask.end_date = task.ActualEndDate;
                         actualTask.duration = (task.ActualEndDate.Value - task.ActualStartDate.Value).Days;
@@ -320,27 +321,33 @@ namespace API.Controllers
                     else if(task.Status== Configurations.TASK_STATUS[3])    //已停工
                     {
                         //考虑停工后复工的显示方式
-                        //TODO, get last day from work log
-                        var latestWorkDate = task.ActualStartDate.Value.AddDays(5);
+                        //Get last day from work log
+                        var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate);
                         actualTask.end_date = latestWorkDate;
-                        actualTask.duration = (latestWorkDate - task.ActualStartDate.Value).Days;
-                        var pendingDays = (nowTime - latestWorkDate).Days;
+                        actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
+                        var pendingDays = (nowTime - latestWorkDate.Value).Days;
                         actualTask.text  = Configurations.TASK_STATUS[3] + pendingDays + "天";
                     }
                     else
                     {
                         //施工中
-                        //TODO, get last day from work log
-                        var latestWorkDate = task.ActualStartDate.Value.AddDays(7);
-                        actualTask.end_date = latestWorkDate;
-                        actualTask.duration = (latestWorkDate - task.ActualStartDate.Value).Days;
-                        if(task.ActualStartDate>task.PlanStartDate){
+                        //Get last day from work log
+                        var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate); //task.ActualStartDate.Value.AddDays(7);
+                        if(!latestWorkDate.HasValue)
+                        {
+                            //异常， 任务已经开始，但是没有找到相关工作日志？
+                            latestWorkDate = task.ActualStartDate;
+                        }
+                        actualTask.end_date = DateTime.Parse(latestWorkDate.Value.ToShortDateString()).AddDays(1);
+                        actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
+
+                        if (task.ActualStartDate>task.PlanStartDate){
                             //延期
                             actualTask.text = "已延期" + (task.ActualStartDate.Value - task.PlanStartDate.Value).Days + "天";
                             if(latestWorkDate>task.PlanEndDate)
                             {
                                 //延期并逾期
-                                actualTask.text += "逾期" + (latestWorkDate - task.PlanEndDate.Value).Days + "天";
+                                actualTask.text += "逾期" + calculateExceedDays(actualTask.end_date, task.PlanEndDate) + "天";
                                 actualTask.exceed = true;
                                 actualTask.delayed = true;
                             }
@@ -352,11 +359,11 @@ namespace API.Controllers
                         }
                         else
                         {
-                            //提前开工
-                            if (latestWorkDate > task.PlanEndDate)
+                            //提前或正常开工
+                            if (actualTask.end_date > task.PlanEndDate)
                             {
                                 //逾期
-                                actualTask.text = "已逾期" + (latestWorkDate - task.PlanEndDate.Value).Days + "天";
+                                actualTask.text = "已逾期" + calculateExceedDays(actualTask.end_date, task.PlanEndDate) + "天";
                                 actualTask.exceed = true;
                             }
                             else
@@ -382,6 +389,14 @@ namespace API.Controllers
                 result.AddRange(CalculateChildrenTasks(row));
             }
             return result;
+        }
+
+
+        private int calculateExceedDays(DateTime? lastWorkDate, DateTime? planEndDate)
+        {
+            var exceedSpan = lastWorkDate.Value - planEndDate.Value;
+            var exceedDays = (int)Math.Ceiling((decimal)exceedSpan.TotalHours / 24);
+            return exceedDays;
         }
 
     }
