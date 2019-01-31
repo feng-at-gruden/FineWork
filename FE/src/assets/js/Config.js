@@ -20,7 +20,7 @@ const Themes = [
 	{ primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
 ]
 
-const Theme = Themes[1]
+const Theme = Themes[3]
 //"amber" "orange accent-4"//"pink accent-2"//"amber" orange
 
 //项目状态

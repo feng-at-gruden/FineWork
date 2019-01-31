@@ -53,24 +53,25 @@
 </template>
 <script>
 import BasePage from '../assets/js/BasePage'
-
+//https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&nc=1361089515117&FORM=HYLH1
+//单数反转
 const WALLPAPERS = [
+'https://cn.bing.com/az/hprichbg/rb/WinterLynx_EN-CN6283951646_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UpHellyAa_EN-CN4575576413_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/KukeriCostume_EN-CN6866832286_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BodegasYsios_EN-CN6930432309_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BM1759_EN-CN5095819877_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/UKSomerset_EN-CN3755440952_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/Snowkiters_EN-CN6799323123_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/UKSomerset_EN-CN3755440952_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/NapoleonsHat_EN-CN7390815343_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/RainierDawn_EN-CN2623942425_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/VietnamStairs_EN-CN3105923263_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/FortRajgad_EN-CN7910178011_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/IcePalaceStPaul_EN-CN6045646793_1920x1080.jpg',
 ]
 export default {
 	extends: BasePage,
@@ -145,7 +146,6 @@ export default {
 		this.timer = null
 	}
 }
-//https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&nc=1361089515117&FORM=HYLH1
 
 </script>
 <style scoped>
@@ -189,7 +189,7 @@ body {
 	opacity: 0.8;
 }
 
-.wallpaper1,
+
 .wallpaper2 {
 	position: absolute;
 	top: 0px;
@@ -197,12 +197,22 @@ body {
 	width: 100%;
 	height: 100%;
 	background-size: 100% 100%;
-    background-repeat: no-repeat;	
+    background-repeat: no-repeat;
+    transform:rotateY(180deg);
+	-ms-transform:rotateY(180deg); 	/* IE 9 */
+	-moz-transform:rotateY(180deg); 	/* Firefox */
+	-webkit-transform:rotateY(180deg); /* Safari 和 Chrome */
+	-o-transform:rotateY(180deg); 
 }
 .wallpaper1 {
-	background-size: 100% 100%;
-    background-repeat: no-repeat;	
 	background: url('https://cn.bing.com/az/hprichbg/rb/FortRajgad_EN-CN7910178011_1920x1080.jpg');
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
+	background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 .login-gap1 {
