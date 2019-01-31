@@ -369,7 +369,7 @@ export default {
             {                
                 phases.push({Name:this.plan.data[i].text, Id:this.plan.data[i].id})
             }
-             this.$store.commit('updateProjectPhases', phases)
+            this.$store.commit('updateProjectPhases', phases)
         },
         findNodeChildren(id, data) {
             var result = []

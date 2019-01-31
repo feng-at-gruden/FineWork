@@ -5,7 +5,7 @@
                 <v-form lazy-validation ref="searchTaskForm">
                     <v-layout wrap row>
                         <v-flex xs12 md6 pa-3>
-                            <v-autocomplete v-model="searchFilter.project" :items="allProjects" @input="handleProjecctChange" item-text="Name" item-value="Id" color="black lighten-4" class="header-search" label="选择项目" hint="选择项目" hide-no-data>
+                            <v-autocomplete v-model="selectedProject" :items="allProjects" @input="handleProjecctChange" item-text="Name" item-value="Id" label="选择项目" hint="选择项目" hide-no-data>
                                 <template slot="item" slot-scope="data">
                                     <template v-if="typeof data.item !== 'object'">
                                         <v-list-tile-content v-text="data.item"></v-list-tile-content>
@@ -19,10 +19,10 @@
                             </v-autocomplete>
                         </v-flex>
                         <v-flex xs12 md6 pa-3>
-                            <v-text-field v-model="searchFilter.phase" :counter="25" label="选择阶段" append-icon="business"></v-text-field>
+                            <v-select :items="projectPhases" label="项目阶段" item-text="Name" item-value="Id" v-model="selectedPhaseId" @change="handlePhaseChange"></v-select>
                         </v-flex>
                         <v-flex xs12 md8 pa-3 class="keyword">
-                            <v-text-field v-model="searchFilter.keyword" label="任务关键字" append-icon="search"></v-text-field>
+                            <v-text-field v-model="keyword" label="任务关键字" append-icon="search"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md4 pa-3 class="keyword button-box">
                             <v-btn @click="handleResetClick">清空</v-btn>
@@ -37,19 +37,20 @@
                 <v-tab :key="-1" ripple>
                     全部
                 </v-tab>
-                <v-tab v-for="n in config.TaskStatus.length" :key="n" ripple>
-                    {{config.TaskStatus[n-1]}}
+                <v-tab v-for="n in config.TaskStatus.length" :key="n-1" ripple>
+                    {{config.TaskStatus[n-1]}} 
                 </v-tab>
             </v-tabs>
-            <v-data-table :headers="headers" :items="desserts" class="elevation-1">
+            <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td>{{ props.item.name }}</td>
-                    <td class="text-xs-right">{{ props.item.calories }}</td>
-                    <td class="text-xs-right">{{ props.item.fat }}</td>
-                    <td class="text-xs-right">{{ props.item.carbs }}</td>
-                    <td class="text-xs-right">{{ props.item.protein }}</td>
-                    <td class="text-xs-right">
-                        <v-progress-linear color="success" height="5" :value="props.item.iron" style="width: 75%">111</v-progress-linear><span style="float: right; margin-top: -27px;">{{props.item.iron}}%</span>
+                    <td>{{ props.item.text }}</td>
+                    <td class="text-xs-center">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
+                    <td class="text-xs-center">{{ props.item.duration }}天</td>
+                    <td class="text-xs-right">{{ props.item.actual_date }}</td>
+                    <td class="text-xs-right">{{ props.item.actual_end }}</td>
+                    <td class="text-xs-center">{{ props.item.status }}</td>
+                    <td class="text-xs-center">
+                        <v-progress-linear color="success" height="5" :value="props.item.progress*100" style="width: 75%">111</v-progress-linear><span style="float: right; margin-top: -27px;">{{props.item.progress*100}}%</span>
                     </td>
                 </template>
             </v-data-table>
@@ -64,101 +65,27 @@ export default {
     props: [],
     data() {
         return {
-            searchFilter: {},
             taskStatus: 0,
+            project: {},
+            projectPhases: [],
+            selectedPhaseId: 0,
+            tasks: [],
+            filteredTasks:[],
+            keyword: '',
             headers: [{
                     text: '施工任务',
                     align: 'left',
                     sortable: false,
-                    value: 'name'
+                    value: 'text'
                 },
-                { text: '开工日期', value: 'calories' },
-                { text: 'Fat (g)', value: 'fat' },
-                { text: 'Carbs (g)', value: 'carbs' },
-                { text: '状态', value: 'protein' },
-                { text: '施工进度', value: 'iron' }
+                { text: '计划工期', value: 'start_date', align: 'center' },
+                { text: '天数', value: 'duration', align: 'center'  },
+                { text: '开工日期', value: 'actual_start' },
+                { text: '完工日期', value: 'actual_end' },
+                { text: '状态', value: 'status', align: 'center' },
+                { text: '施工进度', value: 'progress', align: 'center' }
             ],
-            desserts: [{
-                    name: 'Frozen Yogurt',
-                    calories: 159,
-                    fat: 6.0,
-                    carbs: 24,
-                    protein: 4.0,
-                    iron: 20
-                },
-                {
-                    name: 'Ice cream sandwich',
-                    calories: 237,
-                    fat: 9.0,
-                    carbs: 37,
-                    protein: 4.3,
-                    iron: 30
-                },
-                {
-                    name: 'Eclair',
-                    calories: 262,
-                    fat: 16.0,
-                    carbs: 23,
-                    protein: 6.0,
-                    iron: 0
-                },
-                {
-                    name: 'Cupcake',
-                    calories: 305,
-                    fat: 3.7,
-                    carbs: 67,
-                    protein: 4.3,
-                    iron: 35
-                },
-                {
-                    name: 'Gingerbread',
-                    calories: 356,
-                    fat: 16.0,
-                    carbs: 49,
-                    protein: 3.9,
-                    iron: 40
-                },
-                {
-                    name: 'Jelly bean',
-                    calories: 375,
-                    fat: 0.0,
-                    carbs: 94,
-                    protein: 0.0,
-                    iron: 55
-                },
-                {
-                    name: 'Lollipop',
-                    calories: 392,
-                    fat: 0.2,
-                    carbs: 98,
-                    protein: 0,
-                    iron: 60
-                },
-                {
-                    name: 'Honeycomb',
-                    calories: 408,
-                    fat: 3.2,
-                    carbs: 87,
-                    protein: 6.5,
-                    iron: 90
-                },
-                {
-                    name: 'Donut',
-                    calories: 452,
-                    fat: 25.0,
-                    carbs: 51,
-                    protein: 4.9,
-                    iron: 100
-                },
-                {
-                    name: 'KitKat',
-                    calories: 518,
-                    fat: 26.0,
-                    carbs: 65,
-                    protein: 7,
-                    iron: 77
-                }
-            ]
+            dateToStr: gantt.date.date_to_str("%Y-%m-%d")
         }
     },
     computed: {
@@ -166,7 +93,7 @@ export default {
             var result = []
             var all = this.$store.state.allProjects
             if (all.length) {
-                for (var i = 0; i < this.config.ProjectStatus.length; i++) {
+                for (var i = 0; i < this.config.ProjectStatus.length-3; i++) {
                     var s = this.config.ProjectStatus[i]
                     if (all.filter(t => t.Status == s.value).length) {
                         result.push({ header: s.text })
@@ -187,25 +114,67 @@ export default {
     },
     methods: {
         handleProjecctChange() {
-            //TODO Load project phase
-            if (this.searchFilter.project) {
-                console.log(this.searchFilter.project)
+            if (this.selectedProject) {
+                this.tasks = [];
+                this.filteredTasks = [];
+                this.loadProjectPhases()
+            }
+        },
+        handlePhaseChange(){
+            if (this.selectedPhaseId) {
+                this.loadPhaseTasks()
             }
         },
         handleResetClick() {
-            this.$refs.searchTaskForm.reset()
+            this.keyword = ''
         },
         handleSearchClick() {
 
+        },
+        loadProjectPhases() {
+            // Call Ajax
+            this.loading = true
+            this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.selectedProject).then(function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.project = json
+                var phases = [];
+                for(var i=0; i<this.project.data.length; i++)
+                {                
+                    phases.push({Name:this.project.data[i].text, Id:this.project.data[i].id})
+                }
+                this.$store.commit('updateProjectPhases', phases)
+                this.projectPhases = phases
+                this.subTitle = this.project.name
+                this.loading = false
+            })
+        },
+        loadPhaseTasks(){
+            // Call Ajax
+            this.loading = true
+            this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.selectedPhaseId).then(function(res) {
+                var json = JSON.parse(res.bodyText)
+                this.loading = false
+                this.tasks = json.data
+                this.updateFilteredTasks()
+            })
+        },
+        updateFilteredTasks(){
+            if(this.tasks){
+                if(this.taskStatus==0){
+                    this.filteredTasks = this.tasks
+                }else{
+                    this.filteredTasks = this.tasks.filter(t=>t.status==this.config.TaskStatus[this.taskStatus-1])
+                }
+            }
         }
     },
     watch: {
-        searchFilter: {
-            deep: true,
-            handler() {
-                console.log(this.searchFilter)
-            }
+        taskStatus(v, ov){
+            this.updateFilteredTasks()
         }
+    },
+    mounted(){
+        this.loadProjectPhases()
     }
 }
 
