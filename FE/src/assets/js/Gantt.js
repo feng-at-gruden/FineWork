@@ -86,7 +86,7 @@ const projectEditingColumns = [
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
 	},
-	{ name: "buttons", label: colHeader, width: "25",template: function(task){return ''} }
+	{ name: "buttons", label: colHeader, width: "25", template: function(task) { return '' } }
 ];
 
 
@@ -100,7 +100,7 @@ const phaseReadonlyColumns = [
 		template(obj) {
 			if (obj.progress > 0) {
 				var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
-				if(obj.type!='project')
+				if (obj.type != 'project')
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
 				else
 					var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
@@ -118,7 +118,7 @@ const phaseReadonlyColumns = [
 		template(obj) {
 			if (obj.progress > 0) {
 				var str = '<div>' + obj.duration + '</div>'
-				if(obj.type!='project')
+				if (obj.type != 'project')
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
 				else
 					var str = '<div class="oneline">' + obj.duration + '</div>'
@@ -170,7 +170,7 @@ const phaseEditingColumns = [
 			return '<div class="gantt-content-samll">' + str + '</div>'
 		}
 	},
-	{ name: "add", label: colHeader, width: "25"}
+	{ name: "add", label: colHeader, width: "25" }
 ];
 
 
@@ -193,6 +193,26 @@ function limitResizeLeft(task, limit) {
 
 function limitResizeRight(task, limit) {
 	task.start_date = new Date(limit.start_date)
+}
+
+function getTaskFitValue(task) {
+	var taskStartPos = gantt.posFromDate(task.start_date),
+		taskEndPos = gantt.posFromDate(task.end_date);
+
+	var width = taskEndPos - taskStartPos;
+	var textWidth = (task.text || "").length * gantt.config.font_width_ratio;
+
+	if (width < textWidth) {
+		var ganttLastDate = gantt.getState().max_date;
+		var ganttEndPos = gantt.posFromDate(ganttLastDate);
+		if (ganttEndPos - taskEndPos < textWidth) {
+			return "left"
+		} else {
+			return "right"
+		}
+	} else {
+		return "center";
+	}
 }
 
 export default {
@@ -375,7 +395,7 @@ export default {
 
 				if (task.progress == 1) {
 					c += ' finished'
-				} else if(task.type!='plan') {
+				} else if (task.type != 'plan') {
 					switch (task.status) {
 						case "施工中":
 							c += ' working'
@@ -392,16 +412,34 @@ export default {
 					}
 					if (task.delayed)
 						c = ' delayed'
-					if (task.exceed && task.status!='已停工')
+					if (task.exceed && task.status != '已停工')
 						c = ' exceed'
 				}
 				return c
 			};
 		}
 
-		
 
-		
+		gantt.config.font_width_ratio = 7;
+		gantt.templates.leftside_text = function leftSideTextTemplate(start, end, task) {
+			if (getTaskFitValue(task) === "left") {
+				return task.text;
+			}
+			return "";
+		};
+		gantt.templates.rightside_text = function rightSideTextTemplate(start, end, task) {
+			if (getTaskFitValue(task) === "right") {
+				return task.text;
+			}
+			return "";
+		};
+		gantt.templates.task_text = function taskTextTemplate(start, end, task) {
+			if (getTaskFitValue(task) === "center") {
+				return task.text;
+			}
+			return "";
+		};
+
 
 		//Drag restriction
 		/*

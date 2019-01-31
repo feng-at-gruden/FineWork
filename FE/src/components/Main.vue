@@ -5,7 +5,7 @@
 			<Header @onOptionMenuClick="handleHeaderOptionMenuClick" :subHeader="subHeader"/>			
 			<v-content class="v-content-container">
 				<v-container fill-height :class="[fullWidth?'main-container-full':'main-container', '']">
-					<v-layout justify-center fill-height row wrap align-center>
+					<v-layout justify-start fill-height row wrap align-center>
 						<v-flex fill-height xs12>
 							<v-fade-transition mode="out-in">
 								<router-view />

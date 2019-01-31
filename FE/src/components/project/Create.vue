@@ -1,5 +1,6 @@
 <template>
-    <v-layout>
+    <v-layout row wrap>
+        <v-flex xs12>
         <v-stepper v-model="step" vertical color="primary">
             <v-stepper-step :complete="step > 1" step="1">
                 项目基础信息
@@ -100,6 +101,7 @@
                 <v-btn flat @click="step--">上一步</v-btn>
             </v-stepper-content>
         </v-stepper>
+    </v-flex>
         <v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>
             {{snackbarMessage}}
             <v-btn dark flat @click="snackbar = false">确定</v-btn>

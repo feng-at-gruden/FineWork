@@ -9,6 +9,7 @@ import CreateProject from '@/components/project/Create'
 import ProjectList from '@/components/project/List'
 import ProjectPlan from '@/components/project/Plan'
 import PhasePlan from '@/components/phase/Plan'
+import ProgressReport from '@/components/progress/Report'
 import MyAccount from '@/components/setting/MyAccount'
 
 
@@ -81,6 +82,17 @@ export default new Router({
                     { icon: 'delete', text: '删除阶段' }, 
                     ] },                 
                 component: PhasePlan
+            }, ]
+        },
+        {
+            path: '/Progress',
+            component: Main,
+            children: [{
+                path: 'Report',
+                name: 'ProgressReport',
+                meta: { requiresAuth: true, level: 2, title: "进度汇报", fullWidth: false, autoLoading: false,
+                    showOptionMenu: false, },                 
+                component: ProgressReport
             }, ]
         },
         {

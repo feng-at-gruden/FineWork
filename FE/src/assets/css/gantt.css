@@ -22,7 +22,7 @@
 
 
 .plan {
-    background: #807e7e;
+    background: #9c9c9c;
     border: solid 1px #616060;
     opacity: 0.75;
 }
@@ -30,45 +30,45 @@
 .actual {
     background: #5998bd;
     border: solid 1px #5998bd;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 /*人工输入的*/
 .working {
     border: solid 1px #2898b0;
     background: #3db9d3;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 .pending {
     border: solid 1px #430571;
     background: #b319b3;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 .not_start {
     border: solid 1px #616060;
     background: #807e7e;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 .finished {
     border: solid 1px #65c16f;
     background: #3c9445;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 /*计算的*/
 .exceed {
     border: solid 0px #944b0d;
     background: #f3550a;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 .delayed {
     border: solid 0px #db2536;
     background: #f11b30;
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
 .finished .gantt_task_progress,

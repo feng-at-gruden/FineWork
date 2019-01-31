@@ -67,7 +67,7 @@ export default {
                 { title: 'PHASE-DROPDOWN', link: '/Phase/Plan', icon: 'playlist_add_check' },
                 { divider: true },
                 { heading: '进度管理' },
-                { title: '施工进度', link: '/work/daily', icon: 'assignment' },
+                { title: '进度汇报', link: '/Progress/Report', icon: 'assignment' },
                 { divider: true },
                 { heading: '系统管理' },
                 { title: '账号管理', link: '/Setting/Account', icon: 'supervisor_account' },

@@ -16,6 +16,7 @@ body{
 .main-container{
     /*overflow: auto;*/
     /*height: 100%;*/
+    max-width: 1080px !important; 
 }
 
 .main-container-full{
