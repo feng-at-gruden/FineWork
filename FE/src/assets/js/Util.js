@@ -31,6 +31,32 @@ default {
         }
     },
 
+    toDecimal(x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+            return;
+        }
+        f = Math.round(x * 100) / 100;
+        return f;
+    },
+
+    accMul(arg1, arg2) {
+        var m = 0,
+            s1 = arg1.toString(),
+            s2 = arg2.toString();
+        try { m += s1.split(".")[1].length } catch (e) {}
+        try { m += s2.split(".")[1].length } catch (e) {}
+        return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+    },
+
+    objCopy(obj) {
+        var newobj = {};
+        for (var attr in obj) {
+            newobj[attr] = obj[attr];
+        }
+        return newobj;
+    },
+
     /**************************************时间格式化处理************************************/
     dateFormat(fmt, date) {
         var o = {
@@ -68,7 +94,7 @@ default {
         return date;
     },
 
-    dateDifference(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式  
+    dateDifference(sDate1, sDate2) { //sDate1和sDate2是2006-12-18格式  
         var dateSpan,
             tempDate,
             iDays;

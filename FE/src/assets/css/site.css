@@ -71,15 +71,26 @@ body{
 }
 
 .half-right-dialog {
-    width: 480px !important;
+    width: 520px !important;
     right: 0;
     height: auto;
     max-height: 100% !important;
     position: fixed;
     overflow-y: auto !important;
     top: 65px;
-    bottom: 0px;
+    bottom: 5px;
     margin: 0 !important;
+}
+
+.half-right-dialog-mobile {
+    width: 95% !important;
+    top: 56px;
+    margin: auto;
+    position: fixed;
+    overflow-y: auto !important;
+    height: auto;
+    max-height: 95% !important;
+    bottom: 10px;
 }
 
 /* Safari */

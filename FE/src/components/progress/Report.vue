@@ -43,20 +43,20 @@
             </v-tabs>
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
-                    <td class="text-xs-center task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
+                    <td class="text-no-wrap" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
-                    <td class="text-xs-center task-date">{{ props.item.actual_start }}</td>
-                    <td class="text-xs-center task-date">{{ props.item.actual_end }}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_start }}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_end }}</td>
                     <td :class="[{'task-exceed': props.item.exceed}, 'text-xs-center']">{{ props.item.status }}</td>
                     <td class="text-xs-center">
-                        <v-progress-linear color="success" height="5" :value="props.item.progress*100" style="width: 68%"></v-progress-linear><span class="progress-value">{{props.item.progress*100}}%</span>
+                        <v-progress-linear color="success" height="5" :value="util.accMul(props.item.progress,100)" style="width: 65%"></v-progress-linear><span class="progress-value">{{util.accMul(props.item.progress,100)}}%</span>
                     </td>
                 </template>
             </v-data-table>
         </v-flex>
         <!--任务进度汇报对话框-->
-        <ProgressReportDialog :task="seletedTask" :open="openProgressReportDialog" @close="openProgressReportDialog = false"></ProgressReportDialog>
+        <ProgressReportDialog :task="seletedTask" :open="openProgressReportDialog" @close="openProgressReportDialog=false" @cancel="onReportDialogCancel"></ProgressReportDialog>
     </v-layout>
 </template>
 <script>
@@ -117,7 +117,7 @@ export default {
                 })
             }
             return result
-        },
+        },        
     },
     methods: {
         handleProjecctChange() {
@@ -137,6 +137,19 @@ export default {
         openWorkDialog(item) {
         	this.seletedTask = item
         	this.openProgressReportDialog = true
+        },
+        onReportDialogCancel(taskCopy) {            
+            //Reset
+            for(var i=0; i<this.filteredTasks.length;i++)
+            {
+                if(this.filteredTasks[i].id==taskCopy.id)
+                {
+                    this.filteredTasks[i].progress = taskCopy.progress
+                    this.filteredTasks[i].status = taskCopy.status
+                    this.filteredTasks[i].actual_start =  taskCopy.actual_start
+                    break
+                }
+            }
         },
         loadProjectPhases() {
             // Call Ajax
@@ -212,9 +225,9 @@ export default {
 }
 .progress-value{
 	float: right; 
-	margin-top: -27px;
+	margin-top: -24px;
 	font-size:10px;
-	-webkit-transform:scale(0.75);
+	-webkit-transform:scale(0.85);
 	font-style: italic;
 }
 
