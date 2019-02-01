@@ -50,7 +50,7 @@ namespace API.Controllers
                 });
 
                 //2. 更新worklog所属task的进度，开工日期，结束日期，状态，
-                if (worklog.status == Configurations.TASK_STATUS[2] && task.Status!= Configurations.TASK_STATUS[2])
+                if (worklog.status == Configurations.TASK_STATUS[3] && task.Status!= Configurations.TASK_STATUS[3])
                 {
                     //已完工
                     task.ActualEndDate = DateTime.Parse(worklog.created_date.Value.ToShortDateString());

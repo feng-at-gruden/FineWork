@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="dialog" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
-        <v-card>
+        <v-card min-height="100%">
             <v-container style="max-width: 600px;">
                 <v-timeline dense clipped>                
                     <v-slide-x-transition group>

@@ -42,8 +42,8 @@
                 </v-tab>
             </v-tabs>
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
-                <template slot="items" slot-scope="props" content-class="exceed">
-                    <td>{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
+                <template slot="items" slot-scope="props">
+                    <td @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
                     <td class="text-xs-center task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
                     <td class="text-xs-center task-date">{{ props.item.actual_start }}</td>
@@ -55,14 +55,19 @@
                 </template>
             </v-data-table>
         </v-flex>
+        <!--任务进度汇报对话框-->
+        <ProgressReportDialog :task="seletedTask" :open="openProgressReportDialog" @close="openProgressReportDialog = false"></ProgressReportDialog>
     </v-layout>
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
+import ProgressReportDialog from './ProgressReportDialog'
+
 export default {
     extends: BasePage,
     name: 'ProgressPlan',
     props: [],
+    components:{ProgressReportDialog},
     data() {
         return {
             taskStatus: 0,
@@ -72,6 +77,7 @@ export default {
             tasks: [],
             filteredTasks:[],
             keyword: '',
+            seletedTask:{},
             headers: [{
                     text: '施工任务',
                     align: 'left',
@@ -79,13 +85,14 @@ export default {
                     value: 'text'
                 },
                 { text: '计划工期', value: 'start_date', align: 'center' },
-                { text: '天数', value: 'duration', align: 'center'  },
+                { text: '工时', value: 'duration', align: 'center'  },
                 { text: '开工日期', value: 'actual_start', align: 'center' },
                 { text: '完工日期', value: 'actual_end', align: 'center'},
                 { text: '状态', value: 'status', align: 'center' },
                 { text: '施工进度', value: 'progress', align: 'center' }
             ],
-            dateToStr: gantt.date.date_to_str("%Y-%m-%d")
+            dateToStr: gantt.date.date_to_str("%Y-%m-%d"),
+            openProgressReportDialog:false,
         }
     },
     computed: {
@@ -93,7 +100,7 @@ export default {
             var result = []
             var all = this.$store.state.allProjects
             if (all.length) {
-                for (var i = 0; i < this.config.ProjectStatus.length-3; i++) {
+                for (var i = 0; i < this.config.ProjectStatus.length-2; i++) {
                     var s = this.config.ProjectStatus[i]
                     if (all.filter(t => t.Status == s.value).length) {
                         result.push({ header: s.text })
@@ -127,10 +134,15 @@ export default {
         handleSearchClick() {
 
         },
+        openWorkDialog(item) {
+        	this.seletedTask = item
+        	this.openProgressReportDialog = true
+        },
         loadProjectPhases() {
             // Call Ajax
-         	this.tasks = [];
-            this.filteredTasks = [];
+         	this.tasks = []
+            this.filteredTasks = []
+            this.projectPhases = []
 
             if (!this.selectedProject) {
                return
@@ -201,7 +213,6 @@ export default {
 .progress-value{
 	float: right; 
 	margin-top: -27px;
-	padding-left: 5px;
 	font-size:10px;
 	-webkit-transform:scale(0.75);
 	font-style: italic;
@@ -215,9 +226,9 @@ export default {
 	color: red;
 }
 .task-exceed-small{
-	font-style: italic;
-	color: red;
 	font-size:10px;
 	-webkit-transform:scale(0.75);
+	font-style: italic;
+	color: red;
 }
 </style>

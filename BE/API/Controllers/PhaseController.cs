@@ -357,11 +357,11 @@ namespace API.Controllers
                     if (task.Progress.Value >= 1)
                     {
                         //已完工
-                        actualTask.text = Configurations.TASK_STATUS[2];
+                        actualTask.text = Configurations.TASK_STATUS[3];
                         actualTask.end_date = task.ActualEndDate;
                         actualTask.duration = (task.ActualEndDate.Value - task.ActualStartDate.Value).Days;
                     }
-                    else if(task.Status== Configurations.TASK_STATUS[3])    //已停工
+                    else if(task.Status== Configurations.TASK_STATUS[2])    //已停工
                     {
                         //考虑停工后复工的显示方式
                         //Get last day from work log
@@ -369,7 +369,7 @@ namespace API.Controllers
                         actualTask.end_date = latestWorkDate;
                         actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
                         var pendingDays = (nowTime - latestWorkDate.Value).Days;
-                        actualTask.text  = Configurations.TASK_STATUS[3] + pendingDays + "天";
+                        actualTask.text  = Configurations.TASK_STATUS[2] + pendingDays + "天";
                         if (nowTime > task.PlanEndDate.Value)
                         {
                             actualTask.exceed = true;
