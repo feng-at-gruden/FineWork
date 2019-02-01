@@ -1,7 +1,7 @@
 <template>
-    <v-dialog v-model="dialog" lazy content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
+    <v-dialog v-model="dialog" lazy persistent content-class="half-right-dialog" hide-overlay transition="slide-x-reverse-transition">
         <v-card min-height="100%">
-            <v-card-title class="grey lighten-4 py-4 title">
+            <v-card-title class="grey lighten-4 py-3 title">
                 任务进度汇报
             </v-card-title>
             <v-form lazy-validation ref="taskProgressForm">
@@ -26,11 +26,26 @@
                             工作进度: {{myTask.text}}
                         </v-flex>
                         <v-flex xs12 md6>
+                            当前状态: {{myTask.text}}
+                        </v-flex>
+                        <v-flex xs12 md6>
                             工作汇报: {{myTask.text}}
                         </v-flex>
                         <v-flex xs12 md6>
                             汇报日期: {{myTask.text}}
                         </v-flex>
+
+                        <v-flex xs12 sm12>
+                            <v-layout justify-center pa-3 style="margin-bottom:30px;">
+                                <v-card-actions bottom >
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="dialog = false">取消</v-btn>
+                                    <v-btn color="primary" @click="handleSaveClick">保存</v-btn>
+                                    <v-spacer></v-spacer>
+                                </v-card-actions>
+                            </v-layout>
+                        </v-flex>
+
                     </v-layout>
                 </v-container>
             </v-form>
@@ -53,10 +68,11 @@ export default {
         }
     },
     methods: {
-
+        handleSaveClick(){
+            this.dialog = false
+        }
     }
 }
-
 </script>
 <style>
 </style>
