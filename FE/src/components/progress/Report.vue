@@ -19,7 +19,7 @@
                             </v-autocomplete>
                         </v-flex>
                         <v-flex xs12 md6 pa-3>
-                            <v-select :items="projectPhases" label="项目阶段" item-text="Name" item-value="Id" v-model="selectedPhaseId" @change="handlePhaseChange"></v-select>
+                            <v-select :items="projectPhases" label="项目阶段" item-text="Name" item-value="Id" v-model="selectedPhaseId" @input="handlePhaseChange"></v-select>
                         </v-flex>
                         <v-flex xs12 md8 pa-3 class="keyword">
                             <v-text-field v-model="keyword" label="任务关键字" append-icon="search"></v-text-field>
@@ -42,15 +42,15 @@
                 </v-tab>
             </v-tabs>
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
-                <template slot="items" slot-scope="props">
-                    <td>{{ props.item.text }}</td>
-                    <td class="text-xs-center">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
+                <template slot="items" slot-scope="props" content-class="exceed">
+                    <td>{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
+                    <td class="text-xs-center task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
-                    <td class="text-xs-right">{{ props.item.actual_date }}</td>
-                    <td class="text-xs-right">{{ props.item.actual_end }}</td>
-                    <td class="text-xs-center">{{ props.item.status }}</td>
+                    <td class="text-xs-center task-date">{{ props.item.actual_start }}</td>
+                    <td class="text-xs-center task-date">{{ props.item.actual_end }}</td>
+                    <td :class="[{'task-exceed': props.item.exceed}, 'text-xs-center']">{{ props.item.status }}</td>
                     <td class="text-xs-center">
-                        <v-progress-linear color="success" height="5" :value="props.item.progress*100" style="width: 75%">111</v-progress-linear><span style="float: right; margin-top: -27px;">{{props.item.progress*100}}%</span>
+                        <v-progress-linear color="success" height="5" :value="props.item.progress*100" style="width: 68%"></v-progress-linear><span class="progress-value">{{props.item.progress*100}}%</span>
                     </td>
                 </template>
             </v-data-table>
@@ -80,8 +80,8 @@ export default {
                 },
                 { text: '计划工期', value: 'start_date', align: 'center' },
                 { text: '天数', value: 'duration', align: 'center'  },
-                { text: '开工日期', value: 'actual_start' },
-                { text: '完工日期', value: 'actual_end' },
+                { text: '开工日期', value: 'actual_start', align: 'center' },
+                { text: '完工日期', value: 'actual_end', align: 'center'},
                 { text: '状态', value: 'status', align: 'center' },
                 { text: '施工进度', value: 'progress', align: 'center' }
             ],
@@ -114,11 +114,7 @@ export default {
     },
     methods: {
         handleProjecctChange() {
-            if (this.selectedProject) {
-                this.tasks = [];
-                this.filteredTasks = [];
-                this.loadProjectPhases()
-            }
+        	this.loadProjectPhases()
         },
         handlePhaseChange(){
             if (this.selectedPhaseId) {
@@ -133,6 +129,12 @@ export default {
         },
         loadProjectPhases() {
             // Call Ajax
+         	this.tasks = [];
+            this.filteredTasks = [];
+
+            if (!this.selectedProject) {
+               return
+            }
             this.loading = true
             this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.selectedProject).then(function(res) {
                 var json = JSON.parse(res.bodyText)
@@ -154,7 +156,7 @@ export default {
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.selectedPhaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
-                this.tasks = json.data
+                this.tasks = json.data.filter(m=>m.type!='project')
                 this.updateFilteredTasks()
             })
         },
@@ -196,5 +198,26 @@ export default {
 .button-box {
     text-align: right;
 }
+.progress-value{
+	float: right; 
+	margin-top: -27px;
+	padding-left: 5px;
+	font-size:10px;
+	-webkit-transform:scale(0.75);
+	font-style: italic;
+}
 
+.task-date{
+	font-style: italic;
+}
+
+.task-exceed{
+	color: red;
+}
+.task-exceed-small{
+	font-style: italic;
+	color: red;
+	font-size:10px;
+	-webkit-transform:scale(0.75);
+}
 </style>

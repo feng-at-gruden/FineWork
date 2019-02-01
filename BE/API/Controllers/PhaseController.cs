@@ -185,20 +185,61 @@ namespace API.Controllers
         private List<TaskViewModel> GetChildrenTask(Task task)
         {
             List<TaskViewModel> result = new List<TaskViewModel>();
-            result.Add(new TaskViewModel
+            var c = new TaskViewModel
             {
                 id = task.Id,
                 text = task.Name,
-                start_date = task.PlanStartDate.HasValue ? task.PlanStartDate : DateTime.Now,
-                end_date = task.PlanEndDate.HasValue ? task.PlanEndDate : DateTime.Now,
+                start_date = task.PlanStartDate,
+                end_date = task.PlanEndDate,
+                actual_start = task.ActualStartDate.HasValue ? task.ActualStartDate.Value.ToString("yyyy-MM-dd") : "",
+                actual_end = task.ActualEndDate.HasValue ? task.ActualEndDate.Value.ToString("yyyy-MM-dd") : "",
                 status = task.Status,
-                parent = task.ParentTaskId.HasValue?task.ParentTaskId.Value:0,
+                parent = task.ParentTaskId.HasValue ? task.ParentTaskId.Value : 0,
                 phaseId = task.PhaseId.Value,
-                progress = 0,//task.Progress.Value,
+                progress = task.Progress.Value,
                 description = task.Description,
                 type = task.ChildrenTasks.Count > 0 ? "project" : "task",
                 open = task.ChildrenTasks.Count > 0 ? true : false,
-            });
+            };
+            if (c.type != "project" && c.progress<1)
+            {
+                var nowTime = DateTime.Parse(DateTime.Now.ToLocalTime().ToShortDateString()); //忽略小时
+                if (task.ActualStartDate == null)
+                {
+                    //没开工
+                    if (task.PlanStartDate.Value < nowTime)
+                    {
+                        //延期
+                        c.delayed = true;
+                    }
+                    if (task.PlanEndDate.Value < nowTime)
+                    {
+                        //逾期
+                        c.exceed = true;
+                    }
+                }
+                else
+                {
+                    //已开工
+                    var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate); 
+                    if (!latestWorkDate.HasValue)
+                    {
+                        //异常， 任务已经开始，但是没有找到相关工作日志？
+                        latestWorkDate = task.ActualStartDate;
+                    }
+                    if (task.ActualStartDate.Value < task.PlanStartDate.Value)
+                    {
+                        //延期
+                        c.delayed = true;
+                    }
+                    if (latestWorkDate > task.PlanEndDate.Value)
+                    {
+                        //逾期
+                        c.exceed = true;
+                    }
+                }
+            }
+            result.Add(c);
             /*
             foreach (var row in task.ChildrenTasks)
             {
