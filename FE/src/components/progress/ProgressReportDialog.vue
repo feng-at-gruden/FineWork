@@ -116,6 +116,12 @@ export default {
             set(v) {
                 var vv = this.util.toDecimal(v / 100)
                 this.myTask.progress = vv
+                if(v>0 && v<100 && this.myTask.status==this.config.TaskStatus[0])
+                    this.myTask.status=this.config.TaskStatus[1]
+                if(v==100)
+                    this.myTask.status=this.config.TaskStatus[3]
+                if(v==0)
+                    this.myTask.status=this.config.TaskStatus[0]
             }
         },
         myTask: {
@@ -181,13 +187,12 @@ export default {
         },
         handleStatusRadioChange(v){
             if(v==config.TaskStatus[3]){
-                //this.oldProgress = this.myTask.progress
                 this.todayProgress = 100
             }else if(v==config.TaskStatus[0]){
-                //this.oldProgress = this.myTask.progress
                 this.todayProgress = 0
             }else{
-                this.todayProgress = this.util.accMul(this.taskCopy.progress, 100)
+                if(this.todayProgress==100)
+                    this.todayProgress = this.util.accMul(this.taskCopy.progress, 100)
             }
 
         },
