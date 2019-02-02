@@ -9,6 +9,7 @@ namespace API.Models.JsonModel
     {
         public Int32 id;
         public DateTime? created_date;
+        public DateTime? start_date;
         public decimal progress;
         public string status;
         public Int32 taskId;

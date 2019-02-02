@@ -366,7 +366,8 @@ namespace API.Controllers
                         //考虑停工后复工的显示方式
                         //Get last day from work log
                         var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate);
-                        actualTask.end_date = latestWorkDate;
+                        //actualTask.end_date = latestWorkDate;
+			actualTask.end_date = DateTime.Parse(latestWorkDate.Value.ToShortDateString()).AddDays(1);
                         actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
                         var pendingDays = (nowTime - latestWorkDate.Value).Days;
                         actualTask.text  = Configurations.TASK_STATUS[2] + pendingDays + "天";

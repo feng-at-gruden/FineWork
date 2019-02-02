@@ -59,7 +59,10 @@ namespace API.Controllers
                 if (task.ActualStartDate == null && worklog.status == Configurations.TASK_STATUS[1])
                 {
                     //"施工中
-                    task.ActualStartDate = DateTime.Parse(worklog.created_date.Value.ToShortDateString());    // 忽略小时
+                    if (worklog.start_date.HasValue)
+                        task.ActualStartDate = DateTime.Parse(worklog.start_date.Value.ToShortDateString());    // 忽略小时
+                    else
+                        task.ActualStartDate = DateTime.Parse(worklog.created_date.Value.ToShortDateString());  // 忽略小时
                 }
                 task.Progress = worklog.progress;
                 task.Status = worklog.status;

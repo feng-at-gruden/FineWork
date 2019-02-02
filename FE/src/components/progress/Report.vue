@@ -5,7 +5,7 @@
                 <v-form lazy-validation ref="searchTaskForm">
                     <v-layout wrap row>
                         <v-flex xs12 md6 pa-3>
-                            <v-autocomplete v-model="selectedProject" :items="allProjects" @input="handleProjecctChange" item-text="Name" item-value="Id" label="选择项目" hint="选择项目" hide-no-data>
+                            <v-autocomplete v-model="selectedProject" :items="allProjects" @input="handleProjecctChange" item-text="Name" item-value="Id" label="选择项目" hide-no-data>
                                 <template slot="item" slot-scope="data">
                                     <template v-if="typeof data.item !== 'object'">
                                         <v-list-tile-content v-text="data.item"></v-list-tile-content>
@@ -21,7 +21,7 @@
                         <v-flex xs12 md6 pa-3>
                             <v-select :items="projectPhases" label="项目阶段" item-text="Name" item-value="Id" v-model="selectedPhaseId" @input="handlePhaseChange"></v-select>
                         </v-flex>
-                        <v-flex xs12 md8 pa-3 class="keyword">
+                        <v-flex xs12 md8 pa-3 class="keyword" style="margin-top: -10px;">
                             <v-text-field v-model="keyword" label="任务关键字" append-icon="search"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md4 pa-3 class="keyword button-box">
@@ -32,7 +32,7 @@
                 </v-form>
             </v-card>
         </v-flex>
-        <v-flex xs12 style="padding-top:40px;">
+        <v-flex xs12 style="padding-top:25px;">
             <v-tabs v-model="taskStatus" color="grey lighten-3" slider-color="primary">
                 <v-tab :key="-1" ripple>
                     全部
