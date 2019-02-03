@@ -11,6 +11,7 @@ import ProjectPlan from '@/components/project/Plan'
 import PhasePlan from '@/components/phase/Plan'
 import ProgressReport from '@/components/progress/Report'
 import MyAccount from '@/components/setting/MyAccount'
+import Users from '@/components/system/Users'
 
 
 Vue.use(Router)
@@ -96,10 +97,21 @@ export default new Router({
             }, ]
         },
         {
-            path: '/',
+            path: '/System',
             component: Main,
             children: [{
-                path: '/Setting/MyAccount',
+                path: 'Users',
+                name: 'Users',
+                meta: { requiresAuth: true, level: 2, title: "用户管理", fullWidth: false, autoLoading: false,
+                    showOptionMenu: false, },                 
+                component: Users
+            }]
+        },
+        {
+            path: '/Setting/',
+            component: Main,
+            children: [{
+                path: 'MyAccount',
                 name: 'MyAccount',
                 meta: { requiresAuth: true, level: 2, title: "个人设置", },
                 component: MyAccount

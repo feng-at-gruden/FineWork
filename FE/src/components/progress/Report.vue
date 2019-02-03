@@ -38,7 +38,7 @@
                     全部
                 </v-tab>
                 <v-tab v-for="n in config.TaskStatus.length" :key="n-1" ripple>
-                    {{config.TaskStatus[n-1]}} 
+                    {{config.TaskStatus[n-1]}}
                 </v-tab>
             </v-tabs>
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
@@ -67,7 +67,7 @@ export default {
     extends: BasePage,
     name: 'ProgressPlan',
     props: [],
-    components:{ProgressReportDialog},
+    components: { ProgressReportDialog },
     data() {
         return {
             taskStatus: 0,
@@ -75,9 +75,9 @@ export default {
             projectPhases: [],
             selectedPhaseId: 0,
             tasks: [],
-            filteredTasks:[],
+            filteredTasks: [],
             keyword: '',
-            seletedTask:{},
+            seletedTask: {},
             headers: [{
                     text: '施工任务',
                     align: 'left',
@@ -85,14 +85,14 @@ export default {
                     value: 'text'
                 },
                 { text: '计划工期', value: 'start_date', align: 'center' },
-                { text: '工时', value: 'duration', align: 'center'  },
+                { text: '工时', value: 'duration', align: 'center' },
                 { text: '开工日期', value: 'actual_start', align: 'center' },
-                { text: '完工日期', value: 'actual_end', align: 'center'},
+                { text: '完工日期', value: 'actual_end', align: 'center' },
                 { text: '状态', value: 'status', align: 'center' },
                 { text: '施工进度', value: 'progress', align: 'center' }
             ],
             dateToStr: gantt.date.date_to_str("%Y-%m-%d"),
-            openProgressReportDialog:false,
+            openProgressReportDialog: false,
         }
     },
     computed: {
@@ -100,7 +100,7 @@ export default {
             var result = []
             var all = this.$store.state.allProjects
             if (all.length) {
-                for (var i = 0; i < this.config.ProjectStatus.length-2; i++) {
+                for (var i = 0; i < this.config.ProjectStatus.length - 2; i++) {
                     var s = this.config.ProjectStatus[i]
                     if (all.filter(t => t.Status == s.value).length) {
                         result.push({ header: s.text })
@@ -117,57 +117,55 @@ export default {
                 })
             }
             return result
-        },        
+        },
     },
     methods: {
         handleProjecctChange() {
-        	this.loadProjectPhases()
+            this.loadProjectPhases()
         },
-        handlePhaseChange(){
+        handlePhaseChange() {
             if (this.selectedPhaseId) {
                 this.loadPhaseTasks()
             }
         },
         handleResetClick() {
             this.keyword = ''
+            this.updateFilteredTasks()
         },
         handleSearchClick() {
-
+        	this.updateFilteredTasks()
         },
         openWorkDialog(item) {
-        	this.seletedTask = item
-        	this.openProgressReportDialog = true
+            this.seletedTask = item
+            this.openProgressReportDialog = true
         },
-        onReportDialogCancel(taskCopy) {            
+        onReportDialogCancel(taskCopy) {
             //Reset
-            for(var i=0; i<this.filteredTasks.length;i++)
-            {
-                if(this.filteredTasks[i].id==taskCopy.id)
-                {
+            for (var i = 0; i < this.filteredTasks.length; i++) {
+                if (this.filteredTasks[i].id == taskCopy.id) {
                     this.filteredTasks[i].progress = taskCopy.progress
                     this.filteredTasks[i].status = taskCopy.status
-                    this.filteredTasks[i].actual_start =  taskCopy.actual_start
+                    this.filteredTasks[i].actual_start = taskCopy.actual_start
                     break
                 }
             }
         },
         loadProjectPhases() {
             // Call Ajax
-         	this.tasks = []
+            this.tasks = []
             this.filteredTasks = []
             this.projectPhases = []
 
             if (!this.selectedProject) {
-               return
+                return
             }
             this.loading = true
             this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.selectedProject).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.project = json
                 var phases = [];
-                for(var i=0; i<this.project.data.length; i++)
-                {                
-                    phases.push({Name:this.project.data[i].text, Id:this.project.data[i].id})
+                for (var i = 0; i < this.project.data.length; i++) {
+                    phases.push({ Name: this.project.data[i].text, Id: this.project.data[i].id })
                 }
                 this.$store.commit('updateProjectPhases', phases)
                 this.projectPhases = phases
@@ -175,32 +173,39 @@ export default {
                 this.loading = false
             })
         },
-        loadPhaseTasks(){
+        loadPhaseTasks() {
             // Call Ajax
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.selectedPhaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
-                this.tasks = json.data.filter(m=>m.type!='project')
+                this.tasks = json.data.filter(m => m.type != 'project')
                 this.updateFilteredTasks()
             })
         },
-        updateFilteredTasks(){
-            if(this.tasks){
-                if(this.taskStatus==0){
-                    this.filteredTasks = this.tasks
-                }else{
-                    this.filteredTasks = this.tasks.filter(t=>t.status==this.config.TaskStatus[this.taskStatus-1])
+        updateFilteredTasks() {
+            if (this.tasks) {
+                var k = this.keyword.trim().toLowerCase()
+                if (k == "") {
+                    if (this.taskStatus == 0)
+                        this.filteredTasks = this.tasks
+                    else
+                        this.filteredTasks = this.tasks.filter(t => t.status == this.config.TaskStatus[this.taskStatus - 1])
+                    return
                 }
+                if (this.taskStatus == 0)
+                    this.filteredTasks = this.tasks.filter(t => t.text.toLowerCase().indexOf(k) >= 0 || (t.description != null && t.description.toLowerCase().indexOf(k) >= 0))
+                else
+                    this.filteredTasks = this.tasks.filter(t => t.status == this.config.TaskStatus[this.taskStatus - 1] && (t.text.toLowerCase().indexOf(k) >= 0 || (t.description != null && t.description.toLowerCase().indexOf(k) >= 0)))
             }
         }
     },
     watch: {
-        taskStatus(v, ov){
+        taskStatus(v, ov) {
             this.updateFilteredTasks()
         }
     },
-    mounted(){
+    mounted() {
         this.loadProjectPhases()
     }
 }
@@ -223,25 +228,28 @@ export default {
 .button-box {
     text-align: right;
 }
-.progress-value{
-	float: right; 
-	margin-top: -24px;
-	font-size:10px;
-	-webkit-transform:scale(0.85);
-	font-style: italic;
+
+.progress-value {
+    float: right;
+    margin-top: -24px;
+    font-size: 10px;
+    -webkit-transform: scale(0.85);
+    font-style: italic;
 }
 
-.task-date{
-	font-style: italic;
+.task-date {
+    font-style: italic;
 }
 
-.task-exceed{
-	color: red;
+.task-exceed {
+    color: red;
 }
-.task-exceed-small{
-	font-size:10px;
-	-webkit-transform:scale(0.75);
-	font-style: italic;
-	color: red;
+
+.task-exceed-small {
+    font-size: 10px;
+    -webkit-transform: scale(0.75);
+    font-style: italic;
+    color: red;
 }
+
 </style>

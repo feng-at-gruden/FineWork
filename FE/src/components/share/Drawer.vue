@@ -70,7 +70,7 @@ export default {
                 { title: '进度汇报', link: '/Progress/Report', icon: 'assignment' },
                 { divider: true },
                 { heading: '系统管理' },
-                { title: '账号管理', link: '/Setting/Account', icon: 'supervisor_account' },
+                { title: '用户管理', link: '/System/Users', icon: 'supervisor_account' },
             ],
             right: null
         }

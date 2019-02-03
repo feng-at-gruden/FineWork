@@ -37,7 +37,7 @@
                             <v-divider></v-divider>
                         </v-flex>
                         <v-flex xs12 md12 style="margin-top: 0px;">
-                            <v-textarea label="工作汇报" v-model="worklog" outline hint="请输入当天工作进展情况"></v-textarea>
+                            <v-textarea label="工作汇报" v-model="worklog" :counter="100" :rules="descriptionRules" required outline hint="请输入当天工作进展情况"></v-textarea>
                         </v-flex>
                         <v-flex xs12 md12 style="margin-top: -15px;">
                             <label class="my-label text-no-wrap">今日进度:</label>
@@ -96,7 +96,10 @@ export default {
             signDate: '',
             actualStartDate: '',
             loading:false,
-            oldProgress:-1,
+            descriptionRules: [
+                v => !!v || '请输入工作汇报',
+                v => (v && v.length <= 100) || '最多输入100个字符'
+            ],
         }
     },
     computed: {
@@ -160,6 +163,9 @@ export default {
             this.$emit('cancel', this.taskCopy)
         },
         handleSaveClick() {
+            if(!this.$refs.taskProgressForm.validate()){
+                return
+            }
             var request = {
                 created_date: this.signDate,
                 start_date: this.actualStartDate,
