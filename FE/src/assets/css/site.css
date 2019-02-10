@@ -24,6 +24,7 @@ body{
     max-width: 100% !important; 
 }
 
+/*
 .loading{
     width: 100%;
     height: 100%;
@@ -34,7 +35,8 @@ body{
     top: 0px;
     left: 0px;
     opacity: 0.5;
-}
+}*/
+
 #my-gantt-container{
     width:100%;
     height:100%;

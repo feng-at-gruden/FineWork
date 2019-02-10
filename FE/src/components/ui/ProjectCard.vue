@@ -1,7 +1,7 @@
 <template>
     <CustomTransition :in="animationIn" :out="animationOut" @afterLeave="handleAnimEnd">
         <v-card>
-            <v-img src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" aspect-ratio="2.75"></v-img>
+            <v-img src="./static/images/construction2.jpg" position="top center" aspect-ratio="2.75"></v-img>
             <v-card-title primary-title>
                 <div>
                     <h3 class="headline mb-0">{{project.Name}}</h3>
