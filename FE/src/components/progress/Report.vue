@@ -227,6 +227,7 @@ export default {
 
 .button-box {
     text-align: right;
+    margin-top: -10px;
 }
 
 .progress-value {

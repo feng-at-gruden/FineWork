@@ -85,7 +85,7 @@
                         </v-layout>
                     </v-container>
                 </v-card>
-                <v-btn color="primary" @click="step++">下一步</v-btn>
+                <v-btn color="primary" @click="handelSaveProject">建立项目</v-btn>
                 <v-btn flat @click="step--">上一步</v-btn>
             </v-stepper-content>
             <!-- <v-stepper-step :complete="step > 3" step="3">添加项目管理人员</v-stepper-step>
@@ -94,12 +94,14 @@
             <v-btn color="primary" @click="step++">下一步</v-btn>
             <v-btn flat @click="step--">上一步</v-btn>
         </v-stepper-content> -->
+        <!--
             <v-stepper-step step="3">项目信息确认</v-stepper-step>
             <v-stepper-content step="3">
                 <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
                 <v-btn color="primary" @click="handelSaveProject">生成项目</v-btn>
                 <v-btn flat @click="step--">上一步</v-btn>
             </v-stepper-content>
+        -->
         </v-stepper>
     </v-flex>
         <v-snackbar v-model="snackbar" :color="snackbarColor" multi-line vertical bottom right>

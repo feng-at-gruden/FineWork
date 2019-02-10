@@ -18,9 +18,10 @@
         <v-flex xs12 style="padding-top:25px;">
         	<v-data-table :headers="headers" :items="filteredUsers" class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td class="text-no-wrap" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
-                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
-                    <td class="text-xs-center">{{ props.item.duration }}天</td>
+                    <td class="text-no-wrap" @click="openUserDialog(props.item)">{{ props.item.username }}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.realname}}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.last_login}}</td>
+                    <td class="text-xs-center"> </td>
                 </template>
             </v-data-table>
         </v-flex>
@@ -34,22 +35,42 @@ export default {
     name: 'Users',
     data() {
         return {
-        	filteredUsers,
-        	headers: [{
-                    text: '用户名',
+        	keyword:'',
+        	filteredUsers:[],
+        	allUsers:[],
+        	headers: [
+        		{
+                    text: '账号',
                     align: 'left',
                     sortable: false,
-                    value: 'text'
+                    value: 'username'
                 },
-                { text: '部门', value: 'start_date', align: 'center' },
-                { text: '登录日期', value: 'duration', align: 'center' },
+                { text: '用户名', value: 'realname', align: 'center' },
+                { text: '登录日期', value: 'last_login', align: 'center' },
                 { text: '操作', value: 'actual_start', align: 'center' },
             ],
             dateToStr: gantt.date.date_to_str("%Y-%m-%d"),
+            mockData:[
+            	{id:1, username:'admin', realname:'郭德纲',last_login:'2019-02-10'},
+            ]
         }
     },
     methods: {
+    	openUserDialog(){
 
+    	},
+    	handleResetClick(){
+    		this.keyword = ''
+
+    	},
+    	handleSearchClick(){
+
+    	}
+    },
+    mounted(){
+    	//Load user data from API
+    	console.log('mounted')
+    	this.filteredUsers = this.mockData
     }
 
 }
