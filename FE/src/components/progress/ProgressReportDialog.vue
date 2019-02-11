@@ -21,18 +21,22 @@
                                 </v-radio-group>
                             </v-layout>
                         </v-flex>
-                        <v-flex xs12 md8 style="margin-top: -20px;">
+                        <v-flex xs12 sm8 style="margin-top: -20px;">
                             <v-icon class="my-icon">date_range</v-icon><label class="my-label text-no-wrap">计划周期:</label><span class="task-date text-no-wrap">{{planStartDate}} 至 {{planEndDate}}</span>
                         </v-flex>
-                        <v-flex xs12 md4 style="margin-top: -20px;">
+                        <v-flex xs12 sm4 style="margin-top: -20px;">
                             <v-icon class="my-icon">timelapse</v-icon><label class="my-label">工时:</label><span class="task-date">{{myTask.duration}}天</span>
                         </v-flex>
-                        <v-flex xs12 md7 style="margin-top: -5px;">
+                        <v-flex xs12 sm5 style="margin-top: -5px;">
+                            <v-icon class="my-icon">update</v-icon><label class="my-label">更新日期:</label><span class="task-date text-no-wrap">2019-10-10</span><!-- TODO -->
+                        </v-flex>
+                        <v-flex xs12 sm7 style="margin-top: -5px;">
                             <v-icon class="my-icon">trending_up</v-icon><label class="my-label">施工进度:<span class="task-exceed-small" v-if="myTask.exceed">(已逾期)</span></label>
-                            <div>
-                                <v-progress-linear :color="progressCss" height="5" :value="todayProgress" style="width: 68%"></v-progress-linear><span class="progress-value">{{todayProgress}}%</span>
+                            <div style="position: relative; top: -33px; left:100px; width: 160px;">
+                                <v-progress-linear :color="progressCss" height="5" :value="todayProgress" style="width: 60%"></v-progress-linear><span class="progress-value" style="position: relative;left: 20px;top:1px;">{{todayProgress}}%</span>
                             </div>
                         </v-flex>
+                        
                         <v-flex xs12 md12 style="margin-top: -10px;">
                             <v-divider></v-divider>
                         </v-flex>
@@ -56,7 +60,7 @@
                             </v-menu>
                         </v-flex>
                         <v-flex xs12 sm12>
-                            <v-layout justify-center pa-2 style="margin-bottom:20px;">
+                            <v-layout justify-center pa-2 style="margin-bottom:0px;">
                                 <v-card-actions bottom>
                                     <v-spacer></v-spacer>
                                     <v-btn @click="handleCancelClick">取消</v-btn>
@@ -119,7 +123,7 @@ export default {
             set(v) {
                 var vv = this.util.toDecimal(v / 100)
                 this.myTask.progress = vv
-                if(v>0 && v<100 && this.myTask.status==this.config.TaskStatus[0])
+                if(v>0 && v<100)
                     this.myTask.status=this.config.TaskStatus[1]
                 if(v==100)
                     this.myTask.status=this.config.TaskStatus[3]
@@ -159,6 +163,7 @@ export default {
     },
     methods: {
         handleCancelClick() {
+            this.$refs.taskProgressForm.reset()
             this.dialog = false
             this.$emit('cancel', this.taskCopy)
         },
@@ -197,7 +202,7 @@ export default {
             }else if(v==config.TaskStatus[0]){
                 this.todayProgress = 0
             }else{
-                if(this.todayProgress==100)
+                if(this.todayProgress==100 || this.todayProgress==0)
                     this.todayProgress = this.util.accMul(this.taskCopy.progress, 100)
             }
 

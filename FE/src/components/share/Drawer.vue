@@ -4,7 +4,7 @@
             <template v-for="(item, i) in items">
                 <v-layout row v-if="item.heading" align-center :key="i">
                     <v-flex xs6>
-                        <v-subheader v-if="item.heading">
+                        <v-subheader v-if="item.heading" class="drawer-sub-heading">
                             {{ item.heading }}
                         </v-subheader>
                     </v-flex>
@@ -212,5 +212,8 @@ export default {
 .phase-select{
     font-size: 13px;
     width: 100%;
+}
+.drawer-sub-heading{
+    margin-top: -12px;
 }
 </style>

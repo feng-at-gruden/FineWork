@@ -3,9 +3,9 @@
         <v-card>
             <v-img src="./static/images/construction2.jpg" position="top center" aspect-ratio="2.75"></v-img>
             <v-card-title primary-title>
-                <div>
-                    <h3 class="headline mb-0">{{project.Name}}</h3>
-                    <div>{{project.Description}}</div>
+                <div style="width: 100%">
+                    <h3 class="headline mb-0 no-wrap">{{project.Name}}</h3>
+                    <div class="text-truncate">{{project.Description}}</div>
                 </div>
             </v-card-title>
             <v-card-actions>
@@ -42,7 +42,7 @@ export default {
             else
                 return this.util.randomOut()
         },
-        project(){
+        project() {
             return this.$props.data
         }
     },

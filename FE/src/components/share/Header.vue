@@ -73,7 +73,7 @@
                 <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list dense class="setting-menu">
-                <v-list-tile @click="goto('/Setting/MyAccount')">
+                <v-list-tile @click="showMyAccount=true">
                     <v-list-tile-action class="header-list-action">
                         <v-icon>settings</v-icon>
                     </v-list-tile-action>
@@ -91,15 +91,19 @@
                 </v-list-tile>
             </v-list>
         </v-menu>
+
+        <MyAccount :open="showMyAccount" @close="showMyAccount=false"></MyAccount>
     </v-toolbar>
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
+import MyAccount from '../setting/MyAccount'
 
 export default {
     name: 'Header',
     extends: BasePage,
     props: ['subHeader'],
+    components:{MyAccount},
     computed: {
         editing() {
             return this.$store.state.editPlan //TODO add more
@@ -132,6 +136,7 @@ export default {
     },
     data: () => ({
         showSearch: false,
+        showMyAccount: false,
         project: 0,
     }),
     methods: {

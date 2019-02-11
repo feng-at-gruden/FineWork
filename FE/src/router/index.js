@@ -10,8 +10,8 @@ import ProjectList from '@/components/project/List'
 import ProjectPlan from '@/components/project/Plan'
 import PhasePlan from '@/components/phase/Plan'
 import ProgressReport from '@/components/progress/Report'
-import MyAccount from '@/components/setting/MyAccount'
 import Users from '@/components/system/Users'
+//import MyAccount from '@/components/setting/MyAccount'
 
 
 Vue.use(Router)
@@ -107,6 +107,7 @@ export default new Router({
                 component: Users
             }]
         },
+        /*
         {
             path: '/Setting/',
             component: Main,
@@ -117,7 +118,7 @@ export default new Router({
                 component: MyAccount
             }]
         },
-
+        */
     ]
 
 })

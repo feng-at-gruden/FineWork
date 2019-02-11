@@ -1,48 +1,68 @@
 <template>
-    <v-layout justify-center>
-        <v-flex xs12 sm8>
-            <v-card>
-                <v-card-title class="grey lighten-4 py-4 title">
-                    个人设置
-                </v-card-title>
-                <v-container grid-list-sm class="pa-4">
-                    <v-layout row wrap>
-                        <v-form ref="form" v-model="valid" lazy-validation>
-                            <v-flex xs12 align-center justify-space-between>
-                                <v-layout align-center>
-                                    <v-avatar size="40px" class="mr-3">
-                                        <img src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png" alt="" >
-                                    </v-avatar>
-                                    <v-text-field v-model="name" :counter="10" :rules="nameRules" label="用户名" required></v-text-field>
-                                </v-layout>
-                            </v-flex>
-                            <v-text-field v-model="password" :rules="passwordRules" label="密码" prepend-icon="security" required></v-text-field>
-                            <v-text-field v-model="rePassword" :rules="rePasswordRules" label="确认密码" prepend-icon="security" required></v-text-field>
-                            <v-text-field v-model="email" :rules="emailRules" label="E-mail" prepend-icon="mail"></v-text-field>
-                            <v-text-field v-model="phone" :rules="phoneRules" label="电话" type="tel" prepend-icon="phone"></v-text-field>
-                            <v-select v-model="select" :items="items" :rules="[v => !!v || 'Item is required']" label="角色" prepend-icon="perm_identity" required></v-select>
-                            <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree?" required></v-checkbox>
-                            <v-btn :disabled="!valid" color="success" @click="validate">
-                                Validate
-                            </v-btn>
-                            <v-btn color="error" @click="reset">
-                                Reset Form
-                            </v-btn>
-                            <v-btn color="warning" @click="resetValidation">
-                                Reset Validation
-                            </v-btn>
-                        </v-form>
-                    </v-layout>
-                </v-container>
-            </v-card>
-        </v-flex>
-    </v-layout>
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-card>
+            <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialog = false">
+                    <v-icon>close</v-icon>
+                </v-btn>
+                <v-toolbar-title>个人设置</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn dark flat @click="dialog = false">保存</v-btn>
+                </v-toolbar-items>
+            </v-toolbar>
+            <v-list three-line subheader>
+                <v-subheader>登录信息</v-subheader>
+                <v-list-tile avatar>
+                    <v-list-tile-content>
+                        <v-list-tile-title>真实姓名</v-list-tile-title>
+                        <v-list-tile-sub-title>Set the content filtering level to restrict apps that can be downloaded</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                    <v-list-tile-content>
+                        <v-list-tile-title>登录密码</v-list-tile-title>
+                        <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                    <v-list-tile-content>
+                        <v-list-tile-title>手机号</v-list-tile-title>
+                        <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list three-line subheader>
+                <v-subheader>偏好设置</v-subheader>
+                <v-list-tile avatar>
+                    <v-list-tile-action>
+                        <v-checkbox v-model="notifications"></v-checkbox>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>主题颜色</v-list-tile-title>
+                        <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                    <v-list-tile-action>
+                        <v-checkbox v-model="widgets"></v-checkbox>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Auto-add widgets</v-list-tile-title>
+                        <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+        </v-card>
+    </v-dialog>
 </template>
 <script>
 import BasePage from '../../assets/js/BasePage'
 export default {
     extends: BasePage,
     name: 'MyAccount',
+    props: ['open'],
     data: () => ({
         valid: true,
         name: '',
@@ -66,7 +86,7 @@ export default {
             v => /.+@.+/.test(v) || '无效E-mail'
         ],
         phone: '',
-        phoneRules:[
+        phoneRules: [
 
         ],
         select: null,
@@ -78,6 +98,14 @@ export default {
         ],
         checkbox: false
     }),
+    computed: {
+        dialog: {
+            get() { return this.$props.open },
+            set(v) {
+                this.$emit('close')
+            }
+        },
+    },
     methods: {
         validate() {
             if (this.$refs.form.validate()) {

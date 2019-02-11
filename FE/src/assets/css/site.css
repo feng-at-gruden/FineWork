@@ -86,13 +86,27 @@ body{
 
 .half-right-dialog-mobile {
     width: 95% !important;
-    top: 56px;
+    max-width: 500px;
+    top: 50px;
+    right: 0px;
     margin: auto;
     position: fixed;
     overflow-y: auto !important;
     height: auto;
-    max-height: 95% !important;
-    bottom: 10px;
+    /*max-height: 95% !important;*/
+    bottom: 0px;
+}
+
+.add-user-btn {
+    bottom: 46px !important;
+    z-index: 1 !important;
+}
+.add-user-btn-mobile {
+    bottom: 16px !important;
+    z-index: 1 !important;
+}
+.create-user-dialog{
+    max-width: 640px;
 }
 
 /* Safari */
