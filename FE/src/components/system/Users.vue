@@ -66,13 +66,12 @@ export default {
             headers: [{
                     text: '账号',
                     align: 'left',
-                    sortable: false,
                     value: 'username'
                 },
                 { text: '用户名', value: 'realname', align: 'center' },
                 { text: '联系方式', value: 'mobile', align: 'center' },
                 { text: '登录日期', value: 'last_login', align: 'center' },
-                { text: '操作', value: 'actual_start', align: 'center' },
+                { text: '操作', value: 'actual_start', align: 'center', sortable: false, },
             ],
             dateToStr: gantt.date.date_to_str("%Y-%m-%d"),
             allUsers: [
