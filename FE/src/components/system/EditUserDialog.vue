@@ -2,22 +2,22 @@
     <v-dialog v-model="dialog" lazy persistent :content-class="dialogCss" transition="scale-transition">
         <v-card>
             <v-card-title class="grey lighten-4 py-3 title">
-                添加系统用户
+                修改用户信息
             </v-card-title>
             <v-form lazy-validation ref="createUserForm">
                 <v-container fluid class="report-dialog-container">
                     <v-layout wrap>
                         <v-flex xs12 md6>
-                            <v-text-field v-model="user.username" :rules="[rules.required]" :counter="25" label="登录帐号" required append-icon="account_box"></v-text-field>
+                            <v-text-field v-model="myUser.username" :rules="[rules.required]" :counter="25" label="登录帐号" required append-icon="account_box"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md6>
-                            <v-text-field v-model="user.password" :append-icon="passwordShow ? 'visibility_off' : 'visibility'" :rules="[rules.required, rules.min]" :type="passwordShow ? 'text' : 'password'" name="input-10-2" label="登录密码" :counter="20" class="input-group--focused" @click:append="passwordShow = !passwordShow" autocomplete="off"></v-text-field>
+                            <v-text-field v-model="myUser.password" :append-icon="passwordShow ? 'visibility_off' : 'visibility'" :type="passwordShow ? 'text' : 'password'" name="input-10-2" label="登录密码" :counter="20" class="input-group--focused" @click:append="passwordShow = !passwordShow" autocomplete="off"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md6>
-                            <v-text-field v-model="user.realname" :counter="25" label="用户名" required append-icon="card_membership"></v-text-field>
+                            <v-text-field v-model="myUser.realname" :counter="25" label="用户名" required append-icon="card_membership"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md6>
-                            <v-text-field v-model="user.mobile" :counter="25" label="联系方式" required append-icon="phone_android"></v-text-field>
+                            <v-text-field v-model="myUser.mobile" :counter="25" label="联系方式" required append-icon="phone_android"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md12>
                             <v-select :items="config.UserPermissions" item-text="text" item-value="value" label="用户权限" multiple chips hint="请选择用户操作权限" persistent-hint append-outer-icon="markunread_mailbox"></v-select>
@@ -47,13 +47,12 @@ import config from '../../assets/js/Config'
 import util from '../../assets/js/Util'
 
 export default {
-    name: 'CreateUserDialog',
-    props: ['open'],
+    name: 'EditUserDialog',
+    props: ['open','user'],
     data() {
         return {
             config,
             util,
-            user: {username:'',realname:'',password:'',mobile:''},
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
@@ -76,10 +75,12 @@ export default {
         dialogCss() {
             return this.util.IsPC() ? 'create-user-dialog' : 'create-user-dialog-mobile'
         },
+        myUser(){
+            return this.$props.user
+        }
     },
     methods: {
         handleCancelClick() {
-            this.$refs.createUserForm.reset()
             this.dialog = false
         },
         handleSaveClick() {
@@ -87,8 +88,7 @@ export default {
                 //Call API
                 
                 //Success
-                this.user.id = 1001
-                this.$emit('save', this.user)
+                this.$emit('save', this.myUser)
                 this.dialog = false
             }
         },
@@ -98,13 +98,6 @@ export default {
             this.snackbar = true
         },
     },
-    watch:{
-        dialog(v,ov){
-            if(v){
-                this.user = {username:'',realname:'',password:'',mobile:''}
-            }
-        }
-    }
 }
 </script>
 <style scoped>

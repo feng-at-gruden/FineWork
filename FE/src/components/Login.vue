@@ -57,15 +57,15 @@ import BasePage from '../assets/js/BasePage'
 //单数反转
 //wget --no-cookie --no-check-certificate
 const WALLPAPERS = [
-'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',	//egale
+'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',	//bird
+'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UpHellyAa_EN-CN4575576413_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/KukeriCostume_EN-CN6866832286_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BodegasYsios_EN-CN6930432309_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/OceanDrive_EN-CN5355005673_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',	//bird
 'https://cn.bing.com/az/hprichbg/rb/BM1759_EN-CN5095819877_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/Snowkiters_EN-CN6799323123_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UKSomerset_EN-CN3755440952_1920x1080.jpg',
@@ -75,7 +75,8 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/FortRajgad_EN-CN7910178011_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/WinterLynx_EN-CN6283951646_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/MinnewankaBoathouse_ZH-CN0548323518_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/JapanCrane_EN-CN4265943819_1920x1080.jpg'
+'https://cn.bing.com/az/hprichbg/rb/JapanCrane_EN-CN4265943819_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/UFOMuseum_EN-CN3265083079_1920x1080.jpg'
 ]
 const TIMER = 20000
 export default {
@@ -210,7 +211,7 @@ body {
 	-o-transform:rotateY(180deg); 
 }
 .wallpaper1 {
-	background: url('https://cn.bing.com/az/hprichbg/rb/MinnewankaBoathouse_ZH-CN0548323518_1920x1080.jpg');
+	background: url('https://cn.bing.com/az/hprichbg/rb/UFOMuseum_EN-CN3265083079_1920x1080.jpg');
 	position: absolute;
 	top: 0px;
 	bottom: 0px;

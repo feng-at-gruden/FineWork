@@ -2,8 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 //const API_URL = "http://127.0.0.1:3000"
 //const API_URL = "http://192.168.31.33:3000"
-//const API_URL = "http://103.254.77.30:8001/API"
-const API_URL = "http://localhost:9909/API"
+const API_URL = "http://103.254.77.30:8001/API"
+//const API_URL = "http://localhost:9909/API"
 //const API_URL = "/API"
 
 //const APP_NAME = "中阳集团项目进度跟踪系统"
@@ -54,6 +54,14 @@ const TaskStatus = ['未开工', '施工中', '已停工', '已完工', ]
 const TaskProgress = ['正常', '已延期', '已逾期']
 
 
+//用户权限
+const UserPermissions = [
+    { value: 'project-management', text: '项目管理' },
+    { value: 'plan-management', text: '计划管理' },
+    { value: 'progress-management', text: '进度管理' },
+    { value: 'system-management', text: '系统管理' },
+]
+
 export default {
     APP_NAME,
     CLIENT_NAME,
@@ -63,5 +71,6 @@ export default {
     ProjectStatus,
     TaskStatus,
     ProjcetType,
-    ProjectPhase
+    ProjectPhase,
+    UserPermissions
 }
