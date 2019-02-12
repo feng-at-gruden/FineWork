@@ -5,7 +5,7 @@
                 <v-form lazy-validation ref="searchTaskForm">
                     <v-layout wrap row>
                         <v-flex xs12 md6 pa-3>
-                            <v-autocomplete v-model="selectedProject" :items="allProjects" @input="handleProjecctChange" item-text="Name" item-value="Id" label="选择项目" hide-no-data>
+                            <v-autocomplete v-model="selectedProject" :items="allProjects" @input="handleProjectChange" item-text="Name" item-value="Id" label="选择项目" hide-no-data>
                                 <template slot="item" slot-scope="data">
                                     <template v-if="typeof data.item !== 'object'">
                                         <v-list-tile-content v-text="data.item"></v-list-tile-content>
@@ -120,7 +120,7 @@ export default {
         },
     },
     methods: {
-        handleProjecctChange() {
+        handleProjectChange() {
             this.loadProjectPhases()
         },
         handlePhaseChange() {

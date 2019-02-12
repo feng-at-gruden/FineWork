@@ -54,6 +54,10 @@ namespace API.Controllers
                 {
                     //已完工
                     task.ActualEndDate = DateTime.Parse(worklog.created_date.Value.ToShortDateString());
+                    if(!task.ActualStartDate.HasValue)
+                    {
+                        task.ActualStartDate = DateTime.Parse(worklog.start_date.Value.ToShortDateString());  // 忽略小时
+                    }
                 }
 
                 if (task.ActualStartDate == null && worklog.status == Configurations.TASK_STATUS[1])

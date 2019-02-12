@@ -237,7 +237,21 @@ namespace API.Controllers
                         //逾期
                         c.exceed = true;
                     }
+                    c.last_update = latestWorkDate.Value.ToString("yyyy-MM-dd");
                 }
+            }
+
+            if (c.progress == 1 && task.ActualStartDate.HasValue && task.ActualEndDate.HasValue && c.type != "project")
+            {
+                //已完工                
+                var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate);
+                if (!latestWorkDate.HasValue)
+                {
+                    //异常， 任务已经开始，但是没有找到相关工作日志？
+                    latestWorkDate = task.ActualEndDate;
+                }
+                c.last_update = latestWorkDate.Value.ToString("yyyy-MM-dd");
+                c.actual_duration = (task.ActualEndDate.Value - task.ActualStartDate.Value).Days;
             }
             result.Add(c);
             /*
@@ -367,7 +381,7 @@ namespace API.Controllers
                         //Get last day from work log
                         var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate);
                         //actualTask.end_date = latestWorkDate;
-			actualTask.end_date = DateTime.Parse(latestWorkDate.Value.ToShortDateString()).AddDays(1);
+			            actualTask.end_date = DateTime.Parse(latestWorkDate.Value.ToShortDateString()).AddDays(1);
                         actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
                         var pendingDays = (nowTime - latestWorkDate.Value).Days;
                         actualTask.text  = Configurations.TASK_STATUS[2] + pendingDays + "天";

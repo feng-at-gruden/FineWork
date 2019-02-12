@@ -76,11 +76,11 @@ body{
     width: 520px !important;
     right: 0;
     height: auto;
-    max-height: 100% !important;
-    position: fixed;
+    max-height: 88% !important;
+    position: absolute;
     overflow-y: auto !important;
     top: 65px;
-    bottom: 5px;
+    /*bottom: 5px;*/
     margin: 0 !important;
 }
 

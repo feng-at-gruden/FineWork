@@ -37,7 +37,7 @@
                 <v-subheader>偏好设置</v-subheader>
                 <v-list-tile avatar>
                     <v-list-tile-action>
-                        <v-checkbox v-model="notifications"></v-checkbox>
+                        <v-checkbox ></v-checkbox>
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>主题颜色</v-list-tile-title>
@@ -46,7 +46,7 @@
                 </v-list-tile>
                 <v-list-tile avatar>
                     <v-list-tile-action>
-                        <v-checkbox v-model="widgets"></v-checkbox>
+                        <v-checkbox ></v-checkbox>
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>Auto-add widgets</v-list-tile-title>
