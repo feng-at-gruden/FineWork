@@ -23,14 +23,14 @@
 import config from '../../assets/js/Config'
 export default {
     name: 'DeleteUserDialog',
-    props: ['open','user'],
+    props: ['open', 'user'],
     data() {
         return {
             config,
         }
     },
     computed: {
-        myUser(){
+        myUser() {
             return this.$props.user
         },
         dialog: {
@@ -43,12 +43,16 @@ export default {
         },
     },
     methods: {
-        handleDeleteClick() {
-            //TODO Call API
-            //Success
-            this.dialog = false
-            this.$emit('delete', this.myUser)
-        }
+        handleDeleteClick() {            
+            this.$http.delete(this.config.API_URL + '/User/' + this.myUser.Id).then(function(res) {
+                this.dialog = false
+                this.$emit('delete', this.myUser)
+            }, function(res) {
+                var json = JSON.parse(res.bodyText)
+                //this.$emit('delete', json)
+                this.dialog = false;
+            })
+        },
     }
 }
 
@@ -62,8 +66,9 @@ export default {
     margin: 0;
 }
 
-.delete-project-desc{
+.delete-project-desc {
     padding-bottom: 15px;
     display: block;
 }
+
 </style>

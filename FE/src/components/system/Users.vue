@@ -18,10 +18,10 @@
         <v-flex xs12 style="padding-top:25px;">
             <v-data-table :headers="headers" :items="filteredUsers" class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td class="text-no-wrap">{{ props.item.username }}</td>
-                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.realname}}</td>
-                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.mobile}}</td>
-                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.last_login}}</td>
+                    <td class="text-no-wrap">{{ props.item.UserName }}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.RealName}}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.Mobile}}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.LastLogin}}</td>
                     <td class="justify-center layout px-0">
                         <v-icon small class="mr-2" @click="editItem(props.item)">
                             edit
@@ -42,6 +42,11 @@
         <EditUserDialog :open="openEditUserDialog" @close="openEditUserDialog=false" @save="handleUserUpdate" :user="userToEdit"></EditUserDialog>
         <!--删除用户对话框-->
         <DeleteUserDialog :open="openDeleteUserDialog" @close="openDeleteUserDialog=false" @delete="handleUserDeleted" :user="userToDelete"></DeleteUserDialog>
+        <!-- -->
+        <v-snackbar v-model="snackbar.open" :color="snackbar.color" multi-line vertical bottom right>
+            {{snackbar.message}}
+            <v-btn dark flat @click="snackbar.open = false">确定</v-btn>
+        </v-snackbar>
     </v-layout>
 </template>
 <script>
@@ -63,28 +68,18 @@ export default {
             openDeleteUserDialog: false,
             userToDelete: {},
             userToEdit: {},
+            snackbar: {open:false, message:'', color:''},
             headers: [{
                     text: '账号',
                     align: 'left',
-                    value: 'username'
+                    value: 'UserName'
                 },
-                { text: '用户名', value: 'realname', align: 'center' },
-                { text: '联系方式', value: 'mobile', align: 'center' },
-                { text: '登录日期', value: 'last_login', align: 'center' },
-                { text: '操作', value: 'actual_start', align: 'center', sortable: false, },
+                { text: '用户名', value: 'RealName', align: 'center' },
+                { text: '联系方式', value: 'Mobile', align: 'center' },
+                { text: '登录日期', value: 'LastUpdate', align: 'center' },
+                { text: '操作', align: 'center', sortable: false, },
             ],
-            dateToStr: gantt.date.date_to_str("%Y-%m-%d"),
-            allUsers: [
-                { id: 1, username: 'admin1', realname: '郭德纲', mobile:'11000000000', last_login: '2019-02-10' },
-                { id: 2, username: 'admin2', realname: '郭德纲', mobile:'12000000000', last_login: '2019-02-10' },
-                { id: 3, username: 'admin3', realname: '郭德纲', mobile:'13000000000', last_login: '2019-02-10' },
-                { id: 4, username: 'admin4', realname: '郭德纲', mobile:'14000000000', last_login: '2019-02-10' },
-                { id: 5, username: 'admin5', realname: '郭德纲', mobile:'15000000000', last_login: '2019-02-10' },
-                { id: 6, username: 'admin6', realname: '郭德纲', mobile:'16000000000', last_login: '2019-02-10' },
-                { id: 7, username: 'admin7', realname: '郭德纲', mobile:'17000000000', last_login: '2019-02-10' },
-                { id: 8, username: 'admin8', realname: '郭德纲', mobile:'18000000000', last_login: '2019-02-10' },
-                
-            ]
+            allUsers: []
         }
     },
     computed:{
@@ -95,7 +90,7 @@ export default {
     methods: {
         updateFilteredUsers(){
             var k = this.keyword.trim().toLowerCase()
-            if(k!='')
+            if(k.length>0)
             {
                 this.filteredUsers = this.allUsers.filter(t=>t.username.toLowerCase().indexOf(k)>=0 || t.realname.toLowerCase().indexOf(k)>=0 || t.mobile.toLowerCase().indexOf(k)>=0)
             }else{
@@ -110,6 +105,7 @@ export default {
             this.updateFilteredUsers()
         },
         editItem(u) {
+            u.Password = "******"
             this.userToEdit = u
             this.openEditUserDialog = true
         },
@@ -118,6 +114,7 @@ export default {
             this.openDeleteUserDialog = true
         },
         handleUserAdded(u){
+            this.showSnackbar("系统帐户添加成功", 'success')
             this.allUsers.push(u)
             this.updateFilteredUsers()
         },
@@ -131,6 +128,7 @@ export default {
                 }
             }
             this.updateFilteredUsers()
+            this.showSnackbar("系统帐户修改成功", 'success')
         },
         handleUserDeleted(u){
             var index=-1
@@ -145,12 +143,25 @@ export default {
             if(index>-1){
                 this.allUsers.splice(index,1)
                 this.updateFilteredUsers()
+                this.showSnackbar("系统帐户已删除", 'success')
             }
+        },
+        showSnackbar(msg, color) {
+            this.snackbar.message = msg
+            this.snackbar.color = color
+            this.snackbar.open = true
+        },
+        loadUsers(){
+            // Call Ajax
+            this.$http.get(this.config.API_URL + '/User/List').then(function(res) {
+                this.allUsers = JSON.parse(res.bodyText)
+                this.updateFilteredUsers()
+            })
         }
     },
     mounted() {
         //Load user data from API
-        this.updateFilteredUsers()
+        this.loadUsers()
     }
 
 }
