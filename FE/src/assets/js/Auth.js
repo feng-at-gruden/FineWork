@@ -15,8 +15,10 @@ export default {
 			emulateJSON: true,			
 		}).then(function(res) {
 			var token = JSON.parse(res.bodyText).Token
-            localStorage.setItem("Token",token)
-			var identity = {username, token }
+			localStorage.setItem("Token",token)
+
+			//TODO, save identity to local
+			var identity = {UserName:'Feng', RealName:'Feng'}
 			window.app.$store.commit('userLogin', identity)			
 			if (url){
 				router.replace(url)            

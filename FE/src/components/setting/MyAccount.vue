@@ -15,19 +15,25 @@
                 <v-subheader>登录信息</v-subheader>
                 <v-list-tile avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title>真实姓名</v-list-tile-title>
-                        <v-list-tile-sub-title>Set the content filtering level to restrict apps that can be downloaded</v-list-tile-sub-title>
+                        <v-list-tile-title>登录帐号: Admin</v-list-tile-title>
+                        <v-list-tile-sub-title>用户登录帐号不可更改。</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile avatar>
+                    <v-list-tile-content>
+                        <v-text-field value="guof" label="用户名" hint="非登录帐号" persistent-hint></v-text-field>
                     </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile avatar>
                     <v-list-tile-content>
                         <v-list-tile-title>登录密码</v-list-tile-title>
-                        <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
+                        <v-text-field value="guof"   persistent-hint></v-text-field>
+                        <v-list-tile-sub-title>如需修改登录密码请输入新的密码，不输入或保持为空则原密码不改变。</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title>手机号</v-list-tile-title>
+                        <v-list-tile-title>联系方式</v-list-tile-title>
                         <v-list-tile-sub-title>Require password for purchase or use password to restrict purchase</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -44,15 +50,6 @@
                         <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile avatar>
-                    <v-list-tile-action>
-                        <v-checkbox ></v-checkbox>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>Auto-add widgets</v-list-tile-title>
-                        <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
-                    </v-list-tile-content>
-                </v-list-tile>
             </v-list>
         </v-card>
     </v-dialog>
@@ -65,38 +62,7 @@ export default {
     props: ['open'],
     data: () => ({
         valid: true,
-        name: '',
-        nameRules: [
-            v => !!v || '用户名不能为空',
-            v => (v && v.length <= 10) || '用户名不能超过10个字符'
-        ],
-        password: '',
-        passwordRules: [
-            v => !!v || '密码不能为空',
-            v => (v && v.length < 4) || '密码必须4位以上'
-        ],
-        rePassword: '',
-        rePasswordRules: [
-            v => !!v || '请确认您的密码',
-            v => (v && v.length < 4) || '密码必须4位以上'
-        ],
-        email: '',
-        emailRules: [
-            v => !!v || '邮箱不能为空',
-            v => /.+@.+/.test(v) || '无效E-mail'
-        ],
-        phone: '',
-        phoneRules: [
-
-        ],
-        select: null,
-        items: [
-            'Item 1',
-            'Item 2',
-            'Item 3',
-            'Item 4'
-        ],
-        checkbox: false
+        user:{}
     }),
     computed: {
         dialog: {
@@ -109,15 +75,9 @@ export default {
     methods: {
         validate() {
             if (this.$refs.form.validate()) {
-                this.snackbar = true
+                
             }
         },
-        reset() {
-            this.$refs.form.reset()
-        },
-        resetValidation() {
-            this.$refs.form.resetValidation()
-        }
     }
 }
 
