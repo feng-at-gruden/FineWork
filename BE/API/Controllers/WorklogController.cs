@@ -42,7 +42,7 @@ namespace API.Controllers
                 }
 
                 //1. 添加worklog db记录
-                var n = db.WorkLog.Add(new WorkLog {
+                var n = db.Worklog.Add(new WorkLog {
                      CreatedBy = u.Id,
                      TaskId = worklog.taskId,
                      CreatedDate = worklog.created_date.HasValue? worklog.created_date.Value.ToLocalTime() : DateTime.Now.ToLocalTime(),

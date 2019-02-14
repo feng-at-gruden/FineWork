@@ -7,6 +7,7 @@ using System.Web.Http;
 using System;
 using Newtonsoft.Json.Linq;
 using API.Models;
+using API.Models.JsonModel;
 
 namespace API.Controllers
 {
@@ -41,11 +42,13 @@ namespace API.Controllers
         public HttpResponseMessage AccountInfo()
         {
             var u = CurrentUser;
-            var userInfo = new
+            var userInfo = new UserViewModel
             {
+                Id = u.Id,
                 UserName = u.UserName,
                 Mobile = u.Mobile,
                 RealName = u.RealName,
+                Permissions = u.Permissions!=null?u.Permissions.Split(','):null,
             };
             return Request.CreateResponse(HttpStatusCode.OK, userInfo);
         }
@@ -55,20 +58,21 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public HttpResponseMessage AccountInfo([FromBody]JObject userInfo)
+        public HttpResponseMessage AccountInfo([FromBody]UserViewModel userInfo)
         {
             var u = CurrentUser;
-            string mobile = userInfo["Mobile"].ToString();
-            if (mobile.Length==11)
-            {
-                u.Mobile = mobile;
-                db.SaveChanges();
-                return Request.CreateResponse(HttpStatusCode.OK, new APIResponse {Success=true, Message="更新成功"});
+            if(u.Id != userInfo.Id){
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new APIResponse { Success = false, Message = "信息输入有误" });
             }
-            else
+
+            u.Mobile = userInfo.Mobile.Trim();
+            u.RealName = userInfo.RealName.Trim();
+            if (!String.IsNullOrWhiteSpace(userInfo.Password.Trim()) && userInfo.Password != u.Password)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, new APIResponse { Success = false, Message="信息输入有误" });
+                u.Password = userInfo.Password;
             }
+            db.SaveChanges();
+            return Request.CreateResponse(HttpStatusCode.OK, new APIResponse { Success = true, Message = "更新成功" });
         }
 
         

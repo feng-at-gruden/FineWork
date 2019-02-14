@@ -17,9 +17,9 @@ namespace API.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.WorkLog = new HashSet<WorkLog>();
             this.Phase = new HashSet<Phase>();
             this.Project = new HashSet<Project>();
+            this.WorkLog = new HashSet<WorkLog>();
         }
     
         public int Id { get; set; }
@@ -29,13 +29,14 @@ namespace API.Models
         public string Mobile { get; set; }
         public Nullable<int> DepartmentId { get; set; }
         public string Permissions { get; set; }
+        public Nullable<System.DateTime> LastLoginAt { get; set; }
     
         public virtual Department Department { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WorkLog> WorkLog { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Phase> Phase { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Project> Project { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WorkLog> WorkLog { get; set; }
     }
 }

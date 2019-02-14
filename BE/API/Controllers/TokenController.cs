@@ -53,6 +53,8 @@ namespace API.Controllers
                         response.Success = false;
                         response.Message = ex.Message.ToString();
                     }
+                    u.LastLoginAt = DateTime.Now;
+                    db.SaveChanges();
                 }
                 else
                 {

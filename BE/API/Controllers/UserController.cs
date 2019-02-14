@@ -75,7 +75,7 @@ namespace API.Controllers
                                 RealName = row.RealName,
                                 Mobile = row.Mobile,
                                 Permissions = row.Permissions.Split(','),
-                                LastLogin = DateTime.Now.ToString("yyyy-MM-dd"),
+                                LastLogin = row.LastLoginAt.HasValue?row.LastLoginAt.Value.ToString("yyyy-MM-dd"):"",
                             };
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
