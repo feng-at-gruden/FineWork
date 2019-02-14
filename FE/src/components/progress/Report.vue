@@ -22,7 +22,7 @@
                             <v-select :items="projectPhases" label="项目阶段" item-text="Name" item-value="Id" v-model="selectedPhaseId" @input="handlePhaseChange"></v-select>
                         </v-flex>
                         <v-flex xs12 md8 pa-3 class="keyword" style="margin-top: -10px;">
-                            <v-text-field v-model="keyword" label="任务关键字" append-icon="search"></v-text-field>
+                            <v-text-field v-model="keyword" label="任务关键字" append-icon="search" @keydown.enter="handleSearchClick"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md4 pa-3 class="keyword button-box">
                             <v-btn @click="handleResetClick">清空</v-btn>

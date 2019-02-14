@@ -42,8 +42,11 @@ namespace API.Controllers
                 {
                     foreach (var p in user.Permissions)
                     {
-                        permission += p + ",";
+                        if (!String.IsNullOrEmpty(p))
+                            permission += p + ",";
                     }
+                    if (permission.LastIndexOf(",") > 0)
+                        permission = permission.Substring(0, permission.LastIndexOf(","));
                 }
                 var newuser = new User
                 {
@@ -74,7 +77,7 @@ namespace API.Controllers
                                 UserName = row.UserName,
                                 RealName = row.RealName,
                                 Mobile = row.Mobile,
-                                Permissions = row.Permissions.Split(','),
+                                Permissions = String.IsNullOrEmpty(row.Permissions)?new String[0]:row.Permissions.Split(','),
                                 LastLogin = row.LastLoginAt.HasValue?row.LastLoginAt.Value.ToString("yyyy-MM-dd"):"",
                             };
             return Request.CreateResponse(HttpStatusCode.OK, model);
@@ -109,8 +112,11 @@ namespace API.Controllers
                 {
                     foreach (var p in user.Permissions)
                     {
-                        permission += p + ",";
+                        if(!String.IsNullOrEmpty(p))
+                            permission += p + ",";
                     }
+                    if (permission.LastIndexOf(",") > 0)
+                        permission = permission.Substring(0, permission.LastIndexOf(","));
                 }
                 ou.RealName = user.RealName.Trim();
                 ou.Mobile = user.Mobile.Trim();

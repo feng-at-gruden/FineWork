@@ -14,11 +14,7 @@ const store = new Vuex.Store({
 		selectedProject:null,
 		projectPhases:[],
 		selectedPhase:null,
-		identity: {
-			username: '',
-			realname:'',
-			token: ''
-		}
+		identity: null,
 	},
 	mutations: {
 		openDrawer(state, v) {
@@ -30,11 +26,14 @@ const store = new Vuex.Store({
 		editPlan(state, v) {
 			state.editPlan = v
 		},
-		userLogin(state, msg) {
-			state.identity = msg;
+		userLogin(state, v) {
+			state.identity = v;
+			localStorage.setItem("Identity", JSON.stringify(v))
 		},
 		userLogout(state) {
-			state.identity = {};
+			state.identity = null;
+			localStorage.removeItem("Token")
+        	localStorage.removeItem("Identity")
 		},
 		optionMenuClick(state,v){			
 			state.selectedOptionMenu = v		

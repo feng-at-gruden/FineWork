@@ -85,8 +85,8 @@
                         </v-layout>
                     </v-container>
                 </v-card>
-                <v-btn color="primary" @click="handelSaveProject">建立项目</v-btn>
                 <v-btn flat @click="step--">上一步</v-btn>
+                <v-btn color="primary" @click="handelSaveProject">建立项目</v-btn>
             </v-stepper-content>
             <!-- <v-stepper-step :complete="step > 3" step="3">添加项目管理人员</v-stepper-step>
         <v-stepper-content step="3">

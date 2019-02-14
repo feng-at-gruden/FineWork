@@ -5,11 +5,12 @@
                 <v-form lazy-validation ref="searchUserForm">
                     <v-layout wrap row>
                         <v-flex xs12 md8 pa-3 class="keyword" style="margin-top: -10px;">
-                            <v-text-field v-model="keyword" label="用户名" append-icon="search"></v-text-field>
+                            <v-text-field v-model="keyword" label="用户名" append-icon="search" @keydown.enter="handleSearchClick"></v-text-field>
+                            <v-text-field style="display: none;"></v-text-field>
                         </v-flex>
                         <v-flex xs12 md4 pa-3 class="keyword button-box">
                             <v-btn @click="handleResetClick">清空</v-btn>
-                            <v-btn color="primary" @click="handleSearchClick">查找</v-btn>
+                            <v-btn color="primary" @click="handleSearchClick" autofocus>查找</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-form>
@@ -68,7 +69,7 @@ export default {
             openDeleteUserDialog: false,
             userToDelete: {},
             userToEdit: {},
-            snackbar: {open:false, message:'', color:''},
+            snackbar: { open: false, message: '', color: '' },
             headers: [{
                     text: '账号',
                     align: 'left',
@@ -82,18 +83,17 @@ export default {
             allUsers: []
         }
     },
-    computed:{
-    	addBtnCss() {
+    computed: {
+        addBtnCss() {
             return this.util.IsPC() ? 'add-user-btn' : 'add-user-btn-mobile'
         },
     },
     methods: {
-        updateFilteredUsers(){
+        updateFilteredUsers() {
             var k = this.keyword.trim().toLowerCase()
-            if(k.length>0)
-            {
-                this.filteredUsers = this.allUsers.filter(t=>t.username.toLowerCase().indexOf(k)>=0 || t.realname.toLowerCase().indexOf(k)>=0 || t.mobile.toLowerCase().indexOf(k)>=0)
-            }else{
+            if (k.length > 0) {
+                this.filteredUsers = this.allUsers.filter(t => t.UserName.toLowerCase().indexOf(k) >= 0 || t.RealName.toLowerCase().indexOf(k) >= 0 || t.Mobile.toLowerCase().indexOf(k) >= 0)
+            } else {
                 this.filteredUsers = this.allUsers
             }
         },
@@ -113,16 +113,14 @@ export default {
             this.userToDelete = u
             this.openDeleteUserDialog = true
         },
-        handleUserAdded(u){
+        handleUserAdded(u) {
             this.showSnackbar("系统帐户添加成功", 'success')
             this.allUsers.push(u)
             this.updateFilteredUsers()
         },
-        handleUserUpdate(u){
-            for(var i=0;i<this.allUsers.length;i++)
-            {
-                if(this.allUsers[i].id==u.id)
-                {
+        handleUserUpdate(u) {
+            for (var i = 0; i < this.allUsers.length; i++) {
+                if (this.allUsers[i].Id == u.Id) {
                     this.allUsers[i] = u
                     break
                 }
@@ -130,18 +128,16 @@ export default {
             this.updateFilteredUsers()
             this.showSnackbar("系统帐户修改成功", 'success')
         },
-        handleUserDeleted(u){
-            var index=-1
-            for(var i=0;i<this.allUsers.length;i++)
-            {
-                if(this.allUsers[i].id==u.id)
-                {
+        handleUserDeleted(u) {
+            var index = -1
+            for (var i = 0; i < this.allUsers.length; i++) {
+                if (this.allUsers[i].Id == u.Id) {
                     index = i
                     break
                 }
             }
-            if(index>-1){
-                this.allUsers.splice(index,1)
+            if (index > -1) {
+                this.allUsers.splice(index, 1)
                 this.updateFilteredUsers()
                 this.showSnackbar("系统帐户已删除", 'success')
             }
@@ -151,7 +147,7 @@ export default {
             this.snackbar.color = color
             this.snackbar.open = true
         },
-        loadUsers(){
+        loadUsers() {
             // Call Ajax
             this.$http.get(this.config.API_URL + '/User/List').then(function(res) {
                 this.allUsers = JSON.parse(res.bodyText)

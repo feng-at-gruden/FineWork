@@ -4,7 +4,6 @@ import config from './Config'
 
 export default {
 	logout() {
-        localStorage.removeItem("Token")
 		window.app.$store.commit('userLogout')
 		router.push('/login')
 	},
@@ -16,10 +15,13 @@ export default {
 		}).then(function(res) {
 			var token = JSON.parse(res.bodyText).Token
 			localStorage.setItem("Token",token)
-
-			//TODO, save identity to local
-			var identity = {UserName:'Feng', RealName:'Feng'}
-			window.app.$store.commit('userLogin', identity)			
+			//Get account info and save identity to local
+			this.$http.get(config.API_URL + '/Account/AccountInfo').then(function(res) {
+                var identity = JSON.parse(res.bodyText)
+                window.app.$store.commit('userLogin', identity)	
+            }, function(res){
+            	failedCallback('获取用户信息失败')
+            })
 			if (url){
 				router.replace(url)            
             }else{
@@ -31,16 +33,13 @@ export default {
 		});
 	},
 	checkIsLogin(state) {        
-		if (!state.identity.token) {
-            var token = localStorage.getItem("Token")
-            if(token){
-                // var identity = {username:'', token }
-                // window.app.$store.commit('userLogin', identity) 
-                return true
-            }else{                
-    			return false
-            }       
-		}
-		return true
+        var token = localStorage.getItem("Token")
+        if(token){
+            // var identity = {username:'', token }
+            // window.app.$store.commit('userLogin', identity) 
+            return true
+        }else{                
+			return false
+        }
 	}
 }

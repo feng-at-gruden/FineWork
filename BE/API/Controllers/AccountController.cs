@@ -11,7 +11,7 @@ using API.Models.JsonModel;
 
 namespace API.Controllers
 {
-    [RoutePrefix("api/Account")]
+    [RoutePrefix("API/Account")]
     [ApiAuthorize]
     public class AccountController : BaseController
     {
