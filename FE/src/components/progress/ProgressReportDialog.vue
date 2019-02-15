@@ -241,6 +241,9 @@ export default {
                     this.actualStartDate = dateToStr(new Date())
                 this.worklog = ''
                 this.oldProgress = -1
+                try{
+                    this.$refs.taskProgressForm.resetValidation()
+                }catch(e){}
             }
         }
     },

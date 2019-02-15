@@ -8,7 +8,6 @@
                 <v-container fluid>
                     <v-layout wrap>
                         <v-flex xs8 md8>
-                            <v-text-field style="display: none;" autofocus></v-text-field>
                             <v-text-field v-model="task.text" :counter="25" :label="unitLabel" :rules="nameRules" append-icon="business"></v-text-field>
                         </v-flex>
                         <v-flex xs4 md4>
@@ -105,12 +104,11 @@ export default {
         },
         dialog(v, ov){
             if(v){
-                
+                try{
+                    this.$refs.createTaskForm.resetValidation()
+                }catch(e){}
             }
         }
-    },
-    mounted(){
-        //this.$refs.createTaskForm.resetValidation()
     },
     methods: {        
         handleSaveClick() {
