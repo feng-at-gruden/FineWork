@@ -106,7 +106,7 @@ export default {
         },
         editItem(u) {
             u.Password = "******"
-            this.userToEdit = u
+            this.userToEdit = u//this.util.objCopy(u)
             this.openEditUserDialog = true
         },
         deleteItem(u) {

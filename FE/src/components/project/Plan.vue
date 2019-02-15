@@ -182,14 +182,17 @@ export default {
         handleOnGanttBeforeCreateTask(pid) {
             //获取父节点ID
             //console.log(pid);
+            this.newTask =  {
+                status: '未开工',
+                text:'',
+                description:'',
+            },
             this.newTask.parent = pid
             //替换成项目开始日期或者父任务开始日期
             //限制时间MAX/MIN不能超过或者低于父节点计划
             //父节点为空则，设置为项目开始日期
             var strToDate = gantt.date.str_to_date("%d-%m-%Y")
             var dateToStr = gantt.date.date_to_str("%Y-%m-%d")
-            this.newTask.status = '未开工'
-            this.newTask.text = ''
             if (pid > 0) {
                 var pTask = this.plan.data.filter(t => t.id == pid)[0]
                 this.newTask.start_date = dateToStr(pTask.start_date)

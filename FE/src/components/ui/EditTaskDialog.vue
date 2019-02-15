@@ -35,7 +35,7 @@
                                     <v-btn color="error" @click="deleteConfirm = true">删除<v-icon right dark>delete</v-icon>
                                     </v-btn>
                                     <v-spacer></v-spacer>
-                                    <v-btn @click="dialog = false">取消</v-btn>
+                                    <v-btn @click="handleCancel">取消</v-btn>
                                     <v-btn color="primary" @click="handleSaveClick" :disabled="!formValid">保存</v-btn>
                                 </v-layout>
                             </v-flex>
@@ -136,6 +136,10 @@ export default {
             this.dialog = false
             this.$emit('delete', this.task)
         },
+        handleCancel() {
+            //this.$refs.taskForm.reset()
+            this.dialog = false
+        }
     }
 }
 </script>

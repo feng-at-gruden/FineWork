@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="60ffc935c3bc4255b92d17eb2a415b78" Name="Diagram1">
         <EntityTypeShape EntityType="FineWorkModel.Department" Width="1.5" PointX="1" PointY="3.75" />
-        <EntityTypeShape EntityType="FineWorkModel.Permission" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="FineWorkModel.Permission" Width="1.5" PointX="3.25" PointY="3.75" />
         <EntityTypeShape EntityType="FineWorkModel.Phase" Width="1.5" PointX="5.625" PointY="6.875" />
         <EntityTypeShape EntityType="FineWorkModel.Project" Width="1.5" PointX="3.25" PointY="6.875" />
         <EntityTypeShape EntityType="FineWorkModel.Task" Width="1.5" PointX="8" PointY="6.875" />

@@ -58,7 +58,7 @@ export default {
             passwordShow: false,
             rules: {
                 required: value => !!value || '不能为空.',
-                min: v => v&&v.trim().length >= 4 || '最少为4位字母',
+                min: v => v&&v.trim().length >= 4 || '至少为4位字母',
             }
         }
     },
@@ -67,6 +67,7 @@ export default {
             get() { return this.$props.open },
             set(v) {
                 this.$emit('close')
+                this.reset()
             }
         },
         dialogCss() {
@@ -75,7 +76,6 @@ export default {
     },
     methods: {
         handleCancelClick() {
-            this.$refs.createUserForm.reset()
             this.dialog = false
         },
         handleSaveClick() {
@@ -93,21 +93,18 @@ export default {
                     this.showAlert(json.Message)
                     this.loading = false
                 });
-                
             }
         },
         showAlert(msg) {
             this.alert.message = msg
             this.alert.open = true
         },
-    },
-    watch:{
-        dialog(v,ov){
-            if(v){
-                this.user = {UserName:'',RealName:'',Password:'',Mobile:''}
-            }
+        reset(){
+            this.user = {}
+            this.alert = {open:false, message:''}
+            this.$refs.createUserForm.resetValidation()
         }
-    }
+    },
 }
 </script>
 <style scoped>

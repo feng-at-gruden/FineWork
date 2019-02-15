@@ -67,7 +67,7 @@ namespace API.Controllers
 
             u.Mobile = userInfo.Mobile.Trim();
             u.RealName = userInfo.RealName.Trim();
-            if (!String.IsNullOrWhiteSpace(userInfo.Password.Trim()) && userInfo.Password != u.Password)
+            if (!String.IsNullOrWhiteSpace(userInfo.Password) && userInfo.Password != u.Password)
             {
                 u.Password = userInfo.Password;
             }

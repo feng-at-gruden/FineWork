@@ -4,10 +4,11 @@
             <v-card-title class="grey lighten-4 py-4 title">
                 添加{{unitName}}
             </v-card-title>
-            <v-form lazy-validation ref="createTaskForm">
+            <v-form lazy-validation ref="createTaskForm" v-model="formValid">
                 <v-container fluid>
                     <v-layout wrap>
                         <v-flex xs8 md8>
+                            <v-text-field style="display: none;" autofocus></v-text-field>
                             <v-text-field v-model="task.text" :counter="25" :label="unitLabel" :rules="nameRules" append-icon="business"></v-text-field>
                         </v-flex>
                         <v-flex xs4 md4>
@@ -50,6 +51,7 @@ export default {
     props: ['open', 'newTask', 'unit'],
     data() {
         return {
+            formValid: true,
             dateMenu1: false,
             dateMenu2: false,
             nameRules: [
@@ -73,7 +75,6 @@ export default {
         dialog: {
             get() { return this.$props.open },
             set(v) {
-                this.$refs.createTaskForm.resetValidation()
                 this.$emit('close')
             }
         },
@@ -101,16 +102,26 @@ export default {
             //if(d2>dmx)
             //    d2 = dmx
             this.task.end_date = this.dateToStr(new Date(d2))
+        },
+        dialog(v, ov){
+            if(v){
+                
+            }
         }
+    },
+    mounted(){
+        //this.$refs.createTaskForm.resetValidation()
     },
     methods: {        
         handleSaveClick() {
             if (this.$refs.createTaskForm.validate()){
                 this.$emit('save', this.task)
+                this.$refs.createTaskForm.resetValidation()
                 this.dialog = false 
             }
         },
         handleCancelClick() {
+            this.$refs.createTaskForm.resetValidation()
             this.dialog = false
         }
     },

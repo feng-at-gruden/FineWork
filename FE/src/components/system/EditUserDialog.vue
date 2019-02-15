@@ -54,6 +54,7 @@ export default {
             util,
             alert: { open: false, message: '' },
             loading: false,
+            userCopy:{},
             passwordShow: false,
             rules: {
                 required: value => !!value || '不能为空.',
@@ -77,6 +78,9 @@ export default {
     },
     methods: {
         handleCancelClick() {
+            this.myUser.RealName = this.userCopy.RealName
+            this.myUser.Mobile = this.userCopy.Mobile
+            this.myUser.Password = this.userCopy.Password
             this.dialog = false
         },
         handleSaveClick() {
@@ -94,8 +98,6 @@ export default {
                     this.loading = false
                     this.dialog = false
                 });
-
-
             }
         },
         showAlert(msg) {
@@ -103,6 +105,13 @@ export default {
             this.alert.open = true
         },
     },
+    watch:{
+        dialog(v,ov){
+            if(v){
+                this.userCopy = this.util.objCopy(this.myUser)
+            }
+        }
+    }
 }
 
 </script>
