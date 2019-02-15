@@ -13,7 +13,7 @@
 					<v-flex lg12 class="login-gap2" v-if="!isMobile"></v-flex>
 					<v-flex xs11 sm8 md5 lg4 offset-lg5>
 						<v-card class="elevation-12 login-box" @keydown.enter="login">
-							<v-toolbar color="primary">
+							<v-toolbar color="primary" dark>
 								<v-toolbar-title>{{title}}</v-toolbar-title>
 								<v-spacer></v-spacer>
 								<v-tooltip bottom>

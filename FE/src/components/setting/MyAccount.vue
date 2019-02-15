@@ -12,30 +12,30 @@
                 </v-toolbar-items>
             </v-toolbar>
             <v-form lazy-validation ref="editAccountForm">
-            <v-list three-line subheader>
-                <v-subheader>登录信息</v-subheader>
-                <v-list-tile avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title>登录帐号: <b>{{identityCopy.UserName}}</b></v-list-tile-title>
-                        <v-list-tile-sub-title>用户登录帐号不可更改</v-list-tile-sub-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile avatar>
-                    <v-list-tile-content>
-                        <v-text-field v-model="identityCopy.RealName" label="用户名" placeholder="姓名" hint="真实姓名，非登录帐号" persistent-hint :rules="[rules.RealNameRule]"></v-text-field>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile avatar>
-                    <v-list-tile-content>
-                        <v-text-field v-model="identityCopy.Mobile" label="联系方式" placeholder="电话" hint="手机或固定电话号码" mask="###########" persistent-hint></v-text-field>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile avatar>
-                    <v-list-tile-content>
-                        <v-text-field v-model="identityCopy.Password" placeholder="密码" type="password" label="登录密码" hint="如需修改密码请输入新的密码，不输入或保持为空则原密码不变" persistent-hint :rules="[rules.PasswordRule]"></v-text-field>
-                    </v-list-tile-content>
-                </v-list-tile>
-            </v-list>
+                <v-list three-line subheader>
+                    <v-subheader>登录信息</v-subheader>
+                    <v-list-tile avatar>
+                        <v-list-tile-content>
+                            <v-list-tile-title>登录帐号: <b>{{identityCopy.UserName}}</b></v-list-tile-title>
+                            <v-list-tile-sub-title>用户登录帐号不可更改</v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile avatar>
+                        <v-list-tile-content>
+                            <v-text-field v-model="identityCopy.RealName" label="用户名" placeholder="姓名" hint="真实姓名，非登录帐号" persistent-hint :rules="[rules.RealNameRule]"></v-text-field>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile avatar>
+                        <v-list-tile-content>
+                            <v-text-field v-model="identityCopy.Mobile" label="联系方式" placeholder="电话" hint="手机或固定电话号码" mask="###########" persistent-hint></v-text-field>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile avatar>
+                        <v-list-tile-content>
+                            <v-text-field v-model="identityCopy.Password" placeholder="密码" type="password" label="登录密码" hint="如需修改密码请输入新的密码，不输入或保持为空则原密码不变" persistent-hint :rules="[rules.PasswordRule]"></v-text-field>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list>
             </v-form>
             <v-alert :value="alert.open" type="error" icon="warning" dismissible transition="slide-y-transition">
                 {{alert.message}}
@@ -43,13 +43,15 @@
             <v-divider></v-divider>
             <v-list three-line subheader>
                 <v-subheader>偏好设置</v-subheader>
-                <v-list-tile avatar>
+                <v-list-tile avatar style="">
                     <v-list-tile-action>
-                        <v-icon large>color_lens</v-icon>
+                        <v-icon large style="margin-top: 15px;">color_lens</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>主题颜色</v-list-tile-title>
-                        <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
+                        <v-list-tile-title>主题颜色:</v-list-tile-title>
+                        <div>
+                            <div v-for="item in config.Themes" @click="selectTheme(item)" class="theme-block" :style="themeStyle(item)"></div>
+                        </div>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -64,11 +66,11 @@ export default {
     props: ['open'],
     data: () => ({
         identityCopy: {},
-        alert:{open:false, message:''},
+        alert: { open: false, message: '' },
         rules: {
-                RealNameRule: v => v=='' || !v || v&&v.length < 25 || '用户名过长',
-                PasswordRule: v => v=='' || !v || v&&v.length >= 4 || '密码至少为4位',
-            }
+            RealNameRule: v => v == '' || !v || v && v.length < 25 || '用户名过长',
+            PasswordRule: v => v == '' || !v || v && v.length >= 4 || '密码至少为4位',
+        }
     }),
     computed: {
         dialog: {
@@ -118,14 +120,29 @@ export default {
             this.alert.message = msg
             this.alert.open = true
         },
+        themeStyle(theme) {
+            if (typeof(theme.primary) == 'string') {
+                return {
+                    backgroundColor: theme.primary,
+                }
+            } else {
+                return {
+                    backgroundColor: theme.primary.base,
+                }
+            }
+
+        },
+        selectTheme(theme) {
+            this.$vuetify.theme = theme
+            localStorage.setItem("Theme",JSON.stringify(theme))
+        }
     },
     mounted() {
         this.identityCopy = this.util.objCopy(this.identity)
     },
-    
-    watch:{
-        dialog(v,ov){
-            if(v){
+    watch: {
+        dialog(v, ov) {
+            if (v) {
                 this.identityCopy = this.util.objCopy(this.identity)
             }
         }
@@ -133,5 +150,16 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
+.theme-block {
+    width: 60px;
+    height: 60px;
+    line-height: 20px;
+    border: 1px solid #ccc;
+    display: block;
+    margin: 5px;
+    float: left;
+    cursor: pointer;
+}
+
 </style>

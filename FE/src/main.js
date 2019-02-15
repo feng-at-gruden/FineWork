@@ -12,8 +12,9 @@ import config from './assets/js/Config'
 import 'vuetify/dist/vuetify.min.css'
 import './assets/css/site.css'
 
+var theme = localStorage.getItem("Theme")?JSON.parse(localStorage.getItem("Theme")):config.Theme
 Vue.use(Vuex)
-Vue.use(Vuetify, { theme: config.Theme })
+Vue.use(Vuetify, { theme })
 
 Vue.config.productionTip = false
 
