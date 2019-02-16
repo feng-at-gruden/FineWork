@@ -33,7 +33,12 @@ namespace API.Controllers
                 var u = db.User.FirstOrDefault(m => m.Password == passWord && m.UserName == userName);
                 if (u!=null)
                 {
-                    AuthInfo authInfo = new AuthInfo { UserName = u.UserName, RealName= u.RealName, ExpiryDateTime = DateTime.Now.AddHours(2) };
+                    AuthInfo authInfo = new AuthInfo { 
+                        UserName = u.UserName, 
+                        RealName= u.RealName, 
+                        ExpiryDateTime = DateTime.Now.AddHours(2),
+                        Permissions = u.Permissions
+                    };
                     const string secretKey = Configurations.SECRET_KEY;//口令加密秘钥
                     try
                     {

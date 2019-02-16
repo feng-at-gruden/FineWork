@@ -7,6 +7,7 @@ using JWT.Serializers;
 using System.Text;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using API.Models.Auth;
 using API.Models;
 
@@ -17,6 +18,8 @@ namespace API.Filters
     /// </summary>
     public class ApiAuthorizeAttribute: AuthorizeAttribute
     {
+
+
         /// <summary>
         /// 指示指定的控件是否已获得授权
         /// </summary>
@@ -49,7 +52,25 @@ namespace API.Filters
                             {
                                 return false;
                             }
-                            actionContext.RequestContext.RouteData.Values.Add("auth", json);
+                            
+                            try
+                            {
+                                actionContext.RequestContext.RouteData.Values.Add("auth", json);
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                            
+                            if (!string.IsNullOrEmpty(this.Roles))
+                            {
+                                var requestPermissions = this.Roles;
+                                var found = false;
+                                if (json.Permissions.IndexOf(requestPermissions) >= 0)
+                                {
+                                    found = true;
+                                }
+                                return found;
+                            }
                             return true;
                         }
                         return false;

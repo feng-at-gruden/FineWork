@@ -165,6 +165,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Create([FromBody]ProjectViewModel project)
         {
             if (!String.IsNullOrWhiteSpace(project.Name))
@@ -220,6 +221,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
+        [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Edit(int id, [FromBody]ProjectViewModel project)
         {
             if (!String.IsNullOrWhiteSpace(project.Name) && id>0)
@@ -254,6 +256,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
+        [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Delete(int id)
         {
             var p = db.Project.SingleOrDefault(m => m.Id == id);

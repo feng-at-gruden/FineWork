@@ -10,8 +10,7 @@ using System.Web.Http;
 
 namespace API.Controllers
 {
-    [RoutePrefix("API/Worklog")]
-    [ApiAuthorize]
+    [RoutePrefix("API/Worklog"), ApiAuthorize(Roles=Configurations.Permissions.WORK_REPORT)]
     public class WorklogController : BaseController
     {
 

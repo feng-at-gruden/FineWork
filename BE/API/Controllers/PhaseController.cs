@@ -96,6 +96,7 @@ namespace API.Controllers
 
 
         [HttpPost]
+        [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Create([FromBody]TaskViewModel phase)
         {
             var msg = ValidCreatePhaseRequest(phase);
@@ -128,6 +129,7 @@ namespace API.Controllers
 
 
         [HttpPut]
+        [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Edit(int id, [FromBody]TaskViewModel phase)
         {
             var p = db.Phase.SingleOrDefault(t => t.Id == id);
@@ -151,6 +153,7 @@ namespace API.Controllers
 
 
         [HttpDelete]
+        [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Delete(int id)
         {
             var p = db.Phase.SingleOrDefault(m => m.Id == id);

@@ -10,8 +10,7 @@ using API.Models.JsonModel;
 
 namespace API.Controllers
 {
-    [RoutePrefix("API/User")]
-    [ApiAuthorize]
+    [RoutePrefix("API/User"), ApiAuthorize(Roles=Configurations.Permissions.SYSTEM_MANAGEMENT)]
     public class UserController : BaseController
     {
         [HttpPost]

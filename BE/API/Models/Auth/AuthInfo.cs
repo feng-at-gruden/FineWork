@@ -21,7 +21,7 @@ namespace API.Models.Auth
         /// <summary>
         /// 角色
         /// </summary>
-        public List<string> Permissions { get; set; }
+        public string Permissions { get; set; }
 
         /// <summary>
         /// 口令过期时间

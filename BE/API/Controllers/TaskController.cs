@@ -12,7 +12,7 @@ namespace API.Controllers
 {
 
     [RoutePrefix("API/Task")]
-    [ApiAuthorize]
+    [ApiAuthorize(Roles = Configurations.Permissions.PLAN_MANAGEMENT)]
     public class TaskController : BaseController
     {
 
