@@ -36,9 +36,9 @@
             </v-btn>
             <v-list dense>
                 <template v-for="(item, index) in $route.meta.optionMenu">
-                    <v-divider v-if="item.text=='Divider'"></v-divider>
+                    <v-divider v-if="item.text=='Divider' && haveThePermission(item)"></v-divider>
                     <template v-else>
-                        <v-list-tile v-if="!item.editing" :key="item.text" @click="handleOptionMenuClick(item)">
+                        <v-list-tile v-if="!item.editing && haveThePermission(item)" :key="item.text" @click="handleOptionMenuClick(item)">
                             <v-list-tile-action class="header-list-action">
                                 <v-icon>{{item.icon}}</v-icon>
                             </v-list-tile-action>
@@ -47,7 +47,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                         <template v-else>
-                            <v-list-tile v-if="editing" :key="item.editing.text" @click="handleOptionMenuClick(item.editing)">
+                            <v-list-tile v-if="editing && haveThePermission(item)" :key="item.editing.text" @click="handleOptionMenuClick(item.editing)">
                                 <v-list-tile-action class="header-list-action">
                                     <v-icon>{{item.editing.icon}}</v-icon>
                                 </v-list-tile-action>
@@ -55,7 +55,7 @@
                                     <v-list-tile-title>{{item.editing.text}}</v-list-tile-title>
                                 </v-list-tile-content>
                             </v-list-tile>
-                            <v-list-tile v-else :key="item.text" @click="handleOptionMenuClick(item)">
+                            <v-list-tile v-else-if="haveThePermission(item)" :key="item.text" @click="handleOptionMenuClick(item)">
                                 <v-list-tile-action class="header-list-action">
                                     <v-icon>{{item.icon}}</v-icon>
                                 </v-list-tile-action>
@@ -160,6 +160,9 @@ export default {
                 this.$router.push(link)
             }
         },
+        haveThePermission(item) {
+            return this.auth.checkPermission(item.permission, this.identity)
+        }
     },
     watch: {
         project(v, ov) {

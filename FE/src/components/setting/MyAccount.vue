@@ -16,7 +16,8 @@
                     <v-subheader>登录信息</v-subheader>
                     <v-list-tile avatar>
                         <v-list-tile-content>
-                            <v-list-tile-title>登录帐号: <b>{{identityCopy.UserName}}</b></v-list-tile-title>
+                            <v-list-tile-title>登录帐号: <b style="text-decoration: underline;">{{identityCopy.UserName}}</b> <v-chip color="primary" small outline v-for="p in permissions" class="permission-chip">{{p.text}}</v-chip>
+                            </v-list-tile-title>
                             <v-list-tile-sub-title>用户登录帐号不可更改</v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
@@ -79,17 +80,12 @@ export default {
                 this.$emit('close')
             }
         },
-        identity: {
-            get() {
-                if (this.$store.state.identity != null) {
-                    return this.$store.state.identity
-                } else {
-                    return JSON.parse(localStorage.getItem("Identity"))
-                }
-            },
-            set(v) {
-                this.$store.commit('userLogin', v)
+        permissions() {
+            var re = []
+            if (this.identity.Permissions && this.identity.Permissions.length > 0) {
+                re = this.config.UserPermissions.filter(t => this.stringInArray(t.value, this.identity.Permissions))
             }
+            return re
         }
     },
     methods: {
@@ -130,11 +126,17 @@ export default {
                     backgroundColor: theme.primary.base,
                 }
             }
-
         },
         selectTheme(theme) {
             this.$vuetify.theme = theme
-            localStorage.setItem("Theme",JSON.stringify(theme))
+            localStorage.setItem("Theme", JSON.stringify(theme))
+        },
+        stringInArray(str, array) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] == str)
+                    return true
+            }
+            return false
         }
     },
     mounted() {
@@ -161,5 +163,12 @@ export default {
     float: left;
     cursor: pointer;
 }
-
+.permission-chip{
+    -webkit-transform: scale(0.65);
+    height: 19px;
+    margin: 0px -10px 0 -12px;
+    font-style: italic;
+    padding: 0px;
+    border-radius:10px;
+}
 </style>

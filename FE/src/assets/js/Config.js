@@ -2,8 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 //const API_URL = "http://127.0.0.1:3000"
 //const API_URL = "http://103.254.77.30:8001/API"
-//const API_URL = "http://114.115.178.72/FineWork/API"
-const API_URL = "http://localhost:9909/API"
+const API_URL = "http://114.115.178.72/FineWork/API"
+//const API_URL = "http://localhost:9909/API"
 //const API_URL = "/API"
 
 //const APP_NAME = "中阳集团项目进度跟踪系统"

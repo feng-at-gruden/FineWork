@@ -2,7 +2,7 @@
     <v-navigation-drawer v-model="drawer" @input="handleInput" class="my-drawer grey lighten-4" clipped fixed app>
         <v-list dense class="grey lighten-4">
             <template v-for="(item, i) in items">
-                <v-layout row v-if="item.heading" align-center :key="i">
+                <v-layout row v-if="item.heading && haveThePermission(item)" align-center :key="i">
                     <v-flex xs6>
                         <v-subheader v-if="item.heading" class="drawer-sub-heading">
                             {{ item.heading }}
@@ -26,9 +26,9 @@
                         <v-list-tile-content class="drawer-phase-box">
                             <v-select :items="projectPhases" v-model="selectedPhaseId" @change="handlePhaseDropdownChange" label="阶段计划" dense hide-details prepend-icon="playlist_add_check" single-line item-text="Name" item-value="Id" class="phase-select"></v-select>
                         </v-list-tile-content>
-                    </v-list-tile>                    
+                    </v-list-tile>
                 </template>
-                <v-list-tile :key="i" v-else @click="goto(item)">
+                <v-list-tile :key="i" v-else-if="haveThePermission(item)" @click="goto(item)">
                     <v-list-tile-action>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>
@@ -50,6 +50,7 @@ export default {
     props: [],
     data() {
         return {
+            auth,
             config,
             mini: false,
             selectedProjectId: 0,
@@ -58,8 +59,8 @@ export default {
             phaseSelectedFromOuter: false,
             items: [
                 { title: 'PROJECT-DROPDOWN', link: '/', icon: 'home' },
-                { heading: '项目管理'},
-                { title: '新建项目', link: '/Project/Create', icon: 'library_add' },
+                { heading: '项目管理' },
+                { title: '新建项目', link: '/Project/Create', icon: 'library_add', permission:'project-management' },
                 { title: '项目一览', link: '/Project/List', icon: 'location_city' },
                 { divider: true },
                 { heading: '计划管理' },
@@ -69,8 +70,8 @@ export default {
                 { heading: '进度管理' },
                 { title: '进度汇报', link: '/Progress/Report', icon: 'assignment' },
                 { divider: true },
-                { heading: '系统管理' },
-                { title: '用户管理', link: '/System/Users', icon: 'supervisor_account' },
+                { heading: '系统管理', permission:'system-management' },
+                { title: '用户管理', link: '/System/Users', icon: 'supervisor_account', permission:'system-management' },
             ],
             right: null
         }
@@ -93,13 +94,20 @@ export default {
         projectPhases() {
             return this.$store.state.projectPhases
         },
+        identity() {
+            if (this.$store.state.identity != null) {
+                return this.$store.state.identity
+            } else {
+                return JSON.parse(localStorage.getItem("Identity"))
+            }
+        }
     },
     methods: {
         goto(item) {
             if (item.link == 'logout') {
                 this.auth.logout()
             } else if (item.title == '项目计划') {
-                if(this.selectedProjectId)
+                if (this.selectedProjectId)
                     this.$router.push(item.link + this.selectedProjectId)
             } else {
                 this.$router.push(item.link)
@@ -113,6 +121,9 @@ export default {
         },
         handlePhaseDropdownChange(v) {
             this.phaseSelectedFromOuter = false
+        },
+        haveThePermission(item) {
+            return this.auth.checkPermission(item.permission, this.identity)
         }
     },
     watch: {
@@ -126,14 +137,14 @@ export default {
                     }
                 }
             }
-        },        
+        },
         selectedPhaseId(v, ov) {
             if (v != ov) {
                 if (this.projectPhases.filter(t => t.Id == v).length > 0) {
-                    if (!this.phaseSelectedFromOuter){
+                    if (!this.phaseSelectedFromOuter) {
                         this.$router.push('/Phase/' + v)
                         this.$store.commit('updateSelectedPhase', v)
-                    }                                   
+                    }
                 }
             }
         },
@@ -148,7 +159,7 @@ export default {
         this.eventBus.$on('selectedPhaseChanged', v => {
             if (this.selectedPhaseId != v) {
                 this.phaseSelectedFromOuter = true
-                this.selectedPhaseId = parseInt(v + '')                
+                this.selectedPhaseId = parseInt(v + '')
             }
         })
     },
@@ -171,49 +182,56 @@ export default {
 .drawer-projects-box {
     margin-bottom: 10px;
 }
-.drawer-projects-box .v-input{
-    align-items: center    
+
+.drawer-projects-box .v-input {
+    align-items: center
 }
 
 .drawer-phase-box {
     margin-top: 1px;
 }
 
-.drawer-phase-box .v-input__slot{
+.drawer-phase-box .v-input__slot {
     height: 40px;
 }
-.drawer-phase-box .v-text-field{
+
+.drawer-phase-box .v-text-field {
     padding-top: 0px;
-    margin-top: 0px; 
+    margin-top: 0px;
 }
+
 .drawer-phase-box .v-select-list,
 .drawer-phase-box .v-select__selection--comma,
-.drawer-phase-box .v-label
-{
+.drawer-phase-box .v-label {
     font-size: 13px;
     text-align: center;
     margin-left: 23px;
     /*margin-top: 4px;*/
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
 }
-.drawer-phase-box .v-list__tile__title
-{
+
+.drawer-phase-box .v-list__tile__title {
     font-size: 13px;
 }
 
-.drawer-phase-box .v-input__append-outer, .drawer-phase-box .v-input__prepend-outer {
+.drawer-phase-box .v-input__append-outer,
+.drawer-phase-box .v-input__prepend-outer {
     margin-top: 7px;
 }
-.project-select{
+
+.project-select {
     width: 100%;
     margin-top: 0px !important;
     padding-top: 8px !important;
 }
-.phase-select{
+
+.phase-select {
     font-size: 13px;
     width: 100%;
 }
-.drawer-sub-heading{
+
+.drawer-sub-heading {
     margin-top: -12px;
 }
+
 </style>

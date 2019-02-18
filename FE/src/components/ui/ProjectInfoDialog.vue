@@ -61,7 +61,8 @@
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions v-if="!edit" style="position: absolute;">
                                         <v-spacer></v-spacer>
-                                        <v-btn color="primary" @click="edit=true">编辑</v-btn>
+                                        <v-btn @click="dialog=false">关闭</v-btn>
+                                        <v-btn color="primary" v-if="auth.checkPermission('project-management', identity)" @click="edit=true">编辑</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>
                                 </v-fade-transition>
@@ -83,11 +84,14 @@
 </template>
 <script>
 import config from '../../assets/js/Config'
+import auth from '../../assets/js/Auth'
+
 export default {
     name: 'ProjectInfoDialog',
     props: ['open', 'project'],
     data() {
         return {
+            auth,
             config,
             edit: false,
             saving: false,
@@ -111,6 +115,13 @@ export default {
             get() { return this.$props.open },
             set(v) {
                 this.$emit('close')
+            }
+        },
+        identity() {
+            if (this.$store.state.identity != null) {
+                return this.$store.state.identity
+            } else {
+                return JSON.parse(localStorage.getItem("Identity"))
             }
         }
     },

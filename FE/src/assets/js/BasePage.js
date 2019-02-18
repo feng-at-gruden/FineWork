@@ -52,6 +52,18 @@ export default {
 	    		this.$store.commit('updateSelectedPhase', v)
 	    		this.eventBus.$emit('selectedPhaseChanged',v)
         	}
+        },
+        identity: {
+            get() {
+                if (this.$store.state.identity != null) {
+                    return this.$store.state.identity
+                } else {
+                    return JSON.parse(localStorage.getItem("Identity"))
+                }
+            },
+            set(v) {
+                this.$store.commit('userLogin', v)
+            }
         }
 	},
 	watch: {

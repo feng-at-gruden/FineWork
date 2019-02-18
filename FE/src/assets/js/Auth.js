@@ -41,5 +41,19 @@ export default {
         }else{                
 			return false
         }
+	},
+	checkPermission(permission, identity){
+		if(!permission || permission=='')
+			return true
+		if(identity.Permissions){
+			for(var i=0; i<identity.Permissions.length;i++){
+				if(identity.Permissions[i].indexOf(permission)>=0){
+					return true
+				}
+			}
+			return false
+		}else{
+			return false
+		}
 	}
 }

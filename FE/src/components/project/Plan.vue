@@ -76,7 +76,7 @@ export default {
                 case '时间轴':
                     this.openProjectTimeline = true
                     break
-                case '计划调整':
+                case '阶段调整':
                     this.loadRawPlan()
                     this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行计划调整。', 'info')
                     this.drawer = false

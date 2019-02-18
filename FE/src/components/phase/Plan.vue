@@ -66,6 +66,9 @@ export default {
     watch: {
         selectedOptionMenu(v) {
             switch (v.text) {
+                case '阶段统计':
+                    //TODO
+                    break
                 case '计划调整':
                     this.loadRawPlan()
                     this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行任务编辑。', 'info')
