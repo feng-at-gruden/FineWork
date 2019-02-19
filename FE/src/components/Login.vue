@@ -57,11 +57,18 @@ import BasePage from '../assets/js/BasePage'
 //单数反转
 //wget --no-cookie --no-check-certificate
 const WALLPAPERS = [
+'https://cn.bing.com/th?id=OHR.springfestival_ZH-CN6995564658_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.KomondorKennel_ZH-CN6009722858_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',	//egale
 'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',	//bird
 'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UpHellyAa_EN-CN4575576413_1920x1080.jpg',
+'https://cn.bing.com/sa/simg/hpb/NorthMale_EN-US8782628354_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.GBBC_ZH-CN4481989355_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.LoisachKochelsee_ZH-CN5859866695_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.Punakaiki_ZH-CN6944508336_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.lantern19_ZH-CN7846752344_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/HolocaustMemorial_EN-CN3092493021_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/KukeriCostume_EN-CN6866832286_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BodegasYsios_EN-CN6930432309_1920x1080.jpg',
@@ -211,7 +218,7 @@ body {
 	-o-transform:rotateY(180deg); 
 }
 .wallpaper1 {
-	background: url('https://cn.bing.com/az/hprichbg/rb/UFOMuseum_EN-CN3265083079_1920x1080.jpg');
+	background: url('https://cn.bing.com/th?id=OHR.lantern19_ZH-CN7846752344_1920x1080.jpg');
 	position: absolute;
 	top: 0px;
 	bottom: 0px;

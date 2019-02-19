@@ -43,12 +43,12 @@
             </v-tabs>
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td class="text-no-wrap" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed">已逾期</span></td>
+                    <td class="text-no-wrap" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed && props.item.status!=config.TaskStatus[3]">已逾期</span></td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_start }}</td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_end }}</td>
-                    <td :class="[{'task-exceed': props.item.exceed}, 'text-xs-center']">{{ props.item.status }}</td>
+                    <td :class="[{'task-exceed': props.item.exceed&&props.item.status!=config.TaskStatus[3]}, 'text-xs-center']">{{ props.item.status }}</td>
                     <td class="text-xs-center">
                         <v-progress-linear color="success" height="5" :value="util.accMul(props.item.progress,100)" style="width: 65%"></v-progress-linear><span class="progress-value">{{util.accMul(props.item.progress,100)}}%</span>
                     </td>

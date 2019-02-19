@@ -16,7 +16,7 @@
                     <v-subheader>登录信息</v-subheader>
                     <v-list-tile avatar>
                         <v-list-tile-content>
-                            <v-list-tile-title>登录帐号: <b style="text-decoration: underline;">{{identityCopy.UserName}}</b> <v-chip color="primary" small outline v-for="p in permissions" class="permission-chip">{{p.text}}</v-chip>
+                            <v-list-tile-title>登录帐号: <b style="text-decoration: underline;">{{identityCopy.UserName}}</b> <v-chip color="primary" small outline v-for="(p, index) in permissions" :key="index" class="permission-chip">{{p.text}}</v-chip>
                             </v-list-tile-title>
                             <v-list-tile-sub-title>用户登录帐号不可更改</v-list-tile-sub-title>
                         </v-list-tile-content>

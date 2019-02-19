@@ -25,7 +25,7 @@ export default {
         return {
             projects: [],
             filteredProjects:[],
-            filter:[],
+            filter:['在建中'],
             displayProjects:[],
             pageSize: 6,
             pageCount:0,

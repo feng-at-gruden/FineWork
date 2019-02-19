@@ -10,6 +10,7 @@
 				<v-checkbox v-for="item in config.ProjectStatus" v-model="filter" :label="item.text" :value="item.value" :key="item.value" @change="filterChange" class="text-truncate"></v-checkbox>
 			</v-layout>
 		</v-flex>
+		<!--
 		<v-flex lg2 md4 sm12 xs12 offset-lg3>
 			<v-layout justify-end align-center class="project-layout-container">
 				<v-btn-toggle v-model="displayLayout" mandatory>
@@ -25,6 +26,7 @@
 				</v-btn-toggle>
 			</v-layout>
 		</v-flex>
+		-->
 	</v-layout>
 </template>
 <script>
@@ -35,7 +37,7 @@ export default {
 	data() {
 		return {
 			config,
-			filter: []
+			filter: ['在建中']
 		}
 	},
 	computed:{

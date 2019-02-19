@@ -142,7 +142,7 @@ const phaseReadonlyColumns = [
 			} else if (obj.progress == 0) {
 				str = "未开工"
 			} else {
-				str = obj.progress * 100 + "%"
+				str = accMul(obj.progress, 100) + "%"
 			}
 			return "<div class=\"gantt-content-left-status " + ((obj.exceed || obj.delayed) ? 'project-delayed' : '') + '\">' + str + "</div>"
 		}
@@ -174,6 +174,14 @@ const phaseEditingColumns = [
 ];
 
 
+function accMul(arg1, arg2) {
+    var m = 0,
+        s1 = arg1.toString(),
+        s2 = arg2.toString();
+    try { m += s1.split(".")[1].length } catch (e) {}
+    try { m += s2.split(".")[1].length } catch (e) {}
+    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+}
 
 function limitMoveLeft(task, limit) {
 	var dur = task.end_date - task.start_date;
