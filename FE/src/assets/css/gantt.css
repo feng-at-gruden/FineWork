@@ -59,13 +59,13 @@
 }
 
 /*计算的*/
-.exceed {
+.delayed {
     border: solid 0px #944b0d;
     background: #f3550a;
     opacity: 0.75;
 }
 
-.delayed {
+.exceed {
     border: solid 0px #db2536;
     background: #f11b30;
     opacity: 0.75;

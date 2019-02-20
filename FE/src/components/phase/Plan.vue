@@ -73,7 +73,7 @@ export default {
     watch: {
         selectedOptionMenu(v) {
             switch (v.text) {
-                case '显示过滤':
+                case '显示选项':
                     this.openTaskFilter = true
                     break
                 case '阶段统计':
