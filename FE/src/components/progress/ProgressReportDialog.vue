@@ -92,6 +92,7 @@
 import config from '../../assets/js/Config'
 import util from '../../assets/js/Util'
 const dateToStr = gantt.date.date_to_str("%Y-%m-%d")
+const strToDate = gantt.date.str_to_date("%Y-%m-%d")
 export default {
     name: 'ProgressReportDialog',
     props: ['task', 'open'],
@@ -180,6 +181,11 @@ export default {
             if (!this.$refs.taskProgressForm.validate()) {
                 return
             }
+            //Tricky 当天开工/当天完工
+            if(this.actualStartDate==this.signDate && this.myTask.status==this.config.TaskStatus[3]){
+                var d = new Date(strToDate(this.actualStartDate).getTime() + 1000 * 60 * 60 * 24 * 1)
+                this.signDate = dateToStr(d)
+            }
             var request = {
                 created_date: this.signDate,
                 start_date: this.actualStartDate,
@@ -231,14 +237,19 @@ export default {
             if (v) {
                 if (this.myTask)
                     this.taskCopy = this.util.objCopy(this.myTask)
-                this.signDate = dateToStr(new Date())
-                if (this.myTask.actual_start)
-                {
+                if(!this.myTask.last_update || this.myTask.last_update==''){
+                    this.signDate = dateToStr(new Date())
+                }else{
+                    var d = new Date(strToDate(this.myTask.last_update).getTime() + 1000 * 60 * 60 * 24 * 1)
+                    this.signDate = dateToStr(d)
+                }
+                if (this.myTask.actual_start){
                     this.actualStartDate = this.myTask.actual_start.split('T')[0]
                     this.actualEndDate = this.myTask.actual_end.split('T')[0]
                 }
-                else
+                else{
                     this.actualStartDate = dateToStr(new Date())
+                }
                 this.worklog = ''
                 this.oldProgress = -1
                 try{

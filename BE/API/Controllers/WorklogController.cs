@@ -111,9 +111,13 @@ namespace API.Controllers
                     all += duration;
                     done += duration * progress;
                 }
+
                 task.ParentTask.Progress = Math.Round(done / all, 2);
                 if (task.ParentTask.Status == Configurations.TASK_STATUS[0] && done > 0)
                     task.ParentTask.Status = Configurations.TASK_STATUS[1];
+
+                if (task.ParentTask.Progress >= 1)
+                    task.ParentTask.Status = Configurations.TASK_STATUS[3];
 
                 if (task.ParentTask.ParentTask != null)
                     refreshParentsProgress(task.ParentTask);

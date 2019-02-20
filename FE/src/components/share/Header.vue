@@ -8,6 +8,8 @@
             </v-fade-transition>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+
+        <!--Search-->
         <v-flex xs3 sm3 md2>
             <v-layout justify-end>
                 <v-slide-x-reverse-transition>
@@ -30,6 +32,7 @@
         <v-btn icon @click="handleSearchIconClick" id="hearder-search-btn">
             <v-icon>search</v-icon>
         </v-btn>
+
         <!--Option Menu-->
         <v-menu bottom offset-y transition="slide-y-transition" v-if="showOptionMenu" nudge-bottom="15" offset-x nudge-left="80" id="optionMenu">
             <v-btn slot="activator" icon>
@@ -69,7 +72,8 @@
                 </template>
             </v-list>
         </v-menu>
-
+        
+        <!--Account Setting-->
         <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15" offset-x nudge-left="80">
             <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>

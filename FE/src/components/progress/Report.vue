@@ -85,7 +85,7 @@ export default {
                     value: 'text'
                 },
                 { text: '计划工期', value: 'start_date', align: 'center' },
-                { text: '工时', value: 'duration', align: 'center' },
+                { text: '计划工时', value: 'duration', align: 'center' },
                 { text: '开工日期', value: 'actual_start', align: 'center' },
                 { text: '完工日期', value: 'actual_end', align: 'center' },
                 { text: '状态', value: 'status', align: 'center' },

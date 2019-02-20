@@ -41,8 +41,8 @@ export default {
             snackbarColor: '',
             timeline: [],
             plan: { data: [], links: [] },
-            rawPlan: { data: [], links: [] },
-            taskGanttFilter: ['原计划', '未开工', '施工中', '已停工', '已完工'],
+            noFilteredPlan: { data: [], links: [] },
+            taskGanttFilter: [],
             newTask: {
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
@@ -68,12 +68,12 @@ export default {
             var dateToStr = gantt.date.date_to_str("%M%d日")
             var strToDate = gantt.date.str_to_date("%d-%m-%Y")
             return this.plan.name + '(' + dateToStr(strToDate(this.plan.start_date)) + " - " + dateToStr(strToDate(this.plan.end_date)) + ')'
-        }
+        },
     },
     watch: {
         selectedOptionMenu(v) {
             switch (v.text) {
-                case '显示类别':
+                case '显示过滤':
                     this.openTaskFilter = true
                     break
                 case '阶段统计':
@@ -107,7 +107,7 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/DetailPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
-                this.rawPlan = this.refineTaskDate(json)
+                this.noFilteredPlan = this.refineTaskDate(json)
                 this.updateFilteredTask()
                 this.subTitle = this.displaySubTitle
                 this.loading = false
@@ -124,8 +124,8 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
-                this.plan = this.refineTaskDate(json)
-                //this.updateFilteredTask()
+                this.noFilteredPlan = this.refineTaskDate(json)
+                this.updateFilteredTask()
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
@@ -320,15 +320,27 @@ export default {
             })
         },
         handleTaskFilterUpdate(filter) {
+            localStorage.setItem("TaskFilter", JSON.stringify(filter))
             this.taskGanttFilter = filter
             this.updateFilteredTask()
         },
         updateFilteredTask() {
-            this.plan = this.rawPlan
-            //console.log(this.taskGanttFilter)
-            this.plan.data = this.rawPlan.data.filter(t=> this.util.stringInArray(t.status, this.taskGanttFilter))
-            console.log(this.plan)
-            //TODO
+            var p = Object.assign({}, this.noFilteredPlan)
+            p.data = p.data.filter(t=> this.util.stringInArray(t.status, this.taskGanttFilter))
+            //Check parent if parent node is added
+            var pp = Object.assign({}, p)
+            for(var i=0; i<p.data.length;i++){
+                this.addRecursiveParentNode(p.data[i], pp)
+            }
+            this.plan = pp
+        },
+        addRecursiveParentNode(node, originTree){
+            if(node.parent>0 && originTree.data.filter(t=>t.id==node.parent).length==0)
+            {
+                var pnode = this.noFilteredPlan.data.filter(t=>t.id==node.parent)[0]
+                originTree.data.push(pnode)
+                this.addRecursiveParentNode(pnode, originTree)
+            }
         },
         refineTaskDate(json) {
             var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
@@ -369,6 +381,7 @@ export default {
     created() {
         this.loading = true
         this.loadDetailedPlan()
+        this.taskGanttFilter = localStorage.getItem("TaskFilter")?JSON.parse(localStorage.getItem("TaskFilter")):this.config.TaskStatus
     },
     beforeDestroy() {
         this.editPlan = false

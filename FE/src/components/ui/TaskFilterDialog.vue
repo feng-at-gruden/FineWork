@@ -4,32 +4,24 @@
 			<v-list>
 				<v-list-tile avatar>
 					<v-list-tile-avatar>
-						<img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
+						<v-icon big>filter_none</v-icon>
                         </v-list-tile-avatar>
 						<v-list-tile-content>
-							<v-list-tile-title>John Leider</v-list-tile-title>
-							<v-list-tile-sub-title>Founder of Vuetify.js</v-list-tile-sub-title>
+							<v-list-tile-title>任务过滤器</v-list-tile-title>
+							<v-list-tile-sub-title>选择需要显示的任务类型</v-list-tile-sub-title>
 						</v-list-tile-content>
 						<v-list-tile-action>
-							<v-btn class="red--text" icon @click="">
-								<v-icon>favorite</v-icon>
-							</v-btn>
+								<v-icon small>done_all</v-icon>
 						</v-list-tile-action>
 				</v-list-tile>
 			</v-list>
 			<v-divider></v-divider>
 			<v-list>
-				<v-list-tile>
+				<v-list-tile v-for="(item, index) in config.TaskStatus" :key="index">
 					<v-list-tile-action>
-						<v-switch v-model="planGanttFilter.plan" color="purple"></v-switch>
+						<v-switch v-model="myFilter" :color="filterColor[index]" :value="item"></v-switch>
 					</v-list-tile-action>
-					<v-list-tile-title>Enable messages</v-list-tile-title>
-				</v-list-tile>
-				<v-list-tile>
-					<v-list-tile-action>
-						<v-switch v-model="planGanttFilter.plan" color="purple"></v-switch>
-					</v-list-tile-action>
-					<v-list-tile-title>Enable hints</v-list-tile-title>
+					<v-list-tile-title>{{item}}</v-list-tile-title>
 				</v-list-tile>
 			</v-list>
 			<v-card-actions>
@@ -41,12 +33,15 @@
 	</v-menu>
 </template>
 <script>
+import config from '../../assets/js/Config'
 export default {
 	name: 'TaskFilterDialog',
 	props: ['open'],
 	data() {
 		return {
-			planGanttFilter: [],
+			config,
+			myFilter:[],
+			filterColor:['#9c9c9c','#3db9d3','#b319b3','#3c9445',]
 		}
 	},
 	computed: {
@@ -57,13 +52,16 @@ export default {
                     this.$emit('close')
                 }
             }
-        }
+        },
     },
 	methods: {
 		handleSaveClick(){
 			this.dialog = false
-			this.$emit('save', this.planGanttFilter)
+			this.$emit('save', this.myFilter)
 		}
+	},
+	mounted(){
+		this.myFilter = localStorage.getItem("TaskFilter")?JSON.parse(localStorage.getItem("TaskFilter")):this.config.TaskStatus
 	}
 }
 
