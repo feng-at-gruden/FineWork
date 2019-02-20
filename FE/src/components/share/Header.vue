@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar color="primary" dark app fixed clipped-left>
+    <v-toolbar color="primary" dark app fixed clipped-left id="header">
         <v-toolbar-side-icon @click.stop="openDrawer"></v-toolbar-side-icon>
         <v-toolbar-title>
             {{projectName}} {{title}}
@@ -27,10 +27,11 @@
                 </v-slide-x-reverse-transition>
             </v-layout>
         </v-flex>
-        <v-btn icon @click="handleSearchIconClick">
+        <v-btn icon @click="handleSearchIconClick" id="hearder-search-btn">
             <v-icon>search</v-icon>
         </v-btn>
-        <v-menu bottom offset-y transition="slide-y-transition" v-if="showOptionMenu" nudge-bottom="15" offset-x nudge-left="110">
+        <!--Option Menu-->
+        <v-menu bottom offset-y transition="slide-y-transition" v-if="showOptionMenu" nudge-bottom="15" offset-x nudge-left="80" id="optionMenu">
             <v-btn slot="activator" icon>
                 <v-icon>notes</v-icon>
             </v-btn>
@@ -68,7 +69,8 @@
                 </template>
             </v-list>
         </v-menu>
-        <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15" offset-x nudge-left="110">
+
+        <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15" offset-x nudge-left="80">
             <v-btn slot="activator" icon>
                 <v-icon>more_vert</v-icon>
             </v-btn>

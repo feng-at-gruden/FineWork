@@ -57,7 +57,7 @@ import BasePage from '../assets/js/BasePage'
 //单数反转
 //wget --no-cookie --no-check-certificate
 const WALLPAPERS = [
-'https://cn.bing.com/th?id=OHR.springfestival_ZH-CN6995564658_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.RavenWolf_ZH-CN4544068603_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.KomondorKennel_ZH-CN6009722858_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',	//egale
 'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',

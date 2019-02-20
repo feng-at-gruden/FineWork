@@ -8,6 +8,9 @@
         <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'任务计划'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
         <!--删除阶段确认对话框-->
         <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
+        <!--甘特图显示设置框-->
+        <TaskFilterDialog :open="openTaskFilter" @close="openTaskFilter = false" @save="handleTaskFilterUpdate"></TaskFilterDialog>
+        <!--消息提示框-->
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
             <v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -20,22 +23,26 @@ import PhasePlanGantt from '../gantt/PhasePlanGantt'
 import CreateTaskDialog from '../ui/CreateTaskDialog'
 import EditTaskDialog from '../ui/EditTaskDialog'
 import DeletePhaseDialog from '../ui/DeletePhaseDialog'
+import TaskFilterDialog from '../ui/TaskFilterDialog'
+
 
 export default {
     extends: BasePage,
     name: 'PhasePlan',
-    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog },
+    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog },
     data() {
         return {
             openCreateTaskDialog: false,
             openEditTaskDialog: false,
             openDeletePhaseDialog: false,
+            openTaskFilter: false,
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
             timeline: [],
             plan: { data: [], links: [] },
-            detail: {},
+            rawPlan: { data: [], links: [] },
+            taskGanttFilter: ['原计划', '未开工', '施工中', '已停工', '已完工'],
             newTask: {
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
@@ -57,7 +64,7 @@ export default {
         phaseId() {
             return this.$route.params.id
         },
-        displaySubTitle(){
+        displaySubTitle() {
             var dateToStr = gantt.date.date_to_str("%M%d日")
             var strToDate = gantt.date.str_to_date("%d-%m-%Y")
             return this.plan.name + '(' + dateToStr(strToDate(this.plan.start_date)) + " - " + dateToStr(strToDate(this.plan.end_date)) + ')'
@@ -66,6 +73,9 @@ export default {
     watch: {
         selectedOptionMenu(v) {
             switch (v.text) {
+                case '显示类别':
+                    this.openTaskFilter = true
+                    break
                 case '阶段统计':
                     //TODO
                     break
@@ -97,11 +107,12 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/DetailPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
-                this.plan = this.refineTaskDate(json)
+                this.rawPlan = this.refineTaskDate(json)
+                this.updateFilteredTask()
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
-                if(!this.selectedProject && json.projectId){
+                if (!this.selectedProject && json.projectId) {
                     this.selectedProject = parseInt(json.projectId)
                 }
             }, function(res) {
@@ -114,10 +125,11 @@ export default {
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.plan = this.refineTaskDate(json)
+                //this.updateFilteredTask()
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)
-                if(!this.selectedProject && json.projectId)
+                if (!this.selectedProject && json.projectId)
                     this.selectedProject = parseInt(json.projectId)
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
@@ -145,12 +157,12 @@ export default {
             if (pid > 0) {
                 var pTask = this.plan.data.filter(t => t.id == pid)[0]
                 this.newTask.start_date = dateToStr(pTask.start_date)
-                this.newTask.end_date = dateToStr(new Date(strToDate(this.newTask.start_date).getTime() + 1000*60*60*24*1))
+                this.newTask.end_date = dateToStr(new Date(strToDate(this.newTask.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(pTask.end_date)
             } else {
                 this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
-                this.newTask.end_date = dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000*60*60*24*1))
+                this.newTask.end_date = dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(strToDate(this.plan.end_date))
             }
@@ -205,7 +217,7 @@ export default {
         },
         handleOnGanttTaskDblClick(id) {
             //进入阶段详情页
-            
+
         },
         handleOnCreateTaskSave(task) {
             //新建任务窗口SAVE按钮点击
@@ -213,7 +225,7 @@ export default {
 
             //Call API, and get task ID
             this.loading = true
-            if(task.start_date==task.end_date && task.duration==0)
+            if (task.start_date == task.end_date && task.duration == 0)
                 task.duration = 1
             this.$http.post(this.config.API_URL + '/Task', task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
@@ -252,7 +264,7 @@ export default {
             //任务编辑窗口SAVE按钮点击
             //CAlL API
             this.loading = true
-            if(task.start_date==task.end_date && task.duration==0)
+            if (task.start_date == task.end_date && task.duration == 0)
                 task.duration = 1
             this.$http.put(this.config.API_URL + '/Task/' + task.id, task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
@@ -307,7 +319,18 @@ export default {
                 }
             })
         },
-        refineTaskDate(json){
+        handleTaskFilterUpdate(filter) {
+            this.taskGanttFilter = filter
+            this.updateFilteredTask()
+        },
+        updateFilteredTask() {
+            this.plan = this.rawPlan
+            //console.log(this.taskGanttFilter)
+            this.plan.data = this.rawPlan.data.filter(t=> this.util.stringInArray(t.status, this.taskGanttFilter))
+            console.log(this.plan)
+            //TODO
+        },
+        refineTaskDate(json) {
             var dateToStr = gantt.date.date_to_str("%d-%m-%Y")
             //var denseDateFmt = gantt.date.date_to_str("%Y/%m/%d")
             //var denseDateFmtS = gantt.date.date_to_str("%m/%d")
@@ -315,8 +338,8 @@ export default {
             if (json.data) {
                 //日期格式转换
                 for (var i = 0; i < json.data.length; i++) {
-                    json.data[i].start_date = json.data[i].start_date?dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))):''
-                    json.data[i].end_date = json.data[i].end_date?dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))):''
+                    json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : ''
+                    json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : ''
                     //json.data[i].actual_start = json.data[i].actual_start?denseDateFmt(json.data[i].actual_start):''
                     //json.data[i].actual_end = json.data[i].actual_end?denseDateFmtS(json.data[i].actual_end):''
                 }
@@ -350,6 +373,7 @@ export default {
     beforeDestroy() {
         this.editPlan = false
         this.plan = { data: [], links: [] }
+        this.rawPlan = { data: [], links: [] }
         this.selectedPhase = 0
     }
 }

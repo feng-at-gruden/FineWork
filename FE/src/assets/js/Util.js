@@ -57,6 +57,14 @@ default {
         return newobj;
     },
 
+    stringInArray(str, array) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] == str)
+                return true
+        }
+        return false
+    },
+
     /**************************************时间格式化处理************************************/
     dateFormat(fmt, date) {
         var o = {

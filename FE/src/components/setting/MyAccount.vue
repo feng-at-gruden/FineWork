@@ -83,7 +83,7 @@ export default {
         permissions() {
             var re = []
             if (this.identity.Permissions && this.identity.Permissions.length > 0) {
-                re = this.config.UserPermissions.filter(t => this.stringInArray(t.value, this.identity.Permissions))
+                re = this.config.UserPermissions.filter(t => this.util.stringInArray(t.value, this.identity.Permissions))
             }
             return re
         }
@@ -131,13 +131,6 @@ export default {
             this.$vuetify.theme = theme
             localStorage.setItem("Theme", JSON.stringify(theme))
         },
-        stringInArray(str, array) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i] == str)
-                    return true
-            }
-            return false
-        }
     },
     mounted() {
         this.identityCopy = this.util.objCopy(this.identity)

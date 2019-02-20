@@ -131,9 +131,12 @@ namespace API.Controllers
                 all += duration;
                 done += duration * progress;
             }
-            phase.Progress = Math.Round(done / all, 2);
+            
             if (phase.Status == Configurations.TASK_STATUS[0] && done > 0)
                 phase.Status = Configurations.TASK_STATUS[1];
+            phase.Progress = Math.Round(done / all, 2);
+            if(phase.Progress>=1)
+                phase.Status = Configurations.TASK_STATUS[3];
         }
 
     }
