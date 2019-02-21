@@ -84,6 +84,11 @@ export default {
 					this.$emit('onTaskDblClick', id)
 					return false
 				}))
+				this.ganttEventIds.push(myGantt.attachEvent('onOpenTaskWorkLog', (id, event) => {
+					//双击打开工作日志/进度更新对话框
+					this.$emit('onOpenTaskWorkLog', id)
+					return false
+				}))
 			}
 		},
 	},

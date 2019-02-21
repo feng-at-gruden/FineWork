@@ -8,7 +8,7 @@
                 <v-toolbar-title>个人设置</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                    <v-btn dark flat @click="handleSave" :loading="loading">保存</v-btn>
+                    <v-btn dark flat large @click="handleSave" :loading="loading">保存</v-btn>
                 </v-toolbar-items>
             </v-toolbar>
             <v-form lazy-validation ref="editAccountForm">
@@ -51,7 +51,7 @@
                     <v-list-tile-content>
                         <v-list-tile-title>主题颜色:</v-list-tile-title>
                         <div>
-                            <div v-for="item in config.Themes" @click="selectTheme(item)" class="theme-block" :style="themeStyle(item)"></div>
+                            <div v-for="(item, index) in config.Themes" @click="selectTheme(index)" class="theme-block" :style="themeStyle(item)"></div>
                         </div>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -82,7 +82,7 @@ export default {
         },
         permissions() {
             var re = []
-            if (this.identity.Permissions && this.identity.Permissions.length > 0) {
+            if (this.identity && this.identity.Permissions && this.identity.Permissions.length > 0) {
                 re = this.config.UserPermissions.filter(t => this.util.stringInArray(t.value, this.identity.Permissions))
             }
             return re
@@ -127,9 +127,9 @@ export default {
                 }
             }
         },
-        selectTheme(theme) {
-            this.$vuetify.theme = theme
-            localStorage.setItem("Theme", JSON.stringify(theme))
+        selectTheme(themeIndex) {
+            this.$vuetify.theme = this.config.Themes[themeIndex]
+            localStorage.setItem("Theme", themeIndex)
         },
     },
     mounted() {

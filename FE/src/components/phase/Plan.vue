@@ -1,7 +1,7 @@
 <template>
     <v-layout justify-center fill-height align-center>
         <!--阶段计划甘特图-->
-        <PhasePlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDblClick"></PhasePlanGantt>
+        <PhasePlanGantt :plan="plan" :editable="editPlan" :deleteId="taskToDelete" @onBeforeCreateTask="handleOnGanttBeforeCreateTask" @onTaskUpdate="handleOnGanttTaskUpdate" @onOpenEditBox="handleOnGanttOpenEditBox" @onTaskDblClick="handleOnGanttTaskDblClick" @onOpenTaskWorkLog="handleOpenTaskWorkLog"></PhasePlanGantt>
         <!--添加计划对话框-->
         <CreateTaskDialog :newTask="newTask" :open="openCreateTaskDialog" :unit="'任务计划'" @close="openCreateTaskDialog = false" @save="handleOnCreateTaskSave"></CreateTaskDialog>
         <!--编辑计划对话框-->
@@ -10,6 +10,7 @@
         <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
         <!--甘特图显示设置框-->
         <TaskFilterDialog :open="openTaskFilter" @close="openTaskFilter = false" @save="handleTaskFilterUpdate"></TaskFilterDialog>
+        <WorklogCalender :open="openWorklogCalender" @close="openWorklogCalender=false"></WorklogCalender>
         <!--消息提示框-->
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
@@ -24,18 +25,19 @@ import CreateTaskDialog from '../ui/CreateTaskDialog'
 import EditTaskDialog from '../ui/EditTaskDialog'
 import DeletePhaseDialog from '../ui/DeletePhaseDialog'
 import TaskFilterDialog from '../ui/TaskFilterDialog'
-
+import WorklogCalender from '../ui/WorklogCalender'
 
 export default {
     extends: BasePage,
     name: 'PhasePlan',
-    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog },
+    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog, WorklogCalender },
     data() {
         return {
             openCreateTaskDialog: false,
             openEditTaskDialog: false,
             openDeletePhaseDialog: false,
             openTaskFilter: false,
+            openWorklogCalender: false,
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
@@ -115,6 +117,20 @@ export default {
                 if (!this.selectedProject && json.projectId) {
                     this.selectedProject = parseInt(json.projectId)
                 }
+                //Check
+                var phases = this.$store.state.projectPhases
+                if(!phases || phases.length==0){
+                    this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.selectedProject).then(function(res) {
+                        var json = JSON.parse(res.bodyText)
+                        var phases = [];
+                        for (var i = 0; i < json.data.length; i++) {
+                            phases.push({ Name: json.data[i].text, Id: json.data[i].id })
+                        }
+                        this.$store.commit('updateProjectPhases', phases)
+                        
+                    })
+                }
+                
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -216,8 +232,12 @@ export default {
             });
         },
         handleOnGanttTaskDblClick(id) {
-            //进入阶段详情页
-
+            //进入工作日志浏览页
+            if(this.util.IsPC())
+                this.openTaskWorkLog(id)
+        },
+        handleOpenTaskWorkLog(id) {
+            this.openTaskWorkLog(id)
         },
         handleOnCreateTaskSave(task) {
             //新建任务窗口SAVE按钮点击
@@ -323,6 +343,13 @@ export default {
             localStorage.setItem("TaskFilter", JSON.stringify(filter))
             this.taskGanttFilter = filter
             this.updateFilteredTask()
+        },
+        openTaskWorkLog(id) {
+            var t = this.plan.data.filter(t=>t.id==id)[0]
+            if(t.type!='project'){
+                console.log('openTaskWorkLog', id)
+                this.openWorklogCalender = true
+            }
         },
         updateFilteredTask() {
             var p = Object.assign({}, this.noFilteredPlan)

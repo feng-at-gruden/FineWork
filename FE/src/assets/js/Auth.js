@@ -32,11 +32,12 @@ export default {
 			failedCallback(JSON.parse(res.bodyText).Message)			
 		});
 	},
-	checkIsLogin(state) {        
+	checkIsLogin(state) {
+		var identity = state.identity    
+		if(identity)
+			return true
         var token = localStorage.getItem("Token")
         if(token){
-            // var identity = {username:'', token }
-            // window.app.$store.commit('userLogin', identity) 
             return true
         }else{                
 			return false
@@ -45,7 +46,7 @@ export default {
 	checkPermission(permission, identity){
 		if(!permission || permission=='')
 			return true
-		if(identity.Permissions){
+		if(identity && identity.Permissions){
 			for(var i=0; i<identity.Permissions.length;i++){
 				if(identity.Permissions[i].indexOf(permission)>=0){
 					return true

@@ -91,7 +91,15 @@ const projectEditingColumns = [
 
 
 const phaseReadonlyColumns = [
-	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*" },
+	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",
+		template(obj) {
+			if(obj.type!='project' && obj.status!='未开工'){
+				return obj.text + '<i class="task-report-icon material-icons" onclick="javascript:gantt.callEvent(\'onOpenTaskWorkLog\', ['+obj.id+']);">open_in_new</i>'
+			}else{
+				return obj.text
+			}
+		}
+	},
 	{
 		name: "start_date",
 		label: "施工周期",

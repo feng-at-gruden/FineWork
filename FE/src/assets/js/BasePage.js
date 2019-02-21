@@ -76,11 +76,12 @@ export default {
 	created() {
 		if (this.$route.meta.requiresAuth) {			
 			if (!this.auth.checkIsLogin(this.$store.state)) {
+				//console.log('created check', this.$route.path)
 				this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
 				return
 			}
 		}
-	},	
+	},
 	beforeDestroy (){
 		this.eventBus.$emit('subTitleChanged','')
 	}

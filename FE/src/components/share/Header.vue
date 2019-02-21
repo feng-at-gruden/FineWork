@@ -8,7 +8,6 @@
             </v-fade-transition>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-
         <!--Search-->
         <v-flex xs3 sm3 md2>
             <v-layout justify-end>
@@ -32,7 +31,6 @@
         <v-btn icon @click="handleSearchIconClick" id="hearder-search-btn">
             <v-icon>search</v-icon>
         </v-btn>
-
         <!--Option Menu-->
         <v-menu bottom offset-y transition="slide-y-transition" v-if="showOptionMenu" nudge-bottom="15" offset-x nudge-left="80" id="optionMenu">
             <v-btn slot="activator" icon>
@@ -72,7 +70,6 @@
                 </template>
             </v-list>
         </v-menu>
-        
         <!--Account Setting-->
         <v-menu bottom offset-y transition="slide-y-transition" nudge-bottom="15" offset-x nudge-left="80">
             <v-btn slot="activator" icon>
@@ -97,7 +94,6 @@
                 </v-list-tile>
             </v-list>
         </v-menu>
-
         <MyAccount :open="showMyAccount" @close="showMyAccount=false"></MyAccount>
     </v-toolbar>
 </template>
@@ -109,7 +105,7 @@ export default {
     name: 'Header',
     extends: BasePage,
     props: ['subHeader'],
-    components:{MyAccount},
+    components: { MyAccount },
     computed: {
         editing() {
             return this.$store.state.editPlan //TODO add more
@@ -120,18 +116,18 @@ export default {
         allProjects() {
             var result = []
             var all = this.$store.state.allProjects
-            if(all.length){
+            if (all.length) {
                 for (var i = 0; i < this.config.ProjectStatus.length; i++) {
                     var s = this.config.ProjectStatus[i]
-                    if(all.filter(t => t.Status == s.value).length){
+                    if (all.filter(t => t.Status == s.value).length) {
                         result.push({ header: s.text })
                         result = result.concat(all.filter(t => t.Status == s.value))
                         result.push({ divider: true })
                     }
                 }
-                if(result.length)
+                if (result.length)
                     result.pop()
-            }else{
+            } else {
                 // Call Ajax
                 this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {
                     this.$store.commit('updateAllProjects', JSON.parse(res.bodyText))
@@ -177,6 +173,14 @@ export default {
                 this.$router.push('/Project/' + v)
                 //this.project = 0
             }
+        }
+    },
+    mounted() {
+        var allProjects = this.$store.state.allProjects
+        if (!allProjects || allProjects.length == 0) {
+            this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {
+                this.$store.commit('updateAllProjects', JSON.parse(res.bodyText))
+            })
         }
     }
 }
