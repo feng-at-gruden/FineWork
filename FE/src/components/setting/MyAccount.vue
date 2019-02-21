@@ -8,7 +8,7 @@
                 <v-toolbar-title>个人设置</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                    <v-btn dark flat large @click="handleSave" :loading="loading">保存</v-btn>
+                    <v-btn dark flat large @click="handleSave" :loading="loading">保存<v-icon dark class="save-btn">save</v-icon></v-btn>
                 </v-toolbar-items>
             </v-toolbar>
             <v-form lazy-validation ref="editAccountForm">
@@ -163,5 +163,8 @@ export default {
     font-style: italic;
     padding: 0px;
     border-radius:10px;
+}
+.save-btn{
+    margin-left: 5px;
 }
 </style>

@@ -109,6 +109,15 @@ body{
     max-width: 640px;
 }
 
+
+/*worklog calendar*/
+.full-calendar-body .dates .dates-events .events-week .events-day {
+    min-height: 50px;
+}
+.events-day .today {
+    background-color: #fcf8e3 !important;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
   0% { -webkit-transform: rotate(0deg); }

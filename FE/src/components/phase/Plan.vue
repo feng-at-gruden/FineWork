@@ -154,7 +154,7 @@ export default {
         handleOnPhaseDeleted() {
             this.showSnackbar("项目阶段已删除", 'success')
             this.openDeletePhaseDialog = false
-            //TODO, Redirect to Project
+            //Redirect to Project
             setTimeout(() => (this.$router.replace('/Project/' + this.selectedProject)), 2000)
         },
         handleOnGanttBeforeCreateTask(pid) {
@@ -347,7 +347,6 @@ export default {
         openTaskWorkLog(id) {
             var t = this.plan.data.filter(t=>t.id==id)[0]
             if(t.type!='project'){
-                console.log('openTaskWorkLog', id)
                 this.openWorklogCalender = true
             }
         },
