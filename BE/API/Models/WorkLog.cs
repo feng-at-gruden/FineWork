@@ -16,6 +16,7 @@ namespace API.Models
     {
         public int Id { get; set; }
         public string Description { get; set; }
+        public string Comment { get; set; }
         public Nullable<int> TaskId { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }

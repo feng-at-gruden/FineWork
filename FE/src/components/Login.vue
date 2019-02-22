@@ -57,15 +57,15 @@ import BasePage from '../assets/js/BasePage'
 //单数反转
 //wget --no-cookie --no-check-certificate
 const WALLPAPERS = [
-'https://cn.bing.com/th?id=OHR.RavenWolf_ZH-CN4544068603_1920x1080.jpg',
-'https://cn.bing.com/th?id=OHR.KomondorKennel_ZH-CN6009722858_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/PlatteRiver_EN-CN2505500515_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/RavenWolf_EN-CN1564432890_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',	//egale
 'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',	//bird
+'https://cn.bing.com/az/hprichbg/rb/GBBC_EN-CN7021386584_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UpHellyAa_EN-CN4575576413_1920x1080.jpg',
 'https://cn.bing.com/sa/simg/hpb/NorthMale_EN-US8782628354_1920x1080.jpg',
-'https://cn.bing.com/th?id=OHR.GBBC_ZH-CN4481989355_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.LoisachKochelsee_ZH-CN5859866695_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.Punakaiki_ZH-CN6944508336_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.lantern19_ZH-CN7846752344_1920x1080.jpg',
@@ -84,7 +84,9 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/MinnewankaBoathouse_ZH-CN0548323518_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/JapanCrane_EN-CN4265943819_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UFOMuseum_EN-CN3265083079_1920x1080.jpg',
-'https://cn.bing.com/th?id=OHR.BathBach_ZH-CN4601637280_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/BathBach_EN-CN2668793997_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/PingxiSky_EN-CN9973358728_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.KomondorKennel_ZH-CN6009722858_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {

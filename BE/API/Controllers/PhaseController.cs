@@ -224,7 +224,7 @@ namespace API.Controllers
                 else
                 {
                     //已开工
-                    var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate); 
+                    var latestWorkDate = task.Worklog.Max(m => m.CreatedDate); 
                     if (!latestWorkDate.HasValue)
                     {
                         //异常， 任务已经开始，但是没有找到相关工作日志？
@@ -247,7 +247,7 @@ namespace API.Controllers
             if (c.progress == 1 && task.ActualStartDate.HasValue && task.ActualEndDate.HasValue && c.type != "project")
             {
                 //已完工                
-                var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate);
+                var latestWorkDate = task.Worklog.Max(m => m.CreatedDate);
                 if (!latestWorkDate.HasValue)
                 {
                     //异常， 任务已经开始，但是没有找到相关工作日志？
@@ -382,7 +382,7 @@ namespace API.Controllers
                     {
                         //考虑停工后复工的显示方式
                         //Get last day from work log
-                        var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate);
+                        var latestWorkDate = task.Worklog.Max(m => m.CreatedDate);
                         //actualTask.end_date = latestWorkDate;
 			            actualTask.end_date = DateTime.Parse(latestWorkDate.Value.ToShortDateString()).AddDays(1);
                         actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
@@ -397,7 +397,7 @@ namespace API.Controllers
                     {
                         //施工中
                         //Get last day from work log
-                        var latestWorkDate = task.WorkLog.Max(m => m.CreatedDate); //task.ActualStartDate.Value.AddDays(7);
+                        var latestWorkDate = task.Worklog.Max(m => m.CreatedDate); //task.ActualStartDate.Value.AddDays(7);
                         if(!latestWorkDate.HasValue)
                         {
                             //异常， 任务已经开始，但是没有找到相关工作日志？

@@ -11,16 +11,16 @@
         <EntityTypeShape EntityType="FineWorkModel.Project" Width="1.5" PointX="3.25" PointY="6.875" />
         <EntityTypeShape EntityType="FineWorkModel.Task" Width="1.5" PointX="8" PointY="6.875" />
         <EntityTypeShape EntityType="FineWorkModel.User" Width="1.5" PointX="0.875" PointY="6.125" />
-        <EntityTypeShape EntityType="FineWorkModel.WorkLog" Width="1.5" PointX="5.5" PointY="11.375" />
         <AssociationConnector Association="FineWorkModel.User_ibfk_1" />
         <AssociationConnector Association="FineWorkModel.phase_ibfk_1" />
         <AssociationConnector Association="FineWorkModel.phase_ibfk_2" />
         <AssociationConnector Association="FineWorkModel.task_ibfk_1" />
         <AssociationConnector Association="FineWorkModel.Project_ibfk_1" />
         <AssociationConnector Association="FineWorkModel.task_ibfk_2" />
+        <EntityTypeShape EntityType="FineWorkModel.WorkLog" Width="1.5" PointX="10.25" PointY="6.875" />
         <AssociationConnector Association="FineWorkModel.worklog_ibfk_1" />
         <AssociationConnector Association="FineWorkModel.worklog_ibfk_2" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

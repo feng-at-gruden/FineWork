@@ -7,12 +7,10 @@ import Vuex from 'vuex'
 import store from './vuex/store'
 import auth from './assets/js/Auth'
 import Vuetify from 'vuetify'
-import DaySpanVuetify from 'dayspan-vuetify'
 import resource from './resource'
 import config from './assets/js/Config'
 import 'vuetify/dist/vuetify.min.css'
 //import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import 'dayspan-vuetify/dist/lib/dayspan-vuetify.min.css'
 import './assets/css/site.css'
 
 
@@ -22,11 +20,6 @@ var theme = config.Themes[themeIndex]
 Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(Vuetify, { theme })
-Vue.use(DaySpanVuetify, {
-    methods: {
-        getDefaultEventColor: () => '#1976d2'
-    }
-})
 
 Vue.config.productionTip = false
 

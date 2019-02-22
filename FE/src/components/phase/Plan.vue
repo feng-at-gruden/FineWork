@@ -10,7 +10,7 @@
         <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
         <!--甘特图显示设置框-->
         <TaskFilterDialog :open="openTaskFilter" @close="openTaskFilter = false" @save="handleTaskFilterUpdate"></TaskFilterDialog>
-        <WorklogCalender :open="openWorklogCalender" @close="openWorklogCalender=false"></WorklogCalender>
+        <WorklogCalendar :open="openWorklogCalendar" :taskId="worklogTaskId" @close="openWorklogCalendar=false"></WorklogCalendar>
         <!--消息提示框-->
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
@@ -25,19 +25,19 @@ import CreateTaskDialog from '../ui/CreateTaskDialog'
 import EditTaskDialog from '../ui/EditTaskDialog'
 import DeletePhaseDialog from '../ui/DeletePhaseDialog'
 import TaskFilterDialog from '../ui/TaskFilterDialog'
-import WorklogCalender from '../ui/WorklogCalender'
+import WorklogCalendar from '../ui/WorklogCalendar'
 
 export default {
     extends: BasePage,
     name: 'PhasePlan',
-    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog, WorklogCalender },
+    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog, WorklogCalendar },
     data() {
         return {
             openCreateTaskDialog: false,
             openEditTaskDialog: false,
             openDeletePhaseDialog: false,
             openTaskFilter: false,
-            openWorklogCalender: false,
+            openWorklogCalendar: false,
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
@@ -52,6 +52,7 @@ export default {
             },
             taskToEdit: {},
             taskToDelete: 0,
+            worklogTaskId:0,
             mainContainerCSS: 'main-container-gantt',
         }
     },
@@ -347,7 +348,8 @@ export default {
         openTaskWorkLog(id) {
             var t = this.plan.data.filter(t=>t.id==id)[0]
             if(t.type!='project'){
-                this.openWorklogCalender = true
+                this.worklogTaskId = id
+                this.openWorklogCalendar = true
             }
         },
         updateFilteredTask() {

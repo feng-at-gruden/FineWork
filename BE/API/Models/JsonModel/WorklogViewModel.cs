@@ -14,6 +14,7 @@ namespace API.Models.JsonModel
         public string status;
         public Int32 taskId;
         public string description;
+        public string comment;
 
     }
 }

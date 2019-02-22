@@ -10,11 +10,28 @@ using System.Web.Http;
 
 namespace API.Controllers
 {
-    [RoutePrefix("API/Worklog"), ApiAuthorize(Roles=Configurations.Permissions.WORK_REPORT)]
+    [RoutePrefix("API/Worklog"), ApiAuthorize]
     public class WorklogController : BaseController
     {
+        [HttpGet]
+        [Route("List")]
+        public HttpResponseMessage List(int id)
+        {
+            var model = from row in db.Worklog
+                        where row.TaskId == id
+                        orderby row.CreatedDate descending
+                        select new WorklogViewModel
+                        {
+                            id = row.Id,
+                            description = row.Description,
+                            comment = row.Comment,
+                            created_date = row.CreatedDate.Value
+                        };
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
 
         [HttpPost]
+        [ApiAuthorize(Roles = Configurations.Permissions.WORK_REPORT)]
         public HttpResponseMessage Create([FromBody]WorklogViewModel worklog)
         {
             var msg = ValidCreateRequest(worklog);
@@ -41,12 +58,23 @@ namespace API.Controllers
                 }
 
                 //1. 添加worklog db记录
-                var n = db.Worklog.Add(new WorkLog {
-                     CreatedBy = u.Id,
-                     TaskId = worklog.taskId,
-                     CreatedDate = worklog.created_date.HasValue? worklog.created_date.Value.ToLocalTime() : DateTime.Now.ToLocalTime(),
-                     Description = worklog.description,
-                });
+                var cDate = DateTime.Now.ToLocalTime();
+                if (worklog.created_date.HasValue)
+                {
+                    var cd = worklog.created_date.Value.ToLocalTime().ToString("yyyy-MM-dd");
+                    cd = cd + " " + cDate.ToString("HH:mm:ss");
+                    cDate = DateTime.Parse(cd);
+                }
+                var newWorklog = new WorkLog
+                {
+                    CreatedBy = u.Id,
+                    TaskId = worklog.taskId,
+                    CreatedDate = cDate,
+                    Description = worklog.description,
+                };
+                newWorklog.Comment = task.Progress.HasValue ? (task.Progress.Value * 100).ToString("N") : "0";
+                newWorklog.Comment +=  "%#" + (worklog.progress * 100).ToString("N") + "%" + task.Status + "#" + worklog.status;
+                var n = db.Worklog.Add(newWorklog);
 
                 //2. 更新worklog所属task的进度，开工日期，结束日期，状态，
                 if (worklog.status == Configurations.TASK_STATUS[3] && task.Status!= Configurations.TASK_STATUS[3])

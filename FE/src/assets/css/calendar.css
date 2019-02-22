@@ -1,0 +1,99 @@
+.dhx_cal_header,
+.dhx_cal_data,
+.dhx_cal_navline {
+	position: relative;
+}
+
+.dhx_cal_header {
+	top: 0px !important;
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, .1);
+}
+
+.dhx_cal_data {
+	top: 0px !important;
+	min-height: 500px;
+}
+
+.dhx_month_body {
+	height: 75px;
+}
+
+.month_tab,
+.week_tab,
+.day_tab {
+	width: 61px;
+	display: none;
+}
+
+.dhx_cal_event div.dhx_footer,
+.dhx_cal_event.past_event div.dhx_footer,
+.dhx_cal_event.event_english div.dhx_footer,
+.dhx_cal_event.event_math div.dhx_footer,
+.dhx_cal_event.event_science div.dhx_footer {
+	background-color: transparent !important;
+}
+
+.dhx_cal_event .dhx_body {
+	-webkit-transition: opacity 0.1s;
+	transition: opacity 0.1s;
+	opacity: 0.7;
+}
+
+.dhx_cal_event .dhx_title {
+	line-height: 12px;
+}
+
+.dhx_cal_event_line:hover,
+.dhx_cal_event:hover .dhx_body,
+.dhx_cal_event.selected .dhx_body,
+.dhx_cal_event.dhx_cal_select_menu .dhx_body {
+	opacity: 1;
+}
+
+.dhx_cal_event.event_math div,
+.dhx_cal_event_line.event_math {
+	background-color: #FF5722 !important;
+	border-color: #732d16 !important;
+}
+
+.dhx_cal_event.dhx_cal_editor.event_math {
+	background-color: #FF5722 !important;
+}
+
+.dhx_cal_event_clear.event_math {
+	color: #FF5722 !important;
+}
+
+.dhx_cal_event.event_science div,
+.dhx_cal_event_line.event_science {
+	background-color: #0FC4A7 !important;
+	border-color: #698490 !important;
+}
+
+.dhx_cal_event.dhx_cal_editor.event_science {
+	background-color: #0FC4A7 !important;
+}
+
+.dhx_cal_event_clear.event_science {
+	color: #0FC4A7 !important;
+}
+
+.dhx_cal_event.event_english div,
+.dhx_cal_event_line.event_english {
+	background-color: #684f8c !important;
+	border-color: #9575CD !important;
+}
+
+.dhx_cal_event.dhx_cal_editor.event_english {
+	background-color: #684f8c !important;
+}
+
+.dhx_cal_event_clear.event_english {
+	color: #B82594 !important;
+}
+
+
+#worklog-calendar-container {
+	width: 100%;
+	top: 10px;
+}
