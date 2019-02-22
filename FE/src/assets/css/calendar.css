@@ -1,3 +1,8 @@
+#worklog-calendar-container {
+	width: 100%;
+	top: 10px;
+}
+
 .dhx_cal_header,
 .dhx_cal_data,
 .dhx_cal_navline {
@@ -15,7 +20,7 @@
 }
 
 .dhx_month_body {
-	height: 75px;
+	/*height: 78px !important;*/
 }
 
 .month_tab,
@@ -90,10 +95,4 @@
 
 .dhx_cal_event_clear.event_english {
 	color: #B82594 !important;
-}
-
-
-#worklog-calendar-container {
-	width: 100%;
-	top: 10px;
 }

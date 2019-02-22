@@ -285,7 +285,6 @@ export default {
 .my-icon {
     align-items: start;
     margin: 3px 5px 0 0;
-
 }
 
 .task-date {

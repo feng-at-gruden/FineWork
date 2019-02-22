@@ -72,8 +72,8 @@ namespace API.Controllers
                     CreatedDate = cDate,
                     Description = worklog.description,
                 };
-                newWorklog.Comment = task.Progress.HasValue ? (task.Progress.Value * 100).ToString("N") : "0";
-                newWorklog.Comment +=  "%#" + (worklog.progress * 100).ToString("N") + "%" + task.Status + "#" + worklog.status;
+                newWorklog.Comment = task.Progress.HasValue ? (task.Progress.Value * 100).ToString("F0") : "0";
+                newWorklog.Comment += "%#" + (worklog.progress * 100).ToString("F0") + "%" + "#" + task.Status + "#" + worklog.status;
                 var n = db.Worklog.Add(newWorklog);
 
                 //2. 更新worklog所属task的进度，开工日期，结束日期，状态，

@@ -10,7 +10,7 @@
         <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
         <!--甘特图显示设置框-->
         <TaskFilterDialog :open="openTaskFilter" @close="openTaskFilter = false" @save="handleTaskFilterUpdate"></TaskFilterDialog>
-        <WorklogCalendar :open="openWorklogCalendar" :taskId="worklogTaskId" @close="openWorklogCalendar=false"></WorklogCalendar>
+        <WorklogCalendar :open="openWorklogCalendar" :task="worklogTask" @close="openWorklogCalendar=false"></WorklogCalendar>
         <!--消息提示框-->
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
@@ -52,7 +52,7 @@ export default {
             },
             taskToEdit: {},
             taskToDelete: 0,
-            worklogTaskId:0,
+            worklogTask: {},
             mainContainerCSS: 'main-container-gantt',
         }
     },
@@ -120,7 +120,7 @@ export default {
                 }
                 //Check
                 var phases = this.$store.state.projectPhases
-                if(!phases || phases.length==0){
+                if (!phases || phases.length == 0) {
                     this.$http.get(this.config.API_URL + '/Project/RawPlan/?id=' + this.selectedProject).then(function(res) {
                         var json = JSON.parse(res.bodyText)
                         var phases = [];
@@ -128,10 +128,10 @@ export default {
                             phases.push({ Name: json.data[i].text, Id: json.data[i].id })
                         }
                         this.$store.commit('updateProjectPhases', phases)
-                        
+
                     })
                 }
-                
+
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -234,7 +234,7 @@ export default {
         },
         handleOnGanttTaskDblClick(id) {
             //进入工作日志浏览页
-            if(this.util.IsPC())
+            if (this.util.IsPC())
                 this.openTaskWorkLog(id)
         },
         handleOpenTaskWorkLog(id) {
@@ -346,26 +346,25 @@ export default {
             this.updateFilteredTask()
         },
         openTaskWorkLog(id) {
-            var t = this.plan.data.filter(t=>t.id==id)[0]
-            if(t.type!='project'){
-                this.worklogTaskId = id
+            var t = this.plan.data.filter(t => t.id == id)[0]
+            if (t.type != 'project') {
+                this.worklogTask = t
                 this.openWorklogCalendar = true
             }
         },
         updateFilteredTask() {
             var p = Object.assign({}, this.noFilteredPlan)
-            p.data = p.data.filter(t=> this.util.stringInArray(t.status, this.taskGanttFilter))
+            p.data = p.data.filter(t => this.util.stringInArray(t.status, this.taskGanttFilter))
             //Check parent if parent node is added
             var pp = Object.assign({}, p)
-            for(var i=0; i<p.data.length;i++){
+            for (var i = 0; i < p.data.length; i++) {
                 this.addRecursiveParentNode(p.data[i], pp)
             }
             this.plan = pp
         },
-        addRecursiveParentNode(node, originTree){
-            if(node.parent>0 && originTree.data.filter(t=>t.id==node.parent).length==0)
-            {
-                var pnode = this.noFilteredPlan.data.filter(t=>t.id==node.parent)[0]
+        addRecursiveParentNode(node, originTree) {
+            if (node.parent > 0 && originTree.data.filter(t => t.id == node.parent).length == 0) {
+                var pnode = this.noFilteredPlan.data.filter(t => t.id == node.parent)[0]
                 originTree.data.push(pnode)
                 this.addRecursiveParentNode(pnode, originTree)
             }
@@ -409,7 +408,7 @@ export default {
     created() {
         this.loading = true
         this.loadDetailedPlan()
-        this.taskGanttFilter = localStorage.getItem("TaskFilter")?JSON.parse(localStorage.getItem("TaskFilter")):this.config.TaskStatus
+        this.taskGanttFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : this.config.TaskStatus
     },
     beforeDestroy() {
         this.editPlan = false
@@ -427,4 +426,5 @@ export default {
     display: none;
     border: 10px solid #f00;
 }
+
 </style>

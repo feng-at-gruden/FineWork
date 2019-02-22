@@ -182,6 +182,9 @@ export default {
 .drawer-projects-box {
     margin-bottom: 10px;
 }
+.drawer-projects-box .v-input__slot {
+    height: 41px;
+}
 
 .drawer-projects-box .v-input {
     align-items: center
@@ -191,8 +194,9 @@ export default {
     margin-top: 1px;
 }
 
+
 .drawer-phase-box .v-input__slot {
-    height: 40px;
+    height: 41px;
 }
 
 .drawer-phase-box .v-text-field {

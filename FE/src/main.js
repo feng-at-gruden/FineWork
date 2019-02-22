@@ -32,14 +32,17 @@ Vue.http.interceptors.push(function(request, next) {
     var token = localStorage.getItem("Token")
     if (token && request.url.indexOf('Token') < 0) {
         request.headers.set('Content-Type', 'application/json; charset=utf-8')
-        request.headers.set('auth', token)
+        request.headers.set('auth', token + "")
         request.headers.set('Access-Control-Allow-Origin', '*')
     }
     next(function(response) {
         if (response.status === 401 && response.url.indexOf('Token') < 0) {
             localStorage.removeItem("Token")
-            //this.$router.replace('/login' + '?returnUrl=' + this.$route.fullPath)
-            this.$router.replace(this.$route.fullPath)
+            //this.$router.replace('/login' + '?returnUrl=' + this.$route.path)
+            //console.log('token expired', this.$route.fullPath)
+            //this.$router.replace(this.$route.fullPath)
+            this.$router.replace('/login')
+            //TODO to check
         }
     });
 });

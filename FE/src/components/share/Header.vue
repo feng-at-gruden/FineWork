@@ -4,7 +4,7 @@
         <v-toolbar-title>
             {{projectName}} {{title}}
             <v-fade-transition mode="in-out">
-                <v-icon v-if="editing">edit</v-icon>
+                <v-icon v-if="editing">border_color</v-icon>
             </v-fade-transition>
         </v-toolbar-title>
         <v-spacer></v-spacer>
