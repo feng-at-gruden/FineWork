@@ -36,7 +36,7 @@
                             </v-flex>
                         </template>
                         <v-flex xs12 sm5 style="margin-top: -5px;">
-                            <v-icon class="my-icon">update</v-icon><label class="my-label">更新日期:</label><span class="task-date text-no-wrap">{{myTask.last_update}}</span>
+                            <v-icon class="my-icon">update</v-icon><label class="my-label">更新日期:</label><span class="task-date text-no-wrap">{{lastUpdateDate}}</span>
                         </v-flex>
                         <v-flex xs12 sm7 style="margin-top: -5px;">
                             <v-icon class="my-icon">trending_up</v-icon><label class="my-label">施工进度:<span class="task-exceed-small" style="float: right;margin-top: 2px;" v-if="myTask.exceed">(已逾期)</span></label>
@@ -155,6 +155,12 @@ export default {
         planEndDate() {
             if (this.myTask.end_date)
                 return this.myTask.end_date.split('T')[0]
+            else
+                return '-'
+        },
+        lastUpdateDate() {
+            if (this.myTask.last_update)
+                return this.myTask.last_update.split('T')[0]
             else
                 return '-'
         },

@@ -108,7 +108,7 @@ export default {
     components: { MyAccount },
     computed: {
         editing() {
-            return this.$store.state.editPlan //TODO add more
+            return this.$store.state.editPlan
         },
         projectName() {
             return this.$props.subHeader

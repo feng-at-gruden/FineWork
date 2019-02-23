@@ -19,9 +19,14 @@
             <v-list>
                 <v-list-tile v-for="(item, index) in config.TaskStatus" :key="index">
                     <v-list-tile-action>
-                        <v-switch v-model="myFilter" :color="filterColor[index]" :value="item"></v-switch>
+                        <v-switch v-model="myFilter.TaskType" :color="filterColor[index]" :value="item"></v-switch>
                     </v-list-tile-action>
                     <v-list-tile-title>{{item}}</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-checkbox v-model="myFilter.ShowOriginalPlan" label="显示原计划"></v-checkbox>
+                    </v-list-tile-action>
                 </v-list-tile>
                 <v-divider></v-divider>
                 <v-list-tile>
@@ -73,7 +78,7 @@ export default {
     data() {
         return {
             config,
-            myFilter: [],
+            myFilter: {},
             filterColor: ['#9c9c9c', '#3db9d3', '#b319b3', '#3c9445', ]
         }
     },
@@ -94,7 +99,7 @@ export default {
         }
     },
     mounted() {
-        this.myFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : this.config.TaskStatus
+        this.myFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : {TaskType: this.config.TaskStatus, ShowOriginalPlan: true}
     }
 }
 

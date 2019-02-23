@@ -240,7 +240,7 @@ namespace API.Controllers
                         //逾期
                         c.exceed = true;
                     }
-                    c.last_update = latestWorkDate.Value.ToString("yyyy-MM-dd");
+                    c.last_update = latestWorkDate;
                 }
             }
 
@@ -253,7 +253,7 @@ namespace API.Controllers
                     //异常， 任务已经开始，但是没有找到相关工作日志？
                     latestWorkDate = task.ActualEndDate;
                 }
-                c.last_update = latestWorkDate.Value.ToString("yyyy-MM-dd");
+                c.last_update = latestWorkDate;
                 c.actual_duration = (task.ActualEndDate.Value - task.ActualStartDate.Value).Days;
             }
             result.Add(c);
@@ -283,6 +283,13 @@ namespace API.Controllers
                     phaseId = task.PhaseId.Value,
                     progress = task.Progress.Value,
                     description = task.Description,
+                    start_date = task.PlanStartDate,
+                    end_date = task.PlanEndDate,
+                    duration = (task.PlanEndDate.Value - task.PlanStartDate.Value).Days,
+                    actual_start = task.ActualStartDate,
+                    actual_end = task.ActualEndDate,
+                    //last_update = task.ChildrenTasks.Max(m=>m.LastUpdated),
+                    last_update = task.LastUpdated,
                     type = "project",
                     open = true,
                 };

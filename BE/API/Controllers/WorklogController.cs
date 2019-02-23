@@ -65,7 +65,7 @@ namespace API.Controllers
                     cd = cd + " " + cDate.ToString("HH:mm:ss");
                     cDate = DateTime.Parse(cd);
                 }
-                var newWorklog = new WorkLog
+                var newWorklog = new Worklog
                 {
                     CreatedBy = u.Id,
                     TaskId = worklog.taskId,
@@ -97,6 +97,7 @@ namespace API.Controllers
                 }
                 task.Progress = worklog.progress;
                 task.Status = worklog.status;
+                task.LastUpdated = newWorklog.CreatedDate;
 
                 //3. 判断当前task的父节点是task还是phase，
                 //4. 判断当前task所属的父节点是否已经开工。 未开工则更新父节点的最小的actual start date.
@@ -141,11 +142,17 @@ namespace API.Controllers
                 }
 
                 task.ParentTask.Progress = Math.Truncate( (done / all) * 100m ) * 0.01m;
-                if (task.ParentTask.Status == Configurations.TASK_STATUS[0] && done > 0)
+                if (task.ParentTask.Status == Configurations.TASK_STATUS[0] && done > 0){
                     task.ParentTask.Status = Configurations.TASK_STATUS[1];
+                }
+                task.ParentTask.ActualStartDate = task.ParentTask.ChildrenTasks.Min(m => m.ActualStartDate);
+                task.ParentTask.LastUpdated = task.ParentTask.ChildrenTasks.Max(m => m.LastUpdated);
 
                 if (task.ParentTask.Progress >= 1)
+                {
                     task.ParentTask.Status = Configurations.TASK_STATUS[3];
+                    task.ParentTask.ActualEndDate = task.ParentTask.ChildrenTasks.Max(m => m.ActualEndDate);
+                }
 
                 if (task.ParentTask.ParentTask != null)
                     refreshParentsProgress(task.ParentTask);

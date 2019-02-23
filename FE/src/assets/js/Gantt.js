@@ -117,11 +117,13 @@ const phaseReadonlyColumns = [
 		width: "95",
 		template(obj) {
 			if (obj.progress > 0) {
-				var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 				if (obj.type != 'project'){
+					var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + denseDateFmtS2(obj.actual_end) + '</div>'
-				}else{
-					var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+				}else{					
+					var str = '<div>' + obj.plan_start_date + " - " + denseDateFmtS2(obj.plan_end_date) + '</div>'
+					//str = str + '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+					str = str + '<div>' + obj.actual_start + " - " + (obj.actual_end!=''?denseDateFmtS2(obj.actual_end):denseDateFmtS2(obj.last_update)) + '</div>'
 				}
 			} else {
 				var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
@@ -136,11 +138,13 @@ const phaseReadonlyColumns = [
 		width: "25",
 		template(obj) {
 			if (obj.progress > 0) {
-				var str = '<div>' + obj.duration + '</div>'
-				if (obj.type != 'project')
+				if (obj.type != 'project'){
+					var str = '<div>' + obj.duration + '</div>'
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
-				else
-					var str = '<div class="oneline">' + obj.duration + '</div>'
+				}else{
+					var str = '<div class="oneline">' + obj.plan_duration + '</div>'
+					//str = str + '<div>' + obj.duration + '</div>'
+				}
 			} else {
 				var str = '<div class="oneline">' + obj.duration + '</div>'
 			}

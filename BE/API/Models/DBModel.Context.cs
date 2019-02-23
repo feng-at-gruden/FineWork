@@ -31,6 +31,6 @@ namespace API.Models
         public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Task> Task { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<WorkLog> Worklog { get; set; }
+        public virtual DbSet<Worklog> Worklog { get; set; }
     }
 }

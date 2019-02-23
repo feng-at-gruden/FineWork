@@ -69,7 +69,8 @@ body{
     z-index: 10
 }
 .gantt-loader{
-    right: 22px;
+    right: 20px;
+    bottom: 20px;
 }
 
 .half-right-dialog {

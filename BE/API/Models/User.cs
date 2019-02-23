@@ -19,7 +19,7 @@ namespace API.Models
         {
             this.Phase = new HashSet<Phase>();
             this.Project = new HashSet<Project>();
-            this.Worklog = new HashSet<WorkLog>();
+            this.Worklog = new HashSet<Worklog>();
         }
     
         public int Id { get; set; }
@@ -37,6 +37,6 @@ namespace API.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Project> Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WorkLog> Worklog { get; set; }
+        public virtual ICollection<Worklog> Worklog { get; set; }
     }
 }

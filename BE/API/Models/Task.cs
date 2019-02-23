@@ -18,7 +18,7 @@ namespace API.Models
         public Task()
         {
             this.ChildrenTasks = new HashSet<Task>();
-            this.Worklog = new HashSet<WorkLog>();
+            this.Worklog = new HashSet<Worklog>();
         }
     
         public int Id { get; set; }
@@ -34,12 +34,13 @@ namespace API.Models
         public string Status { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<System.DateTime> LastUpdated { get; set; }
     
         public virtual Phase Phase { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Task> ChildrenTasks { get; set; }
         public virtual Task ParentTask { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WorkLog> Worklog { get; set; }
+        public virtual ICollection<Worklog> Worklog { get; set; }
     }
 }

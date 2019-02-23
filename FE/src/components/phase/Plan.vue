@@ -44,7 +44,7 @@ export default {
             timeline: [],
             plan: { data: [], links: [] },
             noFilteredPlan: { data: [], links: [] },
-            taskGanttFilter: [],
+            taskGanttFilter: {},
             newTask: {
                 start_date: new Date().toISOString().substr(0, 10),
                 end_date: new Date().toISOString().substr(0, 10),
@@ -77,7 +77,11 @@ export default {
         selectedOptionMenu(v) {
             switch (v.text) {
                 case '显示选项':
-                    this.openTaskFilter = true
+                    if(this.editPlan){
+                        this.showSnackbar('请先退出编辑模式。', 'info')
+                    }else{
+                        this.openTaskFilter = true
+                    }
                     break
                 case '阶段统计':
                     //TODO
@@ -356,7 +360,11 @@ export default {
         },
         updateFilteredTask() {
             var p = Object.assign({}, this.noFilteredPlan)
-            p.data = p.data.filter(t => this.util.stringInArray(t.status, this.taskGanttFilter))
+            p.data = p.data.filter(t => this.util.stringInArray(t.status, this.taskGanttFilter.TaskType))
+            //Not display origial plan
+            if(!this.taskGanttFilter.ShowOriginalPlan){
+                p.data = p.data.filter(t => t.type!='plan')
+            }
             //Check parent if parent node is added
             var pp = Object.assign({}, p)
             for (var i = 0; i < p.data.length; i++) {
@@ -378,10 +386,27 @@ export default {
             if (json.data) {
                 //日期格式转换
                 for (var i = 0; i < json.data.length; i++) {
+
+                    //Force move 'project' node's start_date to a new field so that gantt can auto-calculate start date 
+                    if(json.data[i].type=='project'){
+                        //Force to empty start_date and add a new plan_start_date, so that gantt can calculate automatically
+                        json.data[i].plan_start_date = json.data[i].start_date ? json.data[i].start_date.split('T')[0].replace(/-/g,'/') : ''
+                        json.data[i].plan_end_date = json.data[i].end_date ? json.data[i].end_date.split('T')[0].replace(/-/g,'/') : ''
+                        json.data[i].plan_duration = json.data[i].duration
+                    }
+
                     json.data[i].start_date = json.data[i].start_date ? dateToStr(new Date(Date.parse(json.data[i].start_date.split('T')[0]))) : ''
                     json.data[i].end_date = json.data[i].end_date ? dateToStr(new Date(Date.parse(json.data[i].end_date.split('T')[0]))) : ''
                     json.data[i].actual_start = json.data[i].actual_start ? json.data[i].actual_start.split('T')[0].replace(/-/g,'/') : ''
                     json.data[i].actual_end = json.data[i].actual_end ? json.data[i].actual_end.split('T')[0].replace(/-/g,'/'): ''
+                    json.data[i].last_update = json.data[i].last_update ? json.data[i].last_update.split('T')[0].replace(/-/g,'/'): ''
+                    
+                    if(json.data[i].type=='project'){
+                        json.data[i].start_date = ''
+                        json.data[i].end_date = ''
+                        json.data[i].duration = 0
+                        //console.log(json.data[i])
+                    }
                 }
             }
             json.start_date = dateToStr(new Date(Date.parse(json.start_date.split('T')[0])))
@@ -408,7 +433,7 @@ export default {
     created() {
         this.loading = true
         this.loadDetailedPlan()
-        this.taskGanttFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : this.config.TaskStatus
+        this.taskGanttFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : {TaskType: this.config.TaskStatus, ShowOriginalPlan: true}
     },
     beforeDestroy() {
         this.editPlan = false

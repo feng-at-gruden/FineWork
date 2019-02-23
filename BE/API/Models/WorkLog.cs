@@ -12,7 +12,7 @@ namespace API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class WorkLog
+    public partial class Worklog
     {
         public int Id { get; set; }
         public string Description { get; set; }

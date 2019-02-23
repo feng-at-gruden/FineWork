@@ -254,7 +254,7 @@
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserPrincipal.cs" />
-    <Compile Include="Models\WorkLog.cs">
+    <Compile Include="Models\Worklog.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

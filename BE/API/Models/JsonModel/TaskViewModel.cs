@@ -25,6 +25,6 @@ namespace API.Models.JsonModel
         public DateTime? actual_start;
         public DateTime? actual_end;
         public int actual_duration;
-        public string last_update;
+        public DateTime? last_update;
     }
 }
