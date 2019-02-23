@@ -57,12 +57,12 @@ import BasePage from '../assets/js/BasePage'
 //单数反转
 //wget --no-cookie --no-check-certificate
 const WALLPAPERS = [
-'https://cn.bing.com/az/hprichbg/rb/PlatteRiver_EN-CN2505500515_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/RavenWolf_EN-CN1564432890_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg',	//egale
 'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',
-'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',	//bird
+'https://cn.bing.com/az/hprichbg/rb/PlatteRiver_EN-CN2505500515_1920x1080.jpg', //Many bird
 'https://cn.bing.com/az/hprichbg/rb/GBBC_EN-CN7021386584_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/GoldfinchSnow_EN-CN6193065571_1920x1080.jpg',	//bird
+'https://cn.bing.com/az/hprichbg/rb/RavenWolf_EN-CN1564432890_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/LaDigue_EN-CN5418321345_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/UpHellyAa_EN-CN4575576413_1920x1080.jpg',
 'https://cn.bing.com/sa/simg/hpb/NorthMale_EN-US8782628354_1920x1080.jpg',
@@ -221,7 +221,7 @@ body {
 	-o-transform:rotateY(180deg); 
 }
 .wallpaper1 {
-	background: url('https://cn.bing.com/th?id=OHR.lantern19_ZH-CN7846752344_1920x1080.jpg');
+	background: url('https://cn.bing.com/az/hprichbg/rb/PlatteRiver_EN-CN2505500515_1920x1080.jpg');
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
