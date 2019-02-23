@@ -22,8 +22,8 @@ namespace API.Models.JsonModel
         public string render;
         public bool exceed;     //逾期
         public bool delayed;    //延期
-        public string actual_start;
-        public string actual_end;
+        public DateTime? actual_start;
+        public DateTime? actual_end;
         public int actual_duration;
         public string last_update;
     }

@@ -43,7 +43,7 @@
             </v-tabs>
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
                 <template slot="items" slot-scope="props">
-                    <td class="text-no-wrap" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed && props.item.status!=config.TaskStatus[3]">已逾期</span></td>
+                    <td class="text-no-wrap task-name" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed && props.item.status!=config.TaskStatus[3]">已逾期</span></td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_start }}</td>
@@ -236,6 +236,10 @@ export default {
     font-size: 10px;
     -webkit-transform: scale(0.85);
     font-style: italic;
+}
+
+.task-name{
+    cursor: pointer;
 }
 
 .task-date {

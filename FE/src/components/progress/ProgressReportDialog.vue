@@ -245,10 +245,12 @@ export default {
                 }
                 if (this.myTask.actual_start){
                     this.actualStartDate = this.myTask.actual_start.split('T')[0]
-                    this.actualEndDate = this.myTask.actual_end.split('T')[0]
                 }
                 else{
-                    this.actualStartDate = dateToStr(new Date())
+                    this.actualStartDate = this.planStartDate //dateToStr(new Date())
+                }
+                if(this.myTask.actual_end){
+                    this.actualEndDate = this.myTask.actual_end.split('T')[0]
                 }
                 this.worklog = ''
                 this.oldProgress = -1

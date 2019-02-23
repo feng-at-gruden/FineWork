@@ -1,6 +1,16 @@
 const denseDateFmt = gantt.date.date_to_str("%Y/%m/%d")
 const denseDateFmtS = gantt.date.date_to_str("%m/%d")
 
+const denseDateFmtS2 = function(date){
+	if(date){
+		var k = date.split('/')
+		if(k.length>0){
+			return k[1] + '/' + k[2]
+		}
+	}
+	return ''
+}
+
 var colHeader = '<div class="gantt_grid_head_cell gantt_grid_head_add" onclick="gantt.createTask()"></div>'
 var colContent = function(task) {
 	return ('<i class="fa gantt_button_grid gantt_grid_edit fa-pencil" onclick="clickGridButton(' + task.id + ', \'edit\')"></i>' +
@@ -108,10 +118,11 @@ const phaseReadonlyColumns = [
 		template(obj) {
 			if (obj.progress > 0) {
 				var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
-				if (obj.type != 'project')
-					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + obj.actual_end + '</div>'
-				else
+				if (obj.type != 'project'){
+					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + denseDateFmtS2(obj.actual_end) + '</div>'
+				}else{
 					var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
+				}
 			} else {
 				var str = '<div class="oneline">' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 			}

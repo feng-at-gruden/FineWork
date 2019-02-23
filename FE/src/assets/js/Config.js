@@ -1,15 +1,15 @@
 import colors from 'vuetify/es5/util/colors'
 
-//const ENV = 'PROD'
 const ENV = 'UAT'
+//const ENV = 'PROD'
 
 if(ENV=='UAT'){
     var APP_NAME = "Fine.Work"
     var CLIENT_NAME = "Feng Guo"
-    var API_URL = "http://114.115.178.72/FineWork/API"
-    //var API_URL = "http://127.0.0.1:3000"
+    //var API_URL = "http://114.115.178.72/FineWork/API"
+    var API_URL = "http://localhost:9909/API"
     //var API_URL = "http://103.254.77.30:8001/API"
-    //var API_URL = "http://localhost:9909/API"
+    //var API_URL = "http://127.0.0.1:3000"
 }else{
     var APP_NAME = "中阳集团项目进度跟踪系统"
     var CLIENT_NAME = "中阳集团"

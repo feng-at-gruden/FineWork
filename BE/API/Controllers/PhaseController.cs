@@ -194,8 +194,8 @@ namespace API.Controllers
                 text = task.Name,
                 start_date = task.PlanStartDate,
                 end_date = task.PlanEndDate,
-                actual_start = task.ActualStartDate.HasValue ? task.ActualStartDate.Value.ToString("yyyy-MM-dd") : "",
-                actual_end = task.ActualEndDate.HasValue ? task.ActualEndDate.Value.ToString("yyyy-MM-dd") : "",
+                actual_start = task.ActualStartDate,
+                actual_end = task.ActualEndDate,
                 status = task.Status,
                 parent = task.ParentTaskId.HasValue ? task.ParentTaskId.Value : 0,
                 phaseId = task.PhaseId.Value,
@@ -438,8 +438,8 @@ namespace API.Controllers
                             }
                         }
                     }
-                    holderTask.actual_start = actualTask.start_date.Value.ToString("yyyy/MM/dd");
-                    holderTask.actual_end = actualTask.end_date.Value.ToString("MM/dd");
+                    holderTask.actual_start = actualTask.start_date;
+                    holderTask.actual_end = actualTask.end_date;
                     holderTask.actual_duration = actualTask.duration;
                     holderTask.exceed = actualTask.exceed;
                     holderTask.delayed = actualTask.delayed;

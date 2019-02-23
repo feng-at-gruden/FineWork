@@ -140,7 +140,7 @@ namespace API.Controllers
                     done += duration * progress;
                 }
 
-                task.ParentTask.Progress = Math.Round(done / all, 2);
+                task.ParentTask.Progress = Math.Truncate( (done / all) * 100m ) * 0.01m;
                 if (task.ParentTask.Status == Configurations.TASK_STATUS[0] && done > 0)
                     task.ParentTask.Status = Configurations.TASK_STATUS[1];
 
@@ -166,7 +166,7 @@ namespace API.Controllers
             
             if (phase.Status == Configurations.TASK_STATUS[0] && done > 0)
                 phase.Status = Configurations.TASK_STATUS[1];
-            phase.Progress = Math.Round(done / all, 2);
+            phase.Progress = Math.Truncate((done / all) * 100m) * 0.01m;
             if(phase.Progress>=1)
                 phase.Status = Configurations.TASK_STATUS[3];
         }
