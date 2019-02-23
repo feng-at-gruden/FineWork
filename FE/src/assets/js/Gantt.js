@@ -142,8 +142,8 @@ const phaseReadonlyColumns = [
 					var str = '<div>' + obj.duration + '</div>'
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
 				}else{
-					var str = '<div class="oneline">' + obj.plan_duration + '</div>'
-					//str = str + '<div>' + obj.duration + '</div>'
+					var str = '<div>' + obj.plan_duration + '</div>'
+					str = str + '<div>' + obj.actual_duration + '</div>'
 				}
 			} else {
 				var str = '<div class="oneline">' + obj.duration + '</div>'

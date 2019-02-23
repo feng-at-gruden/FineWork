@@ -289,10 +289,15 @@ namespace API.Controllers
                     actual_start = task.ActualStartDate,
                     actual_end = task.ActualEndDate,
                     //last_update = task.ChildrenTasks.Max(m=>m.LastUpdated),
-                    last_update = task.LastUpdated,
+                    last_update = task.LastUpdated,                    
                     type = "project",
                     open = true,
                 };
+                if (task.LastUpdated.HasValue)
+                {
+                    parentTask.last_update = DateTime.Parse(task.LastUpdated.Value.ToShortDateString()).AddDays(1);
+                    parentTask.actual_duration = (parentTask.last_update.Value - parentTask.actual_start.Value).Days;
+                }
                 /*
                 var st1 = task.ChildrenTasks.Min(m => m.PlanStartDate);
                 var st2 = task.ChildrenTasks.Where(m=> m.ActualStartDate != null).Min(m => m.ActualStartDate);

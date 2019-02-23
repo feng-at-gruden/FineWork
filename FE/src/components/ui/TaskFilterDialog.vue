@@ -7,7 +7,7 @@
                         <v-icon big>filter_none</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title>任务过滤器</v-list-tile-title>
+                        <v-list-tile-title>显示过滤器</v-list-tile-title>
                         <v-list-tile-sub-title>选择需要显示的任务类型</v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
@@ -24,9 +24,10 @@
                     <v-list-tile-title>{{item}}</v-list-tile-title>
                 </v-list-tile>
                 <v-list-tile>
-                    <v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-spacer></v-spacer>
                         <v-checkbox v-model="myFilter.ShowOriginalPlan" label="显示原计划"></v-checkbox>
-                    </v-list-tile-action>
+                    </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
                 <v-list-tile>
