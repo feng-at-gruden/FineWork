@@ -87,7 +87,7 @@ export default {
             for (var i = 0; i < worklogs.length; i++) {
                 r.push({
                     id: worklogs[i].id,
-                    text: worklogs[i].description,
+                    text: worklogs[i].description.replace(/\n/g, "<br/>"),
                     details: worklogs[i].comment,
                     start_date: worklogs[i].created_date.split('T')[0] + ' ' + worklogs[i].created_date.split('T')[1],
                     end_date: worklogs[i].created_date.split('T')[0] + ' ' + worklogs[i].created_date.split('T')[1],

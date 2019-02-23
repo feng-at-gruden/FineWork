@@ -192,7 +192,7 @@ export default {
                 progress: this.myTask.progress,
                 status: this.myTask.status,
                 taskId: this.myTask.id,
-                description: this.worklog
+                description: this.worklog.replace(/\n/g, "<br/>").replace(/\s/g, " ")
             }
             this.loading = true;
             this.$http.post(this.config.API_URL + '/Worklog', request).then(function(res) {
