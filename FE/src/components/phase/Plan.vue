@@ -366,6 +366,9 @@ export default {
             if(!this.taskGanttFilter.ShowOriginalPlan){
                 p.data = p.data.filter(t => t.type!='plan')
             }
+            if(!this.taskGanttFilter.ShowActualPlan){
+                p.data = p.data.filter(t => t.type!='actual')
+            }
             //Check parent if parent node is added
             var pp = Object.assign({}, p)
             for (var i = 0; i < p.data.length; i++) {
@@ -434,7 +437,7 @@ export default {
     created() {
         this.loading = true
         this.loadDetailedPlan()
-        this.taskGanttFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : {TaskType: this.config.TaskStatus, ShowOriginalPlan: true}
+        this.taskGanttFilter = localStorage.getItem("TaskFilter") ? JSON.parse(localStorage.getItem("TaskFilter")) : {TaskType: this.config.TaskStatus, ShowOriginalPlan: true, ShowActualPlan: true}
     },
     beforeDestroy() {
         this.editPlan = false

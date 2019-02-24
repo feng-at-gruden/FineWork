@@ -72,7 +72,10 @@ router.beforeEach((to, from, next) => {
         console.log('not login', to.path)
         window.app.$router.replace('/login' + '?returnUrl=' + to.path)
     }*/
-
+    if(to.path.toLowerCase().indexOf('/clear')>=0){
+        localStorage.clear()
+        return
+    }
     if (to.meta.title) {
         document.title = config.APP_NAME + " - " + to.meta.title
     }
