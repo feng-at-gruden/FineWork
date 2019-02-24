@@ -72,8 +72,17 @@ namespace API.Controllers
                     CreatedDate = cDate,
                     Description = worklog.description,
                 };
-                newWorklog.Comment = task.Progress.HasValue ? (task.Progress.Value * 100).ToString("F0") : "0";
-                newWorklog.Comment += "%#" + (worklog.progress * 100).ToString("F0") + "%" + "#" + task.Status + "#" + worklog.status;
+                if (task.LastUpdated.HasValue && task.LastUpdated.Value > newWorklog.CreatedDate.Value)
+                {
+                    //补登
+                    newWorklog.Comment = (worklog.progress * 100).ToString("F0");
+                    newWorklog.Comment += "%#" + (worklog.progress * 100).ToString("F0") + "%" + "#" + worklog.status + "#" + worklog.status;
+                }
+                else
+                {
+                    newWorklog.Comment = task.Progress.HasValue ? (task.Progress.Value * 100).ToString("F0") : "0";
+                    newWorklog.Comment += "%#" + (worklog.progress * 100).ToString("F0") + "%" + "#" + task.Status + "#" + worklog.status;
+                }
                 var n = db.Worklog.Add(newWorklog);
 
                 //2. 更新worklog所属task的进度，开工日期，结束日期，状态，
@@ -95,9 +104,19 @@ namespace API.Controllers
                     else
                         task.ActualStartDate = DateTime.Parse(worklog.created_date.Value.ToShortDateString());  // 忽略小时
                 }
-                task.Progress = worklog.progress;
-                task.Status = worklog.status;
-                task.LastUpdated = newWorklog.CreatedDate;
+
+                //如果不是补登的记录，则更新task的进度和状态， 否则不更新
+                if (task.LastUpdated.HasValue && task.LastUpdated.Value> newWorklog.CreatedDate.Value)
+                {
+                    //补登
+                }
+                else
+                {
+                    task.Progress = worklog.progress;
+                    task.Status = worklog.status;
+                    task.LastUpdated = newWorklog.CreatedDate;
+                }
+                
 
                 //3. 判断当前task的父节点是task还是phase，
                 //4. 判断当前task所属的父节点是否已经开工。 未开工则更新父节点的最小的actual start date.

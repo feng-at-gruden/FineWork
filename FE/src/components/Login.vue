@@ -86,6 +86,7 @@ const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/UFOMuseum_EN-CN3265083079_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/BathBach_EN-CN2668793997_1920x1080.jpg',
 'https://cn.bing.com/az/hprichbg/rb/PingxiSky_EN-CN9973358728_1920x1080.jpg',
+'https://cn.bing.com/az/hprichbg/rb/OldTownTallinn_ZH-CN4833535739_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.KomondorKennel_ZH-CN6009722858_1920x1080.jpg',
 ]
 const TIMER = 20000
@@ -221,7 +222,7 @@ body {
 	-o-transform:rotateY(180deg); 
 }
 .wallpaper1 {
-	background: url('https://cn.bing.com/az/hprichbg/rb/PlatteRiver_EN-CN2505500515_1920x1080.jpg');
+	background: url('https://cn.bing.com/az/hprichbg/rb/OldTownTallinn_ZH-CN4833535739_1920x1080.jpg');
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
