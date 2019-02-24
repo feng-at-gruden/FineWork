@@ -145,8 +145,10 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.phaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
-                this.noFilteredPlan = this.refineTaskDate(json)
-                this.updateFilteredTask()
+                //No need filter on edit mode
+                //this.noFilteredPlan = this.refineTaskDate(json)
+                //this.updateFilteredTask()
+                this.plan = this.refineTaskDate(json)
                 this.subTitle = this.displaySubTitle
                 this.loading = false
                 this.selectedPhase = parseInt(this.plan.id)

@@ -114,7 +114,7 @@ const phaseReadonlyColumns = [
 		name: "start_date",
 		label: "施工周期",
 		align: "center",
-		width: "95",
+		width: "96",
 		template(obj) {
 			if (obj.progress > 0) {
 				if (obj.type != 'project'){
@@ -135,7 +135,7 @@ const phaseReadonlyColumns = [
 		name: "duration",
 		label: "天",
 		align: "center",
-		width: "25",
+		width: "20",
 		template(obj) {
 			if (obj.progress > 0) {
 				if (obj.type != 'project'){
@@ -155,7 +155,7 @@ const phaseReadonlyColumns = [
 		name: "progress",
 		label: "状态",
 		align: "center",
-		width: "48",
+		width: "42",
 		template: function(obj) {
 			var str
 			if (obj.status == "已停工") {
@@ -312,29 +312,22 @@ export default {
 	markerIds: [],
 
 	initBasicProjectGantt: function(id, editable) {
-		/*gantt.templates.task_cell_class = function(task, date) {
-			var dateToStr = gantt.date.date_to_str("%D");
-			if (dateToStr(date) == "六" || dateToStr(date) == "日")
-				return "week_end";
-			return "";
-		};
-		gantt.templates.task_class = function(st, end, item) {
-			return item.exceed == 1 ? "high" : ""
-		};*/
-		/*
-		gantt.templates.rightside_text = function(start, end, task) {
-			return "" + task.duration + '天'
-		};
-		*/
-
+		
 		gantt.config.work_time = false; //false为工作日也计算在内
-		gantt.config.min_column_width = 40;
-
+		gantt.config.select_task  = false;
+		gantt.config.show_chart = true;	//display right grid
+		gantt.config.show_grid = true;	//display left tree
+		gantt.config.show_task_cells = true;	//display right as cell
+		//gantt.config.fit_tasks = false; 
 		//gantt.config.autofit = true;
+		gantt.config.grid_width = 320;
+
 		gantt.config.drag_progress = false;
 		gantt.config.drag_links = false;
 		gantt.config.readonly = !editable;
 		gantt.config.scale_height = 60;
+		//gantt.config.row_height = 30;
+		gantt.config.min_column_width = 20;
 	},
 
 	initProjectGantt: function(id, editable) {

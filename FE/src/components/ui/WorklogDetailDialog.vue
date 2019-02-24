@@ -18,14 +18,14 @@
                 </div>
                 <v-divider></v-divider>
                 <br style="clear: both; line-height: 0px; height: 0px;" />
-                <div style="float: right; display: block;">
+                <div style="float: right; display: block; margin-top: -20px;">
                     <div class="worklog-tip">
                         汇报人: {{myWorklog.created_by}}
                     </div>
                 </div>
                 <br style="clear: both; line-height: 0px; height: 0px;" />
             </v-card-text>
-            <v-card-actions class="pa-3" style="padding-top: 0px !important;">
+            <v-card-actions class="pa-3" style="padding-top: 0px !important; margin-top: -20px;">
                 <v-spacer></v-spacer>
                 <v-btn @click="dialog = false">关闭</v-btn>
                 <v-spacer></v-spacer>
@@ -85,8 +85,8 @@ export default {
 </script>
 <style scoped>
 .worklog-text {
-    margin-bottom: 40px;
-    min-height: 100px;
+    margin-bottom: 25px;
+    min-height: 80px;
 }
 .worklog-tip {
     font-size: 12px;
