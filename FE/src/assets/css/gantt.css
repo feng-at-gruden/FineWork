@@ -20,6 +20,18 @@
     font-size: 15px;
 }
 
+.project{
+    margin-top: 11px;
+    height: 8px !important;
+    line-height: 10px !important;
+    background: #1031ad !important;
+    border: solid 1px #12282d !important;
+}
+
+.project .gantt_task_progress,
+.project .gantt_task_content{
+    display: none;
+}
 
 .plan {
     background: #9c9c9c;

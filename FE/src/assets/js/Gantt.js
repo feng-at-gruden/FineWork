@@ -419,6 +419,8 @@ export default {
 			gantt.config.columns = phaseReadonlyColumns
 			gantt.templates.task_class = function(start, end, task) {
 				var c = ''
+				if(task.type=='project')
+					c += ' project'
 				if (task.type == 'plan')
 					c += ' plan'
 				if (task.type == 'actual')
