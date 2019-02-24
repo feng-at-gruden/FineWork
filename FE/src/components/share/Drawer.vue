@@ -69,7 +69,7 @@ export default {
                 { divider: true, permission:'progress-management' },
                 { heading: '进度管理', permission:'progress-management' },
                 { title: '进度汇报', link: '/Progress/Report', icon: 'assignment', permission:'progress-management' },
-                { divider: true },
+                { divider: true, permission:'system-management' },
                 { heading: '系统管理', permission:'system-management' },
                 { title: '用户管理', link: '/System/Users', icon: 'supervisor_account', permission:'system-management' },
             ],

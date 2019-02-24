@@ -46,7 +46,7 @@
                 <v-subheader>偏好设置</v-subheader>
                 <v-list-tile avatar style="">
                     <v-list-tile-action>
-                        <v-icon large style="margin-top: 15px;">color_lens</v-icon>
+                        <v-icon large style="margin-top: 15px;" color="primary">color_lens</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
                         <v-list-tile-title>主题颜色:</v-list-tile-title>

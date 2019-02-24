@@ -6,7 +6,7 @@
 			</v-layout>
 		</v-flex>
 		<v-flex d-flex lg6 md6 sm8 xs12>
-			<v-layout justify-start>
+			<v-layout justify-start style="max-width: 460px;">
 				<v-checkbox v-for="item in config.ProjectStatus" v-model="filter" :label="item.text" :value="item.value" :key="item.value" @change="filterChange" class="text-truncate"></v-checkbox>
 			</v-layout>
 		</v-flex>
