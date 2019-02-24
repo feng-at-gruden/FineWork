@@ -28,7 +28,7 @@
     border: solid 1px #12282d !important;
 }
 
-.project .gantt_task_progress,
+/*.project .gantt_task_progress,*/
 .project .gantt_task_content{
     display: none;
 }

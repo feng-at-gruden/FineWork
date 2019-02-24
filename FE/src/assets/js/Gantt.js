@@ -320,7 +320,7 @@ export default {
 		gantt.config.show_task_cells = true;	//display right as cell
 		//gantt.config.fit_tasks = false; 
 		//gantt.config.autofit = true;
-		gantt.config.grid_width = 320;
+		gantt.config.grid_width = 360;
 
 		gantt.config.drag_progress = false;
 		gantt.config.drag_links = false;
