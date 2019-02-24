@@ -257,10 +257,12 @@ export default {
         },
         handleOnGanttTaskDblClick(id) {
             //进入阶段详情页
-            var task = this.plan.data.filter(t => t.id == id)[0]
-            //var child = this.plan.data.filter(t=>t.parent==id)
-            if (task && !task.parent > 0) {
-                this.$router.push('/Phase/' + id)
+            if (this.util.IsPC()){
+                var task = this.plan.data.filter(t => t.id == id)[0]
+                //var child = this.plan.data.filter(t=>t.parent==id)
+                if (task && !task.parent > 0) {
+                    this.$router.push('/Phase/' + id)
+                }
             }
         },
         handleOnCreateTaskSave(task) {

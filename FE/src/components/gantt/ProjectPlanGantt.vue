@@ -81,8 +81,8 @@ export default {
 			} else {
 				this.ganttEventIds.push(myGantt.attachEvent('onTaskDblClick', (id, event) => {
 					//按ctrl键点击task进入阶段计划
-					if (event.ctrlKey)
-						this.$emit('onTaskDblClick', id)
+					//if (event.ctrlKey)
+					this.$emit('onTaskDblClick', id)
 					return false
 				}))
 			}

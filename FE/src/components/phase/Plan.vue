@@ -362,6 +362,10 @@ export default {
         updateFilteredTask() {
             var p = Object.assign({}, this.noFilteredPlan)
             p.data = p.data.filter(t => this.util.stringInArray(t.status, this.taskGanttFilter.TaskType))
+
+            //Remove first and add later
+            p.data = p.data.filter(t => t.type!='project')
+
             //Not display origial plan
             if(!this.taskGanttFilter.ShowOriginalPlan){
                 p.data = p.data.filter(t => t.type!='plan')
@@ -369,6 +373,7 @@ export default {
             if(!this.taskGanttFilter.ShowActualPlan){
                 p.data = p.data.filter(t => t.type!='actual')
             }
+            
             //Check parent if parent node is added
             var pp = Object.assign({}, p)
             for (var i = 0; i < p.data.length; i++) {
