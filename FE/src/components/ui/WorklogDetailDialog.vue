@@ -7,13 +7,20 @@
             </v-card-title>
             <v-card-text>
                 <div class="worklog-text" v-html="myWorklog.text"></div>
-                <v-divider></v-divider>
-                <div style="float: right; display: block;">
+                
+                <div style="float: right; display: block; margin-top: -23px;">
                     <div class="worklog-tip" v-if="statusUpdate!=''">
                         <v-icon class="my-work-icon">check_box</v-icon> {{statusUpdate}}
                     </div>
                     <div class="worklog-tip" v-if="progressUpdate!=''">
                         <v-icon class="my-work-icon">trending_up</v-icon> {{progressUpdate}}
+                    </div>
+                </div>
+                <v-divider></v-divider>
+                <br style="clear: both; line-height: 0px; height: 0px;" />
+                <div style="float: right; display: block;">
+                    <div class="worklog-tip">
+                        汇报人: {{myWorklog.created_by}}
                     </div>
                 </div>
                 <br style="clear: both; line-height: 0px; height: 0px;" />
@@ -78,10 +85,11 @@ export default {
 </script>
 <style scoped>
 .worklog-text {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+    min-height: 100px;
 }
 .worklog-tip {
-    font-size: 10px;
+    font-size: 12px;
     text-align: left;
     float: right;
     margin-right: 10px;

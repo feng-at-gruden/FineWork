@@ -91,6 +91,7 @@ export default {
                     details: worklogs[i].comment,
                     start_date: worklogs[i].created_date.split('T')[0] + ' ' + worklogs[i].created_date.split('T')[1],
                     end_date: worklogs[i].created_date.split('T')[0] + ' ' + worklogs[i].created_date.split('T')[1],
+                    created_by: worklogs[i].created_by,
                 })
             }
             return r

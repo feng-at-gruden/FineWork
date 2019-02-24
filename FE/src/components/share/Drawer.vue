@@ -12,7 +12,7 @@
                         <!--<v-btn small flat>edit</v-btn>-->
                     </v-flex>
                 </v-layout>
-                <v-divider dark v-else-if="item.divider" class="my-3" :key="i"></v-divider>
+                <v-divider dark v-else-if="item.divider && haveThePermission(item)" class="my-3" :key="i"></v-divider>
                 <template v-else-if="item.title=='PROJECT-DROPDOWN'" v-show="openProjects.length>0">
                     <v-list-tile :key="i" v-show="openProjects.length>0">
                         <v-list-tile-content class="drawer-projects-box">
@@ -66,9 +66,9 @@ export default {
                 { heading: '计划管理' },
                 { title: '项目计划', link: '/Project/', icon: 'subject' },
                 { title: 'PHASE-DROPDOWN', link: '/Phase/Plan', icon: 'playlist_add_check' },
-                { divider: true },
-                { heading: '进度管理' },
-                { title: '进度汇报', link: '/Progress/Report', icon: 'assignment' },
+                { divider: true, permission:'progress-management' },
+                { heading: '进度管理', permission:'progress-management' },
+                { title: '进度汇报', link: '/Progress/Report', icon: 'assignment', permission:'progress-management' },
                 { divider: true },
                 { heading: '系统管理', permission:'system-management' },
                 { title: '用户管理', link: '/System/Users', icon: 'supervisor_account', permission:'system-management' },

@@ -25,7 +25,8 @@ namespace API.Controllers
                             id = row.Id,
                             description = row.Description,
                             comment = row.Comment,
-                            created_date = row.CreatedDate.Value
+                            created_date = row.CreatedDate.Value,
+                            created_by = row.User.RealName,
                         };
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
