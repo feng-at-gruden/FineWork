@@ -61,7 +61,7 @@ export default new Router({
                         showOptionMenu: true, 
                         optionMenu: [
                         { icon: 'info_outline', text: '项目信息', }, 
-                        { icon: 'timeline', text: '时间轴' }, 
+                        /*{ icon: 'timeline', text: '时间轴' }, */
                         /*{ icon: '', text: 'Divider', permission: 'project-management' }, */
                         { icon: 'blur_linear', text: '阶段调整', permission: 'project-management', editing: { icon: 'save', text: '退出编辑'} },
                         { icon: 'delete_forever', text: '删除项目', permission: 'project-management' }, 

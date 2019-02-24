@@ -181,6 +181,7 @@ export default {
                 this.newTask.end_date = dateToStr(new Date(strToDate(this.newTask.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(pTask.end_date)
+                console.log(this.newTask)
             } else {
                 this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
                 this.newTask.end_date = dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))

@@ -59,6 +59,7 @@ export default {
             ],
             strToDate: gantt.date.str_to_date("%Y-%m-%d"),
             dateToStr: gantt.date.date_to_str("%Y-%m-%d"),
+            //minEndDate: null,
         }
     },
     computed:{
@@ -107,6 +108,11 @@ export default {
                 try{
                     this.$refs.createTaskForm.resetValidation()
                 }catch(e){}
+
+                if(this.task.start_date){
+                    var d2 = this.strToDate(this.task.start_date).getTime() + 1000*60*60*24*1
+                    this.task.end_date = this.dateToStr(new Date(d2))
+                }
             }
         }
     },
