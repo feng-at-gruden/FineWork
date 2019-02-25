@@ -109,10 +109,7 @@ namespace API.Controllers
                 });
             }
 
-            var model = new StatisticsViewModel
-            {
-
-            };
+            var model = getPhaseStastistics(phase);
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
@@ -508,6 +505,38 @@ namespace API.Controllers
             var exceedSpan = lastWorkDate.Value - planEndDate.Value;
             var exceedDays = (int)Math.Ceiling((decimal)exceedSpan.TotalHours / 24);
             return exceedDays;
+        }
+
+        private StatisticsViewModel getPhaseStastistics(Phase phase)
+        {
+            StatisticsViewModel result = new StatisticsViewModel
+            {
+                Id = phase.Id,
+                Name = phase.Name,
+                Progress = phase.Progress.HasValue ? phase.Progress.Value : 0,
+                Status = phase.Status,
+                StartDate = phase.StartDate.Value,
+                EndDate = phase.EndDate.Value,
+                ActualStart = phase.Task.Min(m=>m.ActualStartDate),
+                ActualEnd = phase.Task.Max(m => m.LastUpdated),
+                TaskCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0),
+                FinishedCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[3]),
+                UnfinishedCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status != Configurations.TASK_STATUS[3]),
+                PendingCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[2]),
+                WorkingCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[1]),
+                ExceededCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.LastUpdated > m.PlanEndDate && m.Status == Configurations.TASK_STATUS[1]),
+                DelayedCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && DateTime.Now > m.PlanStartDate.Value.AddDays(1) && m.Status == Configurations.TASK_STATUS[0]),
+                FulfilAheadCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.ActualEndDate.HasValue && m.ActualEndDate < m.PlanEndDate && m.Status == Configurations.TASK_STATUS[3]),
+                LastUpdate = phase.Task.Max(m=>m.LastUpdated),
+            };
+            result.Duration = (result.EndDate - result.StartDate).Days;
+            if (result.ActualEnd.HasValue && result.ActualStart.HasValue)
+            {
+                result.ActualEnd = phase.Task.Max(m => m.LastUpdated).Value.AddDays(1);
+                result.ActualDuration = (result.ActualEnd.Value - result.ActualStart.Value).Days;
+            }
+            
+            return result;
         }
 
     }

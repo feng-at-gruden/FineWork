@@ -10,6 +10,9 @@
         <DeletePhaseDialog :open="openDeletePhaseDialog" @close="openDeletePhaseDialog = false" @delete="handleOnPhaseDeleted"></DeletePhaseDialog>
         <!--甘特图显示设置框-->
         <TaskFilterDialog :open="openTaskFilter" @close="openTaskFilter = false" @save="handleTaskFilterUpdate"></TaskFilterDialog>
+        <!--阶段统计信息对话框 -->
+        <PhaseStatisticsDialog :open="openPhaseStatistics" @close="openPhaseStatistics = false"></PhaseStatisticsDialog>
+        <!--工作日志Calendar-->
         <WorklogCalendar :open="openWorklogCalendar" :task="worklogTask" @close="openWorklogCalendar=false"></WorklogCalendar>
         <!--消息提示框-->
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
@@ -26,11 +29,12 @@ import EditTaskDialog from '../ui/EditTaskDialog'
 import DeletePhaseDialog from '../ui/DeletePhaseDialog'
 import TaskFilterDialog from '../ui/TaskFilterDialog'
 import WorklogCalendar from '../ui/WorklogCalendar'
+import PhaseStatisticsDialog from './PhaseStatisticsDialog'
 
 export default {
     extends: BasePage,
     name: 'PhasePlan',
-    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog, WorklogCalendar },
+    components: { PhasePlanGantt, CreateTaskDialog, EditTaskDialog, DeletePhaseDialog, TaskFilterDialog, WorklogCalendar, PhaseStatisticsDialog },
     data() {
         return {
             openCreateTaskDialog: false,
@@ -38,6 +42,7 @@ export default {
             openDeletePhaseDialog: false,
             openTaskFilter: false,
             openWorklogCalendar: false,
+            openPhaseStatistics: false,
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
@@ -84,7 +89,7 @@ export default {
                     }
                     break
                 case '阶段统计':
-                    //TODO
+                    this.openPhaseStatistics = true
                     break
                 case '计划调整':
                     this.loadRawPlan()
