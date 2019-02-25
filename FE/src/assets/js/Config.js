@@ -19,21 +19,21 @@ if(ENV=='UAT'){
 const WALL_PAPER_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=#INDEX#&n=1&nc=1361089515117&FORM=HYLH1"
 const Themes = [
     { primary: colors.blue.lighten1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.orange.accent4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, },
-    { primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
-    { primary: colors.lightGreen.accent4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.red.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.purple, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.amber.darken3, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.teal, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.orange.darken2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, },
+    { primary: colors.teal.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.cyan, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.green.darken3, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.lime, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.indigo.darken4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.deepPurple , secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.brown.darken3, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.indigo.darken3, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.blueGrey, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.blue.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.grey, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.amber.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
+    { primary: colors.red, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.lightGreen.accent4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.purple.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
 ]
 
 const Theme = Themes[0]

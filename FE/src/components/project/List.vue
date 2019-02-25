@@ -9,6 +9,10 @@
         <div class="text-xs-center">
             <v-pagination v-model="page" :total-visible="7" :length="pageCount" v-if="pageCount>1" circle color="primary"></v-pagination>
         </div>
+
+        <v-btn fixed small dark fab bottom right color="primary" v-if="haveThePermission('project-management')" @click="handleAddBtnClick" :class="addBtnCss">
+            <v-icon>add</v-icon>
+        </v-btn>
     </v-container>
 </template>
 <script>
@@ -37,6 +41,9 @@ export default {
         animationIn() {
             return this.util.randomIn()
         },
+        addBtnCss() {
+            return this.util.IsPC() ? 'add-user-btn' : 'add-user-btn-mobile'
+        },
     },
     watch:{
         filter(v, ov){
@@ -61,6 +68,12 @@ export default {
         },
         handleFilterChange(filter){
             this.filter = filter
+        },
+        handleAddBtnClick() {
+            this.$router.push('/Project/Create')
+        },
+        haveThePermission(permission) {
+            return this.auth.checkPermission(permission, this.identity)
         },
         updateFilteredProjects(){
             if(this.filter.length==0){
