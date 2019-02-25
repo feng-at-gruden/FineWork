@@ -95,6 +95,27 @@ namespace API.Controllers
         }
 
 
+        [HttpGet]
+        [Route("Statistics")]
+        public HttpResponseMessage Statistics(int id)
+        {
+            var phase = db.Phase.SingleOrDefault(m => m.Id == id);
+            if (phase == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse
+                {
+                    Success = false,
+                    Message = "没有找到相关项目阶段信息"
+                });
+            }
+
+            var model = new StatisticsViewModel
+            {
+
+            };
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
+
         [HttpPost]
         [ApiAuthorize(Roles = Configurations.Permissions.PROJECT_MANAGEMENT)]
         public HttpResponseMessage Create([FromBody]TaskViewModel phase)
