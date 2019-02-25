@@ -192,6 +192,7 @@ namespace API.Controllers
             {
                 id = task.Id,
                 text = task.Name,
+                task_name = task.Name,
                 start_date = task.PlanStartDate,
                 end_date = task.PlanEndDate,
                 actual_start = task.ActualStartDate,
@@ -278,6 +279,7 @@ namespace API.Controllers
                 {
                     id = task.Id,
                     text = task.Name,
+                    task_name = task.Name,
                     status = task.Status,
                     parent = task.ParentTaskId.HasValue ? task.ParentTaskId.Value : 0,
                     phaseId = task.PhaseId.Value,
@@ -318,6 +320,7 @@ namespace API.Controllers
                 {
                     id = task.Id,
                     text = task.Name,
+                    task_name = task.Name,
                     phaseId = task.PhaseId.Value,
                     progress = task.Progress.Value,
                     status = task.Status,
@@ -334,6 +337,7 @@ namespace API.Controllers
                 {
                     id = task.Id * 1000000,       //fack id
                     text = "",
+                    task_name = task.Name,
                     phaseId = task.PhaseId.Value,
                     progress = 0,
                     status = task.Status,
@@ -348,6 +352,7 @@ namespace API.Controllers
                 var actualTask = new TaskViewModel
                 {
                     id = task.Id * 1000000 + 1,       //fack id
+                    task_name = task.Name,
                     phaseId = task.PhaseId.Value,
                     progress = task.Progress.Value,
                     status = task.Status,
@@ -360,7 +365,7 @@ namespace API.Controllers
                 };
 
                 //4. Calculate display value
-                if(task.ActualStartDate==null)
+                if(task.ActualStartDate==null && task.Status == Configurations.TASK_STATUS[0])
                 {
                     //没开工
                     if (task.PlanStartDate.Value < nowTime)
@@ -397,7 +402,13 @@ namespace API.Controllers
                         var latestWorkDate = task.Worklog.Max(m => m.CreatedDate);
                         //actualTask.end_date = latestWorkDate;
 			            actualTask.end_date = DateTime.Parse(latestWorkDate.Value.ToShortDateString()).AddDays(1);
-                        actualTask.duration = (actualTask.end_date.Value - task.ActualStartDate.Value).Days;
+                        if (!task.ActualStartDate.HasValue)
+                        {
+                            var firstWorkDate = task.Worklog.Min(m => m.CreatedDate);
+                            actualTask.start_date = DateTime.Parse(firstWorkDate.Value.ToShortDateString());
+                        }
+                        actualTask.duration = (actualTask.end_date.Value - actualTask.start_date.Value).Days;
+
                         var pendingDays = (nowTime - latestWorkDate.Value).Days;
                         actualTask.text  = Configurations.TASK_STATUS[2] + pendingDays + "天";
                         if (nowTime > task.PlanEndDate.Value)

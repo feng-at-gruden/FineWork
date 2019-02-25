@@ -371,10 +371,12 @@ export default {
 						c += ' not_start'
 						break
 				}
-				if (task.exceed)
-					c = ' exceed'
-				if (task.delayed)
-					c = ' delayed'
+				if(task.status!="已停工"){
+					if (task.exceed)
+						c = ' exceed'
+					if (task.delayed)
+						c = ' delayed'
+				}
 			}
 			return c
 		};
