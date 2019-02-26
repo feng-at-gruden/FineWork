@@ -189,7 +189,6 @@ export default {
                 if(json.data[i].last_date){
                     json.data[i].last_date = json.data[i].last_date.split('T')[0]
                 }
-                console.log(json.data[i])
             }
             return json
         },

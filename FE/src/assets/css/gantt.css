@@ -32,6 +32,9 @@
 .project .gantt_task_content{
     display: none;
 }
+.project .gantt_side_content {
+    display: none;
+}
 
 .plan {
     background: #9c9c9c;
@@ -104,6 +107,11 @@
     position: relative;
     display: block;
 }
+
+.plan .gantt_task_content{
+    display: none;
+}
+
 .gantt-content-samll{
     font-size:10px;
     -webkit-transform:scale(0.85);

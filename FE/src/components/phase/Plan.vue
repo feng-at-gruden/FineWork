@@ -159,6 +159,7 @@ export default {
                 this.selectedPhase = parseInt(this.plan.id)
                 if (!this.selectedProject && json.projectId)
                     this.selectedProject = parseInt(json.projectId)
+                //console.log('enter', JSON.stringify(this.plan.data))
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -188,7 +189,6 @@ export default {
                 this.newTask.end_date = dateToStr(new Date(strToDate(this.newTask.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
                 this.newTask.min_date = this.newTask.start_date
                 this.newTask.max_date = dateToStr(pTask.end_date)
-                console.log(this.newTask)
             } else {
                 this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
                 this.newTask.end_date = dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
@@ -210,8 +210,9 @@ export default {
                 start_date: dateToStr(task.start_date),
                 end_date: dateToStr(task.end_date),
                 status: task.status,
-                open: true,
+                open: task.open,
                 description: task.description,
+                type: task.type,
             }
             if (task.parent > 0) {
                 var pTask = this.plan.data.filter(t => t.id == task.parent)[0]
@@ -262,11 +263,12 @@ export default {
             this.loading = true
             if (task.start_date == task.end_date && task.duration == 0)
                 task.duration = 1
+            //console.log('before', this.plan.data)
             this.$http.post(this.config.API_URL + '/Task', task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
                 if (json.Success) {
-                    this.showSnackbar(json.Message, 'success')
+                    //this.showSnackbar(json.Message, 'success')
                     //Update gantt
                     var newId = json.Data.Id
                     var newTaskToGantt = {
@@ -277,10 +279,20 @@ export default {
                         open: task.open,
                         description: task.description,
                         text: task.text,
+                        type: 'task',
                         duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
                     }
                     this.plan.data.push(newTaskToGantt)
+                    if(task.parent>0){
+                        var pPlan = this.plan.data.filter(t=>t.id==task.parent)[0]
+                        pPlan.type = "project"
+                        pPlan.open = true
+                        //pPlan.start_date = ""
+                        //pPlan.end_date = ""
+                        //pPlan.duration = 0
+                    }
                     this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
+                    //console.log('after', JSON.stringify(this.plan.data))
                 }
                 //Clear newTask for CreateTaskDialog
                 this.newTask = {
@@ -305,21 +317,18 @@ export default {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
                 if (json.Success) {
-                    this.showSnackbar(json.Message, 'success')
+                    //this.showSnackbar(json.Message, 'success')
                     //Update to Gantt
                     for (var i = 0; i < this.plan.data.length; i++) {
                         if (task.id == this.plan.data[i].id) {
-                            var editTaskToGantt = {
-                                id: task.id,
-                                start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-                                parent: task.parent,
-                                text: task.text,
-                                duration: task.duration,
-                                description: task.description,
-                                open: task.open,
-                                status: task.status,
-                            }
-                            this.plan.data[i] = editTaskToGantt
+                            var oTask = this.plan.data[i]
+                            oTask.start_date = this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date))
+                            oTask.text = task.text
+                            oTask.duration = task.duration
+                            oTask.description = task.description
+                            oTask.status =  task.status
+                            //this.plan.data[i] = editTaskToGantt
+                            break
                         }
                     }
                     this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
@@ -339,7 +348,7 @@ export default {
                 this.$emit('delete')
                 var json = JSON.parse(res.bodyText)
                 if (json.Success) {
-                    this.showSnackbar(json.Message, 'success')
+                    //this.showSnackbar(json.Message, 'success')
                     //Update to Gantt
                     var ids = this.findNodeChildren(task.id, this.plan.data)
                     this.plan.data = this.plan.data.filter(t => ids.indexOf(t.id) == -1)

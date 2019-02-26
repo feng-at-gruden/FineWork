@@ -226,12 +226,12 @@ function limitResizeRight(task, limit) {
 	task.start_date = new Date(limit.start_date)
 }
 
-function getTaskFitValue(task) {
+function getTaskFitValue(task, text) {
 	var taskStartPos = gantt.posFromDate(task.start_date),
 		taskEndPos = gantt.posFromDate(task.end_date);
 
 	var width = taskEndPos - taskStartPos;
-	var textWidth = (task.text || "").length * gantt.config.font_width_ratio;
+	var textWidth = (text || "").length * gantt.config.font_width_ratio;
 
 	if (width < textWidth) {
 		var ganttLastDate = gantt.getState().max_date;
@@ -328,6 +328,27 @@ export default {
 		gantt.config.scale_height = 60;
 		//gantt.config.row_height = 30;
 		gantt.config.min_column_width = 20;
+
+
+		gantt.config.font_width_ratio = 10;
+		gantt.templates.leftside_text = function leftSideTextTemplate(start, end, task) {
+			if (getTaskFitValue(task, task.text) === "left") {
+				return task.text;
+			}
+			return "";
+		};
+		gantt.templates.rightside_text = function rightSideTextTemplate(start, end, task) {
+			if (getTaskFitValue(task, task.text) === "right") {
+				return task.text;
+			}
+			return "";
+		};
+		gantt.templates.task_text = function taskTextTemplate(start, end, task) {
+			if (getTaskFitValue(task, task.text) === "center") {
+				return task.text;
+			}
+			return "";
+		};
 	},
 
 	initProjectGantt: function(id, editable) {
@@ -410,6 +431,16 @@ export default {
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = phaseEditingColumns
+			gantt.templates.task_class = function(start, end, task) {
+				var c = ''
+				if(task.type=='project')
+					c += ' project'
+				if (task.type == 'plan')
+					c += ' plan'
+				if (task.type == 'actual')
+					c += ' actual'
+				return c
+			}
 		} else {
 			gantt.config.columns = phaseReadonlyColumns
 			gantt.templates.task_class = function(start, end, task) {
@@ -445,28 +476,32 @@ export default {
 				}
 				return c
 			};
+
+			/*
+			gantt.templates.leftside_text = function leftSideTextTemplate(start, end, task) {
+				if (getTaskFitValue(task, task.task_name) === "left") {
+					return task.task_name + '(' + task.text + ')';
+				}
+				return "";
+			};
+			gantt.templates.rightside_text = function rightSideTextTemplate(start, end, task) {
+				if (getTaskFitValue(task, task.task_name) === "right") {
+					return task.task_name + '(' + task.text + ')';
+				}
+				return "";
+			};
+			gantt.templates.task_text = function taskTextTemplate(start, end, task) {
+				if (getTaskFitValue(task, task.task_name) === "center") {
+					gantt.templates.rightside_text = function (start, end, task) {
+						return "(" + task.text + ")";
+					};
+					return task.task_name;
+				}else{
+
+				}
+				return "";
+			};*/
 		}
-
-
-		gantt.config.font_width_ratio = 7;
-		gantt.templates.leftside_text = function leftSideTextTemplate(start, end, task) {
-			if (getTaskFitValue(task) === "left") {
-				return task.text;
-			}
-			return "";
-		};
-		gantt.templates.rightside_text = function rightSideTextTemplate(start, end, task) {
-			if (getTaskFitValue(task) === "right") {
-				return task.text;
-			}
-			return "";
-		};
-		gantt.templates.task_text = function taskTextTemplate(start, end, task) {
-			if (getTaskFitValue(task) === "center") {
-				return task.text;
-			}
-			return "";
-		};
 
 
 		//Drag restriction

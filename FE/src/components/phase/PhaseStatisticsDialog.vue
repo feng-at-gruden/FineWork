@@ -41,7 +41,6 @@ export default {
     },
     methods: {
         loadPhaseStatistics() {
-            console.log('Loading')
             this.loading = true
             this.$http.get(this.config.API_URL + '/Phase/Statistics?id=' + this.phaseId)
             .then(function(res) {
