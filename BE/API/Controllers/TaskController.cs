@@ -175,7 +175,7 @@ namespace API.Controllers
 
         private void refreshParentsDuration(Task parentTask)
         {
-            if (parentTask != null)
+            if (parentTask != null && parentTask.ChildrenTasks.Count()>0)
             {
                 var minStartDate = parentTask.ChildrenTasks.Min(t => t.PlanStartDate);
                 var maxEndDate = parentTask.ChildrenTasks.Max(t => t.PlanEndDate);
@@ -203,15 +203,19 @@ namespace API.Controllers
                     done += duration * progress;
                 }
 
-                parentTask.Progress = Math.Truncate((done / all) * 100m) * 0.01m;
-                if (parentTask.Status == Configurations.TASK_STATUS[0] && done > 0)
-                    parentTask.Status = Configurations.TASK_STATUS[1];
+                if (all > 0)
+                {
+                    parentTask.Progress = Math.Truncate((done / all) * 100m) * 0.01m;
+                    if (parentTask.Status == Configurations.TASK_STATUS[0] && done > 0)
+                        parentTask.Status = Configurations.TASK_STATUS[1];
 
-                if (parentTask.Progress >= 1)
-                    parentTask.Status = Configurations.TASK_STATUS[3];
+                    if (parentTask.Progress >= 1)
+                        parentTask.Status = Configurations.TASK_STATUS[3];
 
-                if (parentTask.ParentTask != null)
-                    refreshParentsProgress(parentTask.ParentTask);
+                    if (parentTask.ParentTask != null)
+                        refreshParentsProgress(parentTask.ParentTask);
+                }
+                
             }
         }
 
@@ -230,11 +234,16 @@ namespace API.Controllers
                 done += duration * progress;
             }
 
-            if (phase.Status == Configurations.TASK_STATUS[0] && done > 0)
-                phase.Status = Configurations.TASK_STATUS[1];
-            phase.Progress = Math.Truncate((done / all) * 100m) * 0.01m;
-            if (phase.Progress >= 1)
-                phase.Status = Configurations.TASK_STATUS[3];
+            if (all > 0)
+            {
+                if (phase.Status == Configurations.TASK_STATUS[0] && done > 0)
+                    phase.Status = Configurations.TASK_STATUS[1];
+
+                phase.Progress = Math.Truncate((done / all) * 100m) * 0.01m;
+                if (phase.Progress >= 1)
+                    phase.Status = Configurations.TASK_STATUS[3];
+            }
+            
         }
 
 

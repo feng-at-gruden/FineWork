@@ -13,6 +13,7 @@ namespace API.Models.JsonModel
         public int TaskCount;           //任务总数
         public int FinishedCount;       //已完成
         public int UnfinishedCount;     //未完成
+        public int UnstartCount;     //未完成
         public int WorkingCount;        //施工中
         public int PendingCount;        //停工中
         public int FulfilAheadCount;    //提前完成

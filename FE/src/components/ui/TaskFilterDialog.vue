@@ -1,10 +1,10 @@
 <template>
-    <v-menu v-model="dialog" :close-on-content-click="false" max-width="360" nudge-bottom="51" offset-x nudge-left="210" attach="#hearder-search-btn">
+    <v-menu v-model="dialog" :close-on-content-click="false" max-width="360" nudge-bottom="51" offset-x nudge-left="195" attach="#hearder-search-btn">
         <v-card>
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
-                        <v-icon big>filter_none</v-icon>
+                        <v-icon large>filter_none</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
                         <v-list-tile-title>显示设置</v-list-tile-title>

@@ -98,6 +98,10 @@ body{
     bottom: 0px;
 }
 
+.statistics-dialog{
+    max-width: 460px !important;
+}
+
 .add-user-btn {
     bottom: 46px !important;
     z-index: 1 !important;

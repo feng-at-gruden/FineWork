@@ -524,6 +524,7 @@ namespace API.Controllers
                 UnfinishedCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status != Configurations.TASK_STATUS[3]),
                 PendingCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[2]),
                 WorkingCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[1]),
+                UnstartCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[0]),
                 ExceededCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.LastUpdated > m.PlanEndDate && m.Status == Configurations.TASK_STATUS[1]),
                 DelayedCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && DateTime.Now > m.PlanStartDate.Value.AddDays(1) && m.Status == Configurations.TASK_STATUS[0]),
                 FulfilAheadCount = phase.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.ActualEndDate.HasValue && m.ActualEndDate < m.PlanEndDate && m.Status == Configurations.TASK_STATUS[3]),
