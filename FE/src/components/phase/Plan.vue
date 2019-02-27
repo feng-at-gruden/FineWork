@@ -159,7 +159,7 @@ export default {
                 this.selectedPhase = parseInt(this.plan.id)
                 if (!this.selectedProject && json.projectId)
                     this.selectedProject = parseInt(json.projectId)
-                //console.log('enter', JSON.stringify(this.plan.data))
+                console.log('enter', JSON.stringify(this.plan.data))
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })
@@ -236,8 +236,10 @@ export default {
                     for (var i = 0; i < this.plan.data.length; i++) {
                         if (task.id == this.plan.data[i].id) {
                             this.plan.data[i] = task
+                            break
                         }
                     }
+                    //console.log('after', JSON.stringify(this.plan.data))
                 }
             }, function(res) {
                 var json = JSON.parse(res.bodyText)
@@ -261,8 +263,9 @@ export default {
 
             //Call API, and get task ID
             this.loading = true
-            if (task.start_date == task.end_date && task.duration == 0)
+            if (task.start_date == task.end_date && task.duration == 0){
                 task.duration = 1
+            }
             //console.log('before', this.plan.data)
             this.$http.post(this.config.API_URL + '/Task', task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
@@ -273,24 +276,31 @@ export default {
                     var newId = json.Data.Id
                     var newTaskToGantt = {
                         id: newId,
-                        start_date: this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date)),
-                        parent: task.parent, //项目阶段parent为空task.parent,
+                        start_date: this.util.stringToDate(task.start_date),
+                        end_date: this.util.stringToDate(task.end_date),
+                        parent: parseInt(task.parent), //项目阶段parent为空task.parent,
                         status: task.status,
-                        open: task.open,
                         description: task.description,
                         text: task.text,
                         type: 'task',
                         duration: this.util.dateDifference(this.util.stringToDate(task.end_date), this.util.stringToDate(task.start_date))
                     }
                     this.plan.data.push(newTaskToGantt)
+
                     if(task.parent>0){
-                        var pPlan = this.plan.data.filter(t=>t.id==task.parent)[0]
-                        pPlan.type = "project"
-                        pPlan.open = true
-                        //pPlan.start_date = ""
-                        //pPlan.end_date = ""
-                        //pPlan.duration = 0
+                        for(var i=0;i<this.plan.data.length;i++){
+                            if(this.plan.data[i].id==newTaskToGantt.parent){
+                                this.plan.data[i].type = "project"
+                                this.plan.data[i].open = true
+                                //this.plan.data[i].start_date = ""
+                                //this.plan.data[i].end_date = ""
+                                //this.plan.data[i].duration = 0
+                                //console.log(i, this.plan.data[i])
+                                break
+                            }
+                        }
                     }
+                    //this.plan = this.refineTaskDate(this.plan)
                     this.plan = Object.assign({}, this.plan) //Force to refresh to Gantt component
                     //console.log('after', JSON.stringify(this.plan.data))
                 }
@@ -310,9 +320,11 @@ export default {
         handleOnEditTaskSave(task) {
             //任务编辑窗口SAVE按钮点击
             //CAlL API
+            
             this.loading = true
             if (task.start_date == task.end_date && task.duration == 0)
                 task.duration = 1
+
             this.$http.put(this.config.API_URL + '/Task/' + task.id, task).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 this.loading = false
@@ -321,13 +333,14 @@ export default {
                     //Update to Gantt
                     for (var i = 0; i < this.plan.data.length; i++) {
                         if (task.id == this.plan.data[i].id) {
+                            var strToDate = gantt.date.str_to_date("%Y-%m-%d")
                             var oTask = this.plan.data[i]
-                            oTask.start_date = this.util.dateFormat('d/M/yyyy', this.util.stringToDate(task.start_date))
+                            oTask.start_date = strToDate(task.start_date)
                             oTask.text = task.text
                             oTask.duration = task.duration
                             oTask.description = task.description
                             oTask.status =  task.status
-                            //this.plan.data[i] = editTaskToGantt
+                            oTask.end_date = new Date(strToDate(task.start_date).getTime() + 1000 * 60 * 60 * 24 * task.duration)
                             break
                         }
                     }
