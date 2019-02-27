@@ -91,7 +91,7 @@ export default {
                 case '阶段统计':
                     this.openPhaseStatistics = true
                     break
-                case '计划调整':
+                case '制定计划':
                     this.loadRawPlan()
                     this.showSnackbar('您已进入编辑模式，可通过拖拽、双击等方式进行任务编辑。', 'info')
                     this.drawer = false

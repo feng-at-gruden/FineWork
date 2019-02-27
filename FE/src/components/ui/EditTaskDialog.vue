@@ -13,7 +13,7 @@
                                 <v-text-field v-model="task.text" :counter="25" :label="unitLabel" :rules="nameRules" required append-icon="business"></v-text-field>
                             </v-flex>
                             <v-flex xs4 md4>
-                                <v-select v-model="task.status" :items="config.TaskStatus" label="计划状态"></v-select>
+                                <v-select readonly v-model="task.status" :items="config.TaskStatus" label="计划状态"></v-select>
                             </v-flex>
                             <v-flex xs12 md12>
                                 <v-text-field v-model="task.description" :counter="50" label="工作内容描述"></v-text-field>

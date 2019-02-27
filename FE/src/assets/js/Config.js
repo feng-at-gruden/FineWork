@@ -6,8 +6,8 @@ const ENV = 'PROD'
 if(ENV=='UAT'){
     var APP_NAME = "Fine.Work"
     var CLIENT_NAME = "Feng Guo"
-    //var API_URL = "http://114.115.178.72/FineWork/API"
-    var API_URL = "http://localhost:9909/API"
+    var API_URL = "http://114.115.178.72/FineWork/API"
+    //var API_URL = "http://localhost:9909/API"
     //var API_URL = "http://103.254.77.30:8001/API"
     //var API_URL = "http://127.0.0.1:3000"
 }else{

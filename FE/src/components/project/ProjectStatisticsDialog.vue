@@ -19,7 +19,8 @@
                 <v-layout wrap>
                     <v-flex xs12 md12 style="color:#333; padding-bottom: 15px; font-size: 16px;">
                         <div style="float:right;color:#aaa; font-style: italic; font-size: 12px;margin: 5px 10px;">
-                            工期{{data.Duration}}天
+                            <v-icon small>date_range</v-icon>
+                            计划工期{{data.Duration}}天
                         </div>
                     </v-flex>
                     <v-flex xs4 md3 class="task-count-container">

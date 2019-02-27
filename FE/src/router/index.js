@@ -80,9 +80,9 @@ export default new Router({
                 meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true,
                     showOptionMenu: true, 
                     optionMenu: [
-                    { icon: 'dns', text: '显示选项'}, 
+                    { icon: 'desktop_mac', text: '显示选项'}, 
                     { icon: 'insert_chart_outlined', text: '阶段统计', }, 
-                    { icon: 'border_color', text: '计划调整', permission: 'plan-management', editing: { icon: 'save', text: '退出编辑'} },
+                    { icon: 'border_color', text: '制定计划', permission: 'plan-management', editing: { icon: 'save', text: '退出编辑'} },
                     { icon: 'delete_sweep', text: '删除阶段', permission: 'project-management' }, 
                     ] },                 
                 component: PhasePlan
