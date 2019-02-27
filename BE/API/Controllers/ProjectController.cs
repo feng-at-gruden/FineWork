@@ -272,6 +272,50 @@ namespace API.Controllers
             }
         }
 
+
+        [HttpGet]
+        [Route("Statistics")]
+        public HttpResponseMessage Statistics(int id)
+        {
+            var project = db.Project.SingleOrDefault(m => m.Id == id);
+            if (project == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, new APIResponse
+                {
+                    Success = false,
+                    Message = "没有找到相关项目信息"
+                });
+            }
+
+            var model = getProjectStastistics(project);
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
+
+        private StatisticsViewModel getProjectStastistics(Project project)
+        {
+            StatisticsViewModel result = new StatisticsViewModel
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Progress = project.Progress.HasValue ? project.Progress.Value : 0,
+                Status = project.Status,
+                StartDate = project.StartDate.Value,
+                EndDate = project.EndDate.Value,
+                Duration = (project.EndDate.Value - project.StartDate.Value).Days,
+                TaskCount = project.Phase.Sum(p=>p.Task.Count(m=>m.ChildrenTasks.Count() == 0)),
+                FinishedCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[3])),
+                UnfinishedCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status != Configurations.TASK_STATUS[3])),
+                PendingCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[2])),
+                WorkingCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[1])),
+                UnstartCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.Status == Configurations.TASK_STATUS[0])),
+                ExceededCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.LastUpdated > m.PlanEndDate && m.Status == Configurations.TASK_STATUS[1])),
+                DelayedCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && DateTime.Now > m.PlanStartDate.Value.AddDays(1) && m.Status == Configurations.TASK_STATUS[0])),
+                FulfilAheadCount = project.Phase.Sum(p=>p.Task.Count(m => m.ChildrenTasks.Count() == 0 && m.ActualEndDate.HasValue && m.ActualEndDate < m.PlanEndDate && m.Status == Configurations.TASK_STATUS[3])),
+            };
+            
+            return result;
+        }
+
     }
 
 

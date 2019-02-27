@@ -7,7 +7,7 @@
                         <v-icon large>timelapse</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title><span>{{data.Name}}</span> - 阶段统计</v-list-tile-title>
+                        <v-list-tile-title><span>{{data.Name}}</span> - 项目统计</v-list-tile-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
                         <v-icon small>more_vert</v-icon>
@@ -19,19 +19,7 @@
                 <v-layout wrap>
                     <v-flex xs12 md12 style="color:#333; padding-bottom: 15px; font-size: 16px;">
                         <div style="float:right;color:#aaa; font-style: italic; font-size: 12px;margin: 5px 10px;">
-                            计划{{data.Duration}}天
-                            <span v-if="data.Status == config.TaskStatus[0] ">
-                                尚未开工
-                            </span>
-                            <span v-else-if="data.Status == config.TaskStatus[1]">
-                                截至目前已施工{{data.ActualDuration}}天
-                            </span>
-                            <span v-else-if="data.Status == config.TaskStatus[2]">
-                                停工中
-                            </span>
-                            <span v-else-if="data.Status == config.TaskStatus[3]">
-                                实际工期{{data.ActualDuration}}天
-                            </span>
+                            工期{{data.Duration}}天
                         </div>
                     </v-flex>
                     <v-flex xs4 md3 class="task-count-container">
@@ -93,7 +81,7 @@
 import config from '../../assets/js/Config'
 import util from '../../assets/js/Util'
 export default {
-    name: 'PhaseStatisticsDialog',
+    name: 'ProjectStatisticsDialog',
     props: ['open'],
     data() {
         return {
@@ -107,7 +95,7 @@ export default {
         }
     },
     computed: {
-        phaseId() {
+        projectId() {
             return this.$route.params.id
         },
         dialog: {
@@ -121,16 +109,14 @@ export default {
         dialog(v, ov) {
             if (v) {
                 this.finishedProgress = 0
-                this.loadPhaseStatistics()
-            } else {
-
+                this.loadStatistics()
             }
         }
     },
     methods: {
-        loadPhaseStatistics() {
+        loadStatistics() {
             this.loading = true
-            this.$http.get(this.config.API_URL + '/Phase/Statistics?id=' + this.phaseId)
+            this.$http.get(this.config.API_URL + '/Project/Statistics?id=' + this.projectId)
                 .then(function(res) {
                     this.data = JSON.parse(res.bodyText)
                     this.loading = false
@@ -169,5 +155,4 @@ export default {
 .task-count-container .v-progress-linear {
     margin: 10px 0 20px 0;
 }
-
 </style>

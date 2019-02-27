@@ -159,7 +159,7 @@ export default {
                 this.selectedPhase = parseInt(this.plan.id)
                 if (!this.selectedProject && json.projectId)
                     this.selectedProject = parseInt(json.projectId)
-                console.log('enter', JSON.stringify(this.plan.data))
+                //console.log('enter', JSON.stringify(this.plan.data))
             }, function(res) {
                 this.showSnackbar('阶段计划加载失败!', 'error')
             })

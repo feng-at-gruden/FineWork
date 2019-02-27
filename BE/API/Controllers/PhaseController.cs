@@ -411,7 +411,7 @@ namespace API.Controllers
                 else
                 {
                     actualTask.start_date = task.ActualStartDate;
-                    if (task.Progress.Value >= 1)
+                    if (task.Progress.Value >= 1 || task.Status == Configurations.TASK_STATUS[3])
                     {
                         //已完工
                         actualTask.text = Configurations.TASK_STATUS[3];

@@ -61,16 +61,16 @@
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions v-if="!edit" style="position: absolute;">
                                         <v-spacer></v-spacer>
-                                        <v-btn @click="dialog=false">关闭</v-btn>
-                                        <v-btn color="primary" v-if="auth.checkPermission('project-management', identity)" @click="edit=true">编辑</v-btn>
+                                        <v-btn flat @click="dialog=false">关闭</v-btn>
+                                        <v-btn flat color="primary" v-if="auth.checkPermission('project-management', identity)" @click="edit=true">编辑</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>
                                 </v-fade-transition>
                                 <v-fade-transition mode="in-out">
                                     <v-card-actions bottom v-if="edit" style="position: absolute;">
                                         <v-spacer></v-spacer>
-                                        <v-btn @click="handleCancelClick">取消</v-btn>
-                                        <v-btn color="primary" @click="handleSaveClick" :disabled="!valid1" :loading="saving">保存</v-btn>
+                                        <v-btn flat @click="handleCancelClick">取消</v-btn>
+                                        <v-btn flat color="primary" @click="handleSaveClick" :disabled="!valid1" :loading="saving">保存</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>
                                 </v-fade-transition>

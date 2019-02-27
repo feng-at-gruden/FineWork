@@ -12,6 +12,8 @@
         <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'项目阶段'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
         <!--删除项目确认对话框-->
         <DeleteProjectDialog :open="openDeleteProjectDialog" @close="openDeleteProjectDialog = false" @delete="handleOnProjectDeleted"></DeleteProjectDialog>
+        <!--阶段统计信息对话框 -->
+        <ProjectStatisticsDialog :open="openProjectStatistics" @close="openProjectStatistics = false"></ProjectStatisticsDialog>
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
             <v-btn dark flat @click="snackbar = false">确定</v-btn>
@@ -26,11 +28,12 @@ import ProjectTimeline from '../ui/ProjectTimeline'
 import CreateTaskDialog from '../ui/CreateTaskDialog'
 import EditTaskDialog from '../ui/EditTaskDialog'
 import DeleteProjectDialog from '../ui/DeleteProjectDialog'
+import ProjectStatisticsDialog from './ProjectStatisticsDialog'
 
 export default {
     extends: BasePage,
     name: 'ProjectPlan',
-    components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline, CreateTaskDialog, EditTaskDialog, DeleteProjectDialog },
+    components: { ProjectPlanGantt, ProjectInfoDialog, ProjectTimeline, CreateTaskDialog, EditTaskDialog, DeleteProjectDialog, ProjectStatisticsDialog },
     data() {
         return {
             openProjectInfoDialog: false,
@@ -38,6 +41,7 @@ export default {
             openCreateTaskDialog: false,
             openEditTaskDialog: false,
             openDeleteProjectDialog: false,
+            openProjectStatistics: false,
             snackbar: false,
             snackbarMessage: '',
             snackbarColor: '',
@@ -72,6 +76,9 @@ export default {
             switch (v.text) {
                 case '项目信息':
                     this.openProjectDetailDialog()
+                    break
+                case '项目统计':
+                    this.openProjectStatistics = true
                     break
                 case '时间轴':
                     this.openProjectTimeline = true

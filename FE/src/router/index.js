@@ -61,6 +61,7 @@ export default new Router({
                         showOptionMenu: true, 
                         optionMenu: [
                         { icon: 'info_outline', text: '项目信息', }, 
+                        { icon: 'insert_chart_outlined', text: '项目统计', }, 
                         /*{ icon: 'timeline', text: '时间轴' }, */
                         /*{ icon: '', text: 'Divider', permission: 'project-management' }, */
                         { icon: 'blur_linear', text: '阶段调整', permission: 'project-management', editing: { icon: 'save', text: '退出编辑'} },
@@ -79,7 +80,7 @@ export default new Router({
                 meta: { requiresAuth: true, level: 2, title: "阶段计划", fullWidth: true, autoLoading: true,
                     showOptionMenu: true, 
                     optionMenu: [
-                    { icon: 'dns', text: '显示选项', hideOnEditing: true }, 
+                    { icon: 'dns', text: '显示选项'}, 
                     { icon: 'insert_chart_outlined', text: '阶段统计', }, 
                     { icon: 'border_color', text: '计划调整', permission: 'plan-management', editing: { icon: 'save', text: '退出编辑'} },
                     { icon: 'delete_sweep', text: '删除阶段', permission: 'project-management' }, 

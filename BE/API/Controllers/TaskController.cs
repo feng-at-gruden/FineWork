@@ -36,7 +36,7 @@ namespace API.Controllers
                     Name = task.text,
                     PlanStartDate = DateTime.Parse(task.start_date.Value.ToLocalTime().ToShortDateString()),
                     PlanEndDate = DateTime.Parse(task.end_date.Value.ToLocalTime().ToShortDateString()),
-                    Progress = 0,
+                    Progress = task.status == Configurations.TASK_STATUS[3]?1:0,
                     Status = string.IsNullOrWhiteSpace(task.status) ? Configurations.TASK_STATUS[0] : task.status,
                     CreatedBy = u.Id,
                     CreatedDate = DateTime.Now.ToLocalTime(),
@@ -91,7 +91,7 @@ namespace API.Controllers
             {
                 var startDate = DateTime.Parse(task.start_date.Value.ToLocalTime().ToShortDateString());
                 p.Name = task.text.Trim();
-                //p.Progress = task.progress;
+                p.Progress = task.status == Configurations.TASK_STATUS[3] ? 1 : p.Progress;
                 p.Description = task.description;
                 p.PlanStartDate = startDate;
                 p.PlanEndDate = startDate.AddDays(task.duration);

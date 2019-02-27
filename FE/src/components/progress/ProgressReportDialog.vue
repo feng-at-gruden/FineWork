@@ -169,9 +169,9 @@ export default {
         },
         progressCss() {
             if (this.myTask.progress >= 1)
-                return 'success'
+                return 'green'
             else if (this.myTask.exceed)
-                return 'error'
+                return 'red'
             else if (this.myTask.status == this.config.TaskStatus[0])
                 return 'grey darken-1'
             else
