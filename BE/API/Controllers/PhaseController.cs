@@ -399,7 +399,12 @@ namespace API.Controllers
                     else
                     {
                         planTask.text = Configurations.TASK_STATUS[0];
-                        notStartAndNotDelay = true;
+
+                        actualTask.start_date = planTask.start_date;
+                        actualTask.end_date = planTask.end_date;
+                        actualTask.duration = planTask.duration;
+                        actualTask.text = Configurations.TASK_STATUS[0];
+                        //notStartAndNotDelay = true;
                     }
                     holderTask.delayed = actualTask.delayed;
                 }

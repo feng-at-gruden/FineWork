@@ -41,6 +41,9 @@
     border: solid 1px #616060;
     opacity: 0.75;
 }
+.plan .gantt_task_content{
+    display: none;
+}
 
 .actual {
     background: #5998bd;
@@ -106,10 +109,6 @@
     border-radius: 0px;
     position: relative;
     display: block;
-}
-
-.plan .gantt_task_content{
-    display: none;
 }
 
 .gantt-content-samll{

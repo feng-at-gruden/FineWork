@@ -7,7 +7,7 @@
                         <v-icon large>timelapse</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                        <v-list-tile-title>阶段统计</v-list-tile-title>
+                        <v-list-tile-title><span>{{data.Name}}</span> - 阶段统计</v-list-tile-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
                         <v-icon small>more_vert</v-icon>
@@ -18,10 +18,20 @@
             <v-container class="statistics-container">
                 <v-layout wrap>
                     <v-flex xs12 md12 style="color:#333; padding-bottom: 15px; font-size: 16px;">
-                        <span>{{data.Name}}</span> 
                         <span style="float:right;color:#aaa; font-style: italic; font-size: 12px;margin: 5px 10px;">
                         计划{{data.Duration}}天
-                        实际{{data.ActualDuration}}天
+                        <span v-if="data.Status == config.TaskStatus[0] ">
+                            尚未开工
+                        </span>
+                        <span v-else-if="data.Status == config.TaskStatus[1]">
+                            截至目前已施工{{data.ActualDuration}}天
+                        </span>
+                        <span v-else-if="data.Status == config.TaskStatus[2]">
+                            停工中
+                        </span>
+                        <span v-else-if="data.Status == config.TaskStatus[3]">
+                            实际工期{{data.ActualDuration}}天
+                        </span>
                         </span>
                     </v-flex>
                     <v-flex xs4 md3 class="task-count-container">
@@ -40,8 +50,8 @@
                         <v-progress-linear color="info" height="5" :value="progress(data.UnfinishedCount)"></v-progress-linear>
                     </v-flex>
                     <v-flex xs4 md3 class="task-count-container">
-                        <label>未开工</label>
-                        <span class="task-count">{{data.UnstartCount}}</span>
+                        <label>施工中</label>
+                        <span class="task-count">{{data.WorkingCount}}</span>
                         <v-progress-linear color="grey" height="5" :value="progress(data.UnstartCount)"></v-progress-linear>
                     </v-flex>
                     <v-flex xs4 md3 class="task-count-container">
@@ -65,7 +75,6 @@
                         <v-progress-linear color="error" height="5" :value="progress(data.PendingCount)"></v-progress-linear>
                     </v-flex>
                 </v-layout>
-                
             </v-container>
             <div class="text-xs-center">
                 <v-progress-circular :rotate="-90" :size="100" :width="15" :value="finishedProgress" color="primary">
@@ -94,7 +103,7 @@ export default {
             interval: {},
             loading: false,
             finishedProgress: 0,
-            wait :0,
+            wait: 0,
         }
     },
     computed: {
@@ -113,8 +122,8 @@ export default {
             if (v) {
                 this.finishedProgress = 0
                 this.loadPhaseStatistics()
-            }else{
-                
+            } else {
+
             }
         }
     },
@@ -141,6 +150,7 @@ export default {
 <style scoped>
 .statistics-container {
     color: #9c9c9c;
+    padding-top: 0px !important;
 }
 
 .task-count-container {
