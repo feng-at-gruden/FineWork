@@ -25,13 +25,13 @@
                                 <v-icon small>hourglass_empty</v-icon>尚未开工
                             </span>
                             <span v-else-if="data.Status == config.TaskStatus[1]">
-                                <v-icon small>directions_walk</v-icon>截至目前共施工{{data.ActualDuration}}天
+                                <v-icon small>directions_walk</v-icon>目前已施工{{data.ActualDuration}}天
                             </span>
                             <span v-else-if="data.Status == config.TaskStatus[2]">
                                 <v-icon small>indeterminate_check_box</v-icon>停工中
                             </span>
                             <span v-else-if="data.Status == config.TaskStatus[3]">
-                                <v-icon small>check_circle_outline</v-icon>实际工期{{data.ActualDuration}}天
+                                <v-icon small>check_circle_outline</v-icon>实际施工{{data.ActualDuration}}天
                             </span>
                         </div>
                     </v-flex>
