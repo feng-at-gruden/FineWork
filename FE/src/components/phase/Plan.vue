@@ -251,8 +251,12 @@ export default {
         },
         handleOnGanttTaskDblClick(id) {
             //进入工作日志浏览页
-            if (this.util.IsPC())
-                this.openTaskWorkLog(id)
+            if (this.util.IsPC()){
+                var task = this.plan.data.filter(t=>t.id==id)[0]
+                if(task.type!='actual' && task.type!='plan'){
+                    this.openTaskWorkLog(id)
+                }
+            }
         },
         handleOpenTaskWorkLog(id) {
             this.openTaskWorkLog(id)
