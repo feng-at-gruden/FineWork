@@ -68,7 +68,7 @@ const projectReadonlyColumns = [
 			} else if (obj.progress == 0) {
 				str = "未开工"
 			} else {
-				str = obj.progress * 100 + "%"
+				str = accMul(obj.progress, 100) + "%"
 			}
 			return "<div class=\"gantt-content-left-status " + (obj.exceed ? 'project-delayed' : '') + '\">' + str + "</div>"
 		}

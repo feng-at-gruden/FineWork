@@ -47,7 +47,7 @@
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_start? props.item.actual_start.split('T')[0] : '' }}</td>
-                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_end? props.item.actual_end.split('T')[0] : '' }}</td>
+                    <td class="text-xs-center text-no-wrap task-date">{{ props.item.last_update? props.item.last_update.split('T')[0] : '' }}</td>
                     <td :class="[{'task-exceed': props.item.exceed&&props.item.status!=config.TaskStatus[3]}, 'text-xs-center']">{{ props.item.status }}</td>
                     <td class="text-xs-center">
                         <v-progress-linear color="success" height="5" :value="util.accMul(props.item.progress,100)" style="width: 65%"></v-progress-linear><span class="progress-value">{{util.accMul(props.item.progress,100)}}%</span>
@@ -87,7 +87,7 @@ export default {
                 { text: '计划工期', value: 'start_date', align: 'center' },
                 { text: '计划工时', value: 'duration', align: 'center' },
                 { text: '开工日期', value: 'actual_start', align: 'center' },
-                { text: '完工日期', value: 'actual_end', align: 'center' },
+                { text: '更新日期', value: 'last_update', align: 'center' },
                 { text: '状态', value: 'status', align: 'center' },
                 { text: '施工进度', value: 'progress', align: 'center' }
             ],

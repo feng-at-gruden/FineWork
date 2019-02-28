@@ -226,6 +226,7 @@ namespace API.Controllers
             if (c.type != "project" && c.progress<1)
             {
                 var nowTime = DateTime.Parse(DateTime.Now.ToLocalTime().ToShortDateString()); //忽略小时
+                var latestWorkDate = task.Worklog.Max(m => m.CreatedDate);
                 if (task.ActualStartDate == null)
                 {
                     //没开工
@@ -243,7 +244,6 @@ namespace API.Controllers
                 else
                 {
                     //已开工
-                    var latestWorkDate = task.Worklog.Max(m => m.CreatedDate); 
                     if (!latestWorkDate.HasValue)
                     {
                         //异常， 任务已经开始，但是没有找到相关工作日志？
@@ -259,8 +259,8 @@ namespace API.Controllers
                         //逾期
                         c.exceed = true;
                     }
-                    c.last_update = latestWorkDate;
                 }
+                c.last_update = latestWorkDate;
             }
 
             if (c.progress == 1 && task.ActualStartDate.HasValue && task.ActualEndDate.HasValue && c.type != "project")

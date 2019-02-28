@@ -58,7 +58,7 @@
                             <v-flex xs12 md6 style="margin-top: -15px;">
                                 <v-menu :close-on-content-click="false" v-model="dateMenu1" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
                                     <v-text-field slot="activator" v-model="actualStartDate" label="开工日期" prepend-icon="event" readonly></v-text-field>
-                                    <v-date-picker v-model="actualStartDate" @input="dateMenu1 = false" :disabled="taskCopy.status!=config.TaskStatus[0]"></v-date-picker>
+                                    <v-date-picker v-model="actualStartDate" @input="dateMenu1 = false" :disabled="startDateDisable"></v-date-picker>
                                 </v-menu>
                             </v-flex>
                             <v-flex xs12 md6 style="margin-top: -15px;">
@@ -158,6 +158,17 @@ export default {
             else
                 return '-'
         },
+        startDateDisable(){
+            if(this.taskCopy.status==config.TaskStatus[0]){
+                return false
+            }else{
+                if(!this.taskCopy.actual_start){
+                    return false
+                }else{
+                    return true
+                }
+            }
+        },
         lastUpdateDate() {
             if (this.myTask.last_update)
                 return this.myTask.last_update.split('T')[0]
@@ -188,10 +199,11 @@ export default {
                 return
             }
             //Tricky 当天开工/当天完工
+            /*
             if(this.actualStartDate==this.signDate && this.myTask.status==this.config.TaskStatus[3]){
                 var d = new Date(strToDate(this.actualStartDate).getTime() + 1000 * 60 * 60 * 24 * 1)
                 this.signDate = dateToStr(d)
-            }
+            }*/
             var request = {
                 created_date: this.signDate,
                 start_date: this.actualStartDate,
