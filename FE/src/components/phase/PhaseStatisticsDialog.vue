@@ -95,7 +95,7 @@ import config from '../../assets/js/Config'
 import util from '../../assets/js/Util'
 export default {
     name: 'PhaseStatisticsDialog',
-    props: ['open'],
+    props: ['open', 'phaseId'],
     data() {
         return {
             config,
@@ -108,8 +108,8 @@ export default {
         }
     },
     computed: {
-        phaseId() {
-            return this.$route.params.id
+        pid() {
+            return this.$props.phaseId
         },
         dialog: {
             get() { return this.$props.open },
@@ -131,7 +131,7 @@ export default {
     methods: {
         loadPhaseStatistics() {
             this.loading = true
-            this.$http.get(this.config.API_URL + '/Phase/Statistics?id=' + this.phaseId)
+            this.$http.get(this.config.API_URL + '/Phase/Statistics?id=' + this.pid)
                 .then(function(res) {
                     this.data = JSON.parse(res.bodyText)
                     this.loading = false

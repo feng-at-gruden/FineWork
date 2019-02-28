@@ -12,8 +12,8 @@
         <EditTaskDialog :taskToEdit="taskToEdit" :open="openEditTaskDialog" :unit="'项目阶段'" @close="openEditTaskDialog = false" @save="handleOnEditTaskSave" @delete="handleOnDeleteTask"></EditTaskDialog>
         <!--删除项目确认对话框-->
         <DeleteProjectDialog :open="openDeleteProjectDialog" @close="openDeleteProjectDialog = false" @delete="handleOnProjectDeleted"></DeleteProjectDialog>
-        <!--阶段统计信息对话框 -->
-        <ProjectStatisticsDialog :open="openProjectStatistics" @close="openProjectStatistics = false"></ProjectStatisticsDialog>
+        <!--项目统计信息对话框 -->
+        <ProjectStatisticsDialog :open="openProjectStatistics" @close="openProjectStatistics = false" :projectId="projectId"></ProjectStatisticsDialog>
         <v-snackbar v-model="snackbar" :color="snackbarColor" :timeout="3000" multi-line vertical bottom right>
             {{snackbarMessage}}
             <v-btn dark flat @click="snackbar = false">确定</v-btn>

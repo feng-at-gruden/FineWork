@@ -129,15 +129,14 @@ export default {
         handleSaveClick() {
             //form validtion
             if (this.$refs.editProjectForm.validate()) {
-                this.loading = true
                 this.saving = true
                 this.$http.put(this.config.API_URL + '/Project/'  + this.projectInfo.Id, this.projectInfo).then(function(res) {
                     var json = JSON.parse(res.bodyText)
-                    this.loading = this.edit = this.saving = false
+                    this.dialog = this.edit = this.saving = false
                     this.$emit('update')
                 }, function(res) {
                     var json = JSON.parse(res.bodyText)
-                    this.loading = this.saving = false
+                    this.saving = false
                 });
             }
         },

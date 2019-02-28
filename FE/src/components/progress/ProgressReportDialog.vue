@@ -57,7 +57,7 @@
                             </v-flex>
                             <v-flex xs12 md6 style="margin-top: -15px;">
                                 <v-menu :close-on-content-click="false" v-model="dateMenu1" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
-                                    <v-text-field slot="activator" v-model="actualStartDate" label="开工日期" prepend-icon="event" readonly></v-text-field>
+                                    <v-text-field slot="activator" v-model="actualStartDate" label="开工日期" prepend-icon="event" readonly :disabled="startDateDisable"></v-text-field>
                                     <v-date-picker v-model="actualStartDate" @input="dateMenu1 = false" :disabled="startDateDisable"></v-date-picker>
                                 </v-menu>
                             </v-flex>
@@ -216,7 +216,12 @@ export default {
             this.$http.post(this.config.API_URL + '/Worklog', request).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 //update UI
-                this.myTask.actual_start = this.actualStartDate
+                if(this.myTask.progress==0 && (this.myTask.status==this.config.TaskStatus[2] || this.myTask.status==this.config.TaskStatus[0])){
+                    //Do not update actual start on UI
+                }else{
+                    this.myTask.actual_start = this.actualStartDate
+                }
+                
                 this.myTask.last_update = this.signDate
                 if (this.myTask.status == this.config.TaskStatus[3]) {
                     this.myTask.actual_end = this.signDate
@@ -256,7 +261,8 @@ export default {
                 if (this.myTask)
                     this.taskCopy = this.util.objCopy(this.myTask)
                 if(!this.myTask.last_update || this.myTask.last_update==''){
-                    this.signDate = dateToStr(new Date())
+                    //this.signDate = dateToStr(new Date())
+                    this.signDate = this.myTask.start_date.split('T')[0]
                 }else{
                     var d = new Date(strToDate(this.myTask.last_update).getTime() + 1000 * 60 * 60 * 24 * 1)
                     this.signDate = dateToStr(d)
@@ -275,6 +281,15 @@ export default {
                 try{
                     this.$refs.taskProgressForm.resetValidation()
                 }catch(e){}
+            }
+        },
+        actualStartDate(v, ov){
+            if(!this.myTask.last_update || this.myTask.last_update==''){
+                //第一次开工，登记日期设成开始日期
+                this.signDate = v
+            }else{
+                var d = new Date(strToDate(this.myTask.last_update).getTime() + 1000 * 60 * 60 * 24 * 1)
+                this.signDate = dateToStr(d)
             }
         }
     },

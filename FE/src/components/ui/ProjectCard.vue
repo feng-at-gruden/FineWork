@@ -10,6 +10,19 @@
             </v-card-title>
             <v-card-actions>
                 <v-btn flat color="primary" @click="gotoDetail" slot="">项目详情</v-btn>
+                <v-spacer></v-spacer>
+                <v-icon small class="mr-2" @click="openDialog(1)">
+                    bar_chart
+                </v-icon>
+
+                <!--
+                <v-icon small class="mr-2" @click="openDialog(0)">
+                    chrome_reader_mode
+                </v-icon>
+                <v-icon small class="mr-2" @click="openDialog(2)" v-if="showBtn[2]">
+                    delete_forever
+                </v-icon>
+                -->
             </v-card-actions>
         </v-card>
     </CustomTransition>
@@ -21,12 +34,12 @@ import util from '../../assets/js/Util'
 
 export default {
     name: 'ProjectCard',
-    props: ['data', 'animIn', 'animOut'],
+    props: ['data', 'animIn', 'animOut', 'showBtns'],
     components: { CustomTransition },
     data() {
         return {
             util,
-            config
+            config,
         }
     },
     computed: {
@@ -42,9 +55,12 @@ export default {
             else
                 return this.util.randomOut()
         },
+        showBtn() {
+            return this.$props.showBtns
+        },
         project() {
             return this.$props.data
-        }
+        },
     },
     methods: {
         gotoDetail() {
@@ -52,10 +68,12 @@ export default {
         },
         handleAnimEnd() {
             //this.$router.push('/Project/' + this.$props.project.id)
+        },
+        openDialog(v){
+            this.$emit('onOpenDialog', { button:v, project:this.project })
         }
-    }
+    },
 }
-
 </script>
 <style>
 </style>

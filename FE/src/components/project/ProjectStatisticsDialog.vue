@@ -83,7 +83,7 @@ import config from '../../assets/js/Config'
 import util from '../../assets/js/Util'
 export default {
     name: 'ProjectStatisticsDialog',
-    props: ['open'],
+    props: ['open', 'projectId'],
     data() {
         return {
             config,
@@ -96,8 +96,8 @@ export default {
         }
     },
     computed: {
-        projectId() {
-            return this.$route.params.id
+        pid() {
+            return this.$props.projectId
         },
         dialog: {
             get() { return this.$props.open },
@@ -117,7 +117,7 @@ export default {
     methods: {
         loadStatistics() {
             this.loading = true
-            this.$http.get(this.config.API_URL + '/Project/Statistics?id=' + this.projectId)
+            this.$http.get(this.config.API_URL + '/Project/Statistics?id=' + this.pid)
                 .then(function(res) {
                     this.data = JSON.parse(res.bodyText)
                     this.loading = false

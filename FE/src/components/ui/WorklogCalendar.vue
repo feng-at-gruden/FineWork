@@ -6,7 +6,7 @@
                     <v-btn icon dark @click="dialog=false">
                         <v-icon>close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>{{myTask.text}} 工作日志<v-icon>assignment</v-icon>
+                    <v-toolbar-title><v-icon>assignment</v-icon> 工作日志 - {{myTask.text}} 
                     </v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
@@ -66,7 +66,7 @@ export default {
     watch: {
         dialog(v, ov) {
             if (v) {
-                setTimeout(() => (myCalendar.initCalendar(this.$refs.container, new Date())), 100)
+                //setTimeout(() => (myCalendar.initCalendar(this.$refs.container, new Date())), 100)
                 this.loadWorklog()
             }
         }

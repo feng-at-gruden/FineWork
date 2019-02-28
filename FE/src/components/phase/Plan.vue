@@ -11,7 +11,7 @@
         <!--甘特图显示设置框-->
         <TaskFilterDialog :open="openTaskFilter" @close="openTaskFilter = false" @save="handleTaskFilterUpdate"></TaskFilterDialog>
         <!--阶段统计信息对话框 -->
-        <PhaseStatisticsDialog :open="openPhaseStatistics" @close="openPhaseStatistics = false"></PhaseStatisticsDialog>
+        <PhaseStatisticsDialog :open="openPhaseStatistics" @close="openPhaseStatistics = false" :phaseId="phaseId"></PhaseStatisticsDialog>
         <!--工作日志Calendar-->
         <WorklogCalendar :open="openWorklogCalendar" :task="worklogTask" @close="openWorklogCalendar=false"></WorklogCalendar>
         <!--消息提示框-->

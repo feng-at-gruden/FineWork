@@ -3,7 +3,7 @@
         <ProjectFilter @filterChange="handleFilterChange" :layout="layout"></ProjectFilter>
         <v-layout row wrap>            
             <v-flex lg4 md4 sm6 xs12 v-for="p in displayProjects" :key="p.id">
-                <ProjectCard :data="p" :animIn="'animated fadeIn'" :animOut="'animated pulse'"></ProjectCard>
+                <ProjectCard :data="p" :animIn="'animated fadeIn'" :animOut="'animated pulse'" :showBtns="showBtns" @onOpenDialog="handleOpenDialog"></ProjectCard>
             </v-flex>
         </v-layout>
         <div class="text-xs-center">
@@ -13,6 +13,10 @@
         <v-btn fixed small dark fab bottom right color="primary" v-if="haveThePermission('project-management')" @click="handleAddBtnClick" :class="addBtnCss">
             <v-icon>add</v-icon>
         </v-btn>
+
+        <!--项目统计信息对话框 -->
+        <ProjectStatisticsDialog :open="openProjectStatistics" @close="openProjectStatistics = false" :projectId="dialogData.project.Id"></ProjectStatisticsDialog>
+
     </v-container>
 </template>
 <script>
@@ -20,11 +24,13 @@ import BasePage from '../../assets/js/BasePage'
 import ProjectFilter from '../ui/ProjectFilter'
 import ProjectCard from '../ui/ProjectCard'
 import ProjectInfoDialog from '../ui/ProjectInfoDialog'
+import DeleteProjectDialog from '../ui/DeleteProjectDialog'
+import ProjectStatisticsDialog from './ProjectStatisticsDialog'
 
 export default {
     extends: BasePage,
     name: 'ProjectList',
-    components: { ProjectFilter, ProjectCard, ProjectInfoDialog },
+    components: { ProjectFilter, ProjectCard, ProjectInfoDialog, DeleteProjectDialog, ProjectStatisticsDialog },
     data() {
         return {
             projects: [],
@@ -35,6 +41,8 @@ export default {
             pageCount:0,
             page: 0,
             layout: 0,
+            openProjectStatistics: false,
+            dialogData:{button:0,project:{}},
         }
     },
     computed: {
@@ -44,6 +52,13 @@ export default {
         addBtnCss() {
             return this.util.IsPC() ? 'add-user-btn' : 'add-user-btn-mobile'
         },
+        showBtns() {
+            if(!this.haveThePermission('project-management')){
+                return [true,true,false]
+            }else{
+                return [true,true,true]
+            }
+        }
     },
     watch:{
         filter(v, ov){
@@ -59,8 +74,6 @@ export default {
             this.loading = true
             this.$http.get(this.config.API_URL + '/Project/List').then(function(res) {
                 this.projects = JSON.parse(res.bodyText)
-                /*var openProjects = this.projects.filter(t=>{return t.Status==this.config.ProjectStatus[1].value})
-                this.$store.commit('updateOpenProjects', openProjects)*/
                 this.$store.commit('updateAllProjects', this.projects)
                 this.updateFilteredProjects()
                 this.loading = false
@@ -98,6 +111,20 @@ export default {
             var st = (this.page - 1) * this.pageSize
             var ed = this.page == this.pageCount? this.filteredProjects.length: st + this.pageSize - 1
             this.displayProjects = this.filteredProjects.filter((t, index)=>{return index>=st && index<=ed})
+        },
+        handleOpenDialog(data) {
+            this.dialogData = data
+            switch(this.dialogData.button){
+                case 0:
+                    this.openProjectInfoDialog = true
+                    break;
+                case 1:
+                    this.openProjectStatistics = true
+                    break;
+                case 2:
+                    this.openDeleteProjectDialog = true
+                    break;
+            }
         }
     },
     created() {

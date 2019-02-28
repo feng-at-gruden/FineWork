@@ -97,9 +97,9 @@ namespace API.Controllers
                     }
                 }
 
-                if (task.ActualStartDate == null && worklog.status == Configurations.TASK_STATUS[1])
+                if (task.ActualStartDate == null && (worklog.status == Configurations.TASK_STATUS[1] || (worklog.status == Configurations.TASK_STATUS[2] && worklog.progress>0)))
                 {
-                    //"施工中
+                    //"施工中 或停工并进度不为0
                     if (worklog.start_date.HasValue)
                         task.ActualStartDate = DateTime.Parse(worklog.start_date.Value.ToShortDateString());    // 忽略小时
                     else

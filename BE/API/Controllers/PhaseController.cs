@@ -392,7 +392,7 @@ namespace API.Controllers
                         var duration = (nowTime - task.PlanStartDate.Value).Days;
                         actualTask.start_date = planTask.start_date;
                         actualTask.end_date = planTask.end_date;
-                        actualTask.text = "已延期" + duration + "天";
+                        actualTask.text = "延期" + duration + "天";
                         actualTask.delayed = true;
                         actualTask.duration = planTask.duration;
                     }
@@ -454,7 +454,7 @@ namespace API.Controllers
 
                         if (task.ActualStartDate>task.PlanStartDate){
                             //延期
-                            actualTask.text = "已延期" + (task.ActualStartDate.Value - task.PlanStartDate.Value).Days + "天";
+                            actualTask.text = "延期" + (task.ActualStartDate.Value - task.PlanStartDate.Value).Days + "天";
                             if(latestWorkDate>task.PlanEndDate)
                             {
                                 //延期并逾期
@@ -474,7 +474,7 @@ namespace API.Controllers
                             if (actualTask.end_date > task.PlanEndDate)
                             {
                                 //逾期
-                                actualTask.text = "已逾期" + calculateExceedDays(actualTask.end_date, task.PlanEndDate) + "天";
+                                actualTask.text = "逾期" + calculateExceedDays(actualTask.end_date, task.PlanEndDate) + "天";
                                 actualTask.exceed = true;
                             }
                             else
