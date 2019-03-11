@@ -18,7 +18,7 @@ if(ENV=='UAT'){
 
 const WALL_PAPER_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=#INDEX#&n=1&nc=1361089515117&FORM=HYLH1"
 const Themes = [
-    { primary: colors.blue.lighten1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.lightBlue , secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.orange.darken2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, },
     { primary: colors.teal.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.cyan, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
@@ -29,6 +29,8 @@ const Themes = [
     { primary: colors.blueGrey, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.blue.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.grey, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.shades.black, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.lime, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.amber.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
     { primary: colors.red, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },

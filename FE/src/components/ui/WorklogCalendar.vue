@@ -36,6 +36,7 @@
 </template>
 <script>
 import 'dhtmlx-scheduler'
+import 'dhtmlx-scheduler/codebase/locale/locale_cn.js'
 import myCalendar from '../../assets/js/Calendar.js'
 import BasePage from '../../assets/js/BasePage'
 import WorklogDetailDialog from './WorklogDetailDialog'
