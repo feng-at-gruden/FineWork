@@ -1,7 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
-//const ENV = 'UAT'
-const ENV = 'PROD'
+const ENV = 'UAT'
+//const ENV = 'PROD'
 
 if(ENV=='UAT'){
     var APP_NAME = "Fine.Work"

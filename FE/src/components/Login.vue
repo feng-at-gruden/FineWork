@@ -92,6 +92,14 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.CumulusCaribbean_EN-CN5051678201_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.WinterGrand_EN-CN5734771587_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.HZMB_ZH-CN5238831909_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.LeopardNamibia_ZH-CN9585068449_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BagpipeOpera_ZH-CN9506207351_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.GrapeHarvest_ZH-CN9372743517_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.Cefalu_ZH-CN9108906653_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.MardiGrasIndians_ZH-CN9075989964_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.ElephantMarch_ZH-CN8771717837_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.FinWhale_ZH-CN9010064973_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.VinicuncaMountain_ZH-CN8884315159_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {
@@ -159,12 +167,17 @@ export default {
 	},
 	created() {
 		document.body.parentNode.style.overflowY = "hidden";
+		this.picIndex = Math.ceil(Math.random()*WALLPAPERS.length);
 		this.timer = setInterval(this.loadWallpaper, TIMER);
 	},
 	beforeDestroy() {
 		document.body.parentNode.style.overflowY = "auto";
 		clearInterval(this.timer)
 		this.timer = null
+	},
+	mounted() {
+		var c = WALLPAPERS[this.picIndex-1]
+		this.$refs.wallpaper1.style.backgroundImage = 'url(' + c + ')'
 	}
 }
 
