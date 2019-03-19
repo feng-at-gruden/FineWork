@@ -43,12 +43,20 @@
 			</v-container>
 		</v-content>
 		<v-footer dark class="footer fixed login-footer">{{copyright}}</v-footer>
-		<transition name="fade">
-			<div class="wallpaper1" ref="wallpaper1" v-show="!wallpaper" transition="fade-transition"></div>
-		</transition>
-		<transition name="fade">
-			<div class="wallpaper2" ref="wallpaper2" v-show="wallpaper" transition="fade-transition"></div>
-		</transition>
+		<div v-if="!showDynamicBG">
+			<transition name="fade">
+				<div class="wallpaper1" ref="wallpaper1" v-show="wallpaperIndex" transition="fade-transition"></div>
+			</transition>
+			<transition name="fade">
+				<div class="wallpaper2" ref="wallpaper2" v-show="!wallpaperIndex" transition="fade-transition"></div>
+			</transition>
+		</div>
+		<div class="slideshow" v-else>
+			<div class="slideshow-image" style="" ref="BG1"></div>
+			<div class="slideshow-image" style="" ref="BG2"></div>
+			<div class="slideshow-image" style="" ref="BG3"></div>
+			<div class="slideshow-image" style="" ref="BG4"></div>
+		</div>
 	</v-app>
 </template>
 <script>
@@ -100,6 +108,13 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.ElephantMarch_ZH-CN8771717837_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.FinWhale_ZH-CN9010064973_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.VinicuncaMountain_ZH-CN8884315159_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.FallasBonfire_ZH-CN0990476822_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.TofinoCoast_ZH-CN0950198582_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.TaoiseachDept_ZH-CN0902989482_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.ChitalDawn_ZH-CN0851079165_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.SeptimiusSeverus_ZH-CN0799811992_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.AgriculturalPi_ZH-CN9754138523_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.SpainRioTinto_ZH-CN9632593185_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {
@@ -115,7 +130,7 @@ export default {
 			logining: false,
 			formValid: true,
 			picIndex: 0,
-			wallpaper: 0,
+			wallpaperIndex: 1,
 			timer: null,
 			nameRules: [
 				v => !!v || '请输入用户',
@@ -131,6 +146,9 @@ export default {
 		},
 		currentTime() {
 			return this.util.dateFormat('yyyy年M月d日 h:mm',new Date())
+		},
+		showDynamicBG() {
+			return !this.util.IsPC()
 		}
 	},
 	methods: {
@@ -156,18 +174,29 @@ export default {
 				this.picIndex = 0
 			}
 			var c = WALLPAPERS[this.picIndex]
-			if(this.wallpaper){
-				this.$refs.wallpaper1.style.backgroundImage = 'url(' + c + ')'
-			}else{								
-				this.$refs.wallpaper2.style.backgroundImage = 'url(' + c + ')'
+			if(!this.showDynamicBG){
+				if(!this.wallpaperIndex){
+					this.$refs.wallpaper1.style.backgroundImage = 'url(' + c + ')'
+				}else{								
+					this.$refs.wallpaper2.style.backgroundImage = 'url(' + c + ')'
+				}
+				this.picIndex++
+				this.wallpaperIndex = this.picIndex % 2
+			}else{
+				this.picIndex += 4
+				if(this.picIndex>WALLPAPERS.length-4)
+				{
+					this.picIndex = 0
+				}
+				this.$refs.BG1.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex] + ')'
+				this.$refs.BG2.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex+1] + ')'
+				this.$refs.BG3.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex+2] + ')'
+				this.$refs.BG4.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex+3] + ')'
 			}
-			this.picIndex++
-			this.wallpaper = this.picIndex % 2
 		}
 	},
 	created() {
 		document.body.parentNode.style.overflowY = "hidden";
-		this.picIndex = Math.ceil(Math.random()*WALLPAPERS.length);
 		this.timer = setInterval(this.loadWallpaper, TIMER);
 	},
 	beforeDestroy() {
@@ -176,8 +205,17 @@ export default {
 		this.timer = null
 	},
 	mounted() {
-		var c = WALLPAPERS[this.picIndex-1]
-		this.$refs.wallpaper1.style.backgroundImage = 'url(' + c + ')'
+		if(!this.showDynamicBG){
+			this.picIndex = Math.ceil(Math.random()*WALLPAPERS.length-1)
+			var c = WALLPAPERS[this.picIndex-1]
+			this.$refs.wallpaper1.style.backgroundImage = 'url(' + c + ')'
+		}else{
+			this.picIndex = Math.ceil(Math.random()*WALLPAPERS.length-4)
+			this.$refs.BG1.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex] + ')'
+			this.$refs.BG2.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex+1] + ')'
+			this.$refs.BG3.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex+2] + ')'
+			this.$refs.BG4.style.backgroundImage = 'url(' + WALLPAPERS[this.picIndex+3] + ')'
+		}
 	}
 }
 
