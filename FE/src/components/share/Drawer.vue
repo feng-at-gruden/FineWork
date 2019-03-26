@@ -209,7 +209,7 @@ export default {
 }
 
 .drawer-phase-box .v-text-field {
-    padding-top: 0px;
+    padding-top: 1px;
     margin-top: 0px;
 }
 
