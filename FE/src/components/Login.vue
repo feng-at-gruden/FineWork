@@ -115,6 +115,13 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.SeptimiusSeverus_ZH-CN0799811992_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.AgriculturalPi_ZH-CN9754138523_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.SpainRioTinto_ZH-CN9632593185_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.SakuraFes_ZH-CN1341601988_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.AthensNight_ZH-CN1280970241_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.PWSRecovery_ZH-CN1234475074_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.HolePunchClouds_ZH-CN1184083504_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.TashkurganGrasslands_ZH-CN1141881683_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.springequinox_ZH-CN1099430476_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.EarlyBloomer_ZH-CN1044452089_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {

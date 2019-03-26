@@ -4,12 +4,12 @@
             <v-img src="./static/images/construction2.jpg" position="top center" aspect-ratio="2.75"></v-img>
             <v-card-title primary-title>
                 <div style="width: 100%">
-                    <h3 class="headline mb-0 no-wrap">{{project.Name}}</h3>
-                    <div class="text-truncate">{{project.Description}}</div>
+                    <h3 class="headline mb-0 no-wrap text-truncate">{{project.Name}}</h3>
+                    <div class="text-truncate" style="padding-top: 5px;">{{project.Description}} &nbsp;</div>
                 </div>
             </v-card-title>
             <v-card-actions>
-                <v-btn flat color="primary" @click="gotoDetail" slot="">项目详情</v-btn>
+                <v-btn flat color="primary" @click="gotoDetail">项目详情</v-btn>
                 <v-spacer></v-spacer>
                 <v-icon small class="mr-2" @click="openDialog(1)">
                     bar_chart

@@ -30,12 +30,12 @@ const Themes = [
     { primary: colors.blue.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.grey, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.shades.black, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
-    { primary: colors.lime, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.amber.darken1, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.pink.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3, info: colors.pink.accent4 },
     { primary: colors.red, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.lightGreen.accent4, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
     { primary: colors.purple.accent2, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
+    { primary: colors.lime, secondary: colors.grey.darken1, accent: colors.shades.black, error: colors.red.accent3 },
 ]
 
 const Theme = Themes[0]

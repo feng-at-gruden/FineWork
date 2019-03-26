@@ -16,7 +16,7 @@
                 <template v-else-if="item.title=='PROJECT-DROPDOWN'" v-show="openProjects.length>0">
                     <v-list-tile :key="i" v-show="openProjects.length>0">
                         <v-list-tile-content class="drawer-projects-box">
-                            <v-select :items="openProjects" v-model="selectedProjectId" @change="handleProjectDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id" class="project-select"></v-select>
+                            <v-select :items="openProjects" v-model="selectedProjectId" @change="handleProjectDropdownChange" label="在建项目" hide-details prepend-icon="map" single-line item-text="Name" item-value="Id" class="project-select text-truncate"></v-select>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-divider dark class="my-3" v-show="openProjects.length>0"></v-divider>
@@ -33,8 +33,8 @@
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title class="text-darken-3">
-                            {{ item.title }}
+                        <v-list-tile-title>
+                            <span :class="isActive(item.link)">{{ item.title }}</span>
                         </v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
@@ -100,7 +100,7 @@ export default {
             } else {
                 return JSON.parse(localStorage.getItem("Identity"))
             }
-        }
+        },
     },
     methods: {
         goto(item) {
@@ -124,7 +124,16 @@ export default {
         },
         haveThePermission(item) {
             return this.auth.checkPermission(item.permission, this.identity)
-        }
+        },
+        isActive(url) {
+            if(url=='/Project/'){
+                if('ProjectPlan'==this.$route.name) 
+                    return 'font-weight-bold'
+                else
+                    return 'text-darken-3'
+            }
+            return this.$route.path.indexOf(url)>=0?'font-weight-bold':'text-darken-3'
+        },
     },
     watch: {
         selectedProjectId(v, ov) {
@@ -229,9 +238,17 @@ export default {
     padding-top: 8px !important;
 }
 
+.project-select .v-select__selection--comma {
+    font-weight: bold;
+}
+
 .phase-select {
     font-size: 13px;
     width: 100%;
+}
+
+.phase-select .v-select__selection--comma {
+    font-weight: bold;
 }
 
 .drawer-sub-heading {

@@ -188,7 +188,9 @@ export default {
                 this.newTask.start_date = dateToStr(pTask.start_date)
                 this.newTask.end_date = dateToStr(new Date(strToDate(this.newTask.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
                 this.newTask.min_date = this.newTask.start_date
-                this.newTask.max_date = dateToStr(pTask.end_date)
+                this.newTask.max_date = dateToStr(strToDate(this.plan.end_date))
+                //this.newTask.max_date = dateToStr(pTask.end_date)
+
             } else {
                 this.newTask.start_date = dateToStr(strToDate(this.plan.start_date))
                 this.newTask.end_date = dateToStr(new Date(strToDate(this.plan.start_date).getTime() + 1000 * 60 * 60 * 24 * 1))
@@ -217,7 +219,8 @@ export default {
             if (task.parent > 0) {
                 var pTask = this.plan.data.filter(t => t.id == task.parent)[0]
                 this.taskToEdit.min_date = dateToStr(pTask.start_date)
-                this.taskToEdit.max_date = dateToStr(pTask.end_date)
+                this.taskToEdit.max_date = dateToStr(strToDate(this.plan.end_date))
+                //this.taskToEdit.max_date = dateToStr(pTask.end_date)
             } else {
                 this.taskToEdit.min_date = dateToStr(strToDate(this.plan.start_date))
                 this.taskToEdit.max_date = dateToStr(strToDate(this.plan.end_date))
