@@ -49,7 +49,7 @@
                         </v-flex>
                         <template v-if="taskCopy.status!=config.TaskStatus[3]">
                             <v-flex xs12 md12 style="margin-top: 0px;">
-                                <v-textarea label="工作汇报" v-model="worklog" :counter="100" :rules="descriptionRules" required outline hint="请输入当天工作进展情况"></v-textarea>
+                                <v-textarea label="工作汇报" v-model="worklog" :counter="240" :rules="descriptionRules" required outline hint="请输入当天工作进展情况"></v-textarea>
                             </v-flex>
                             <v-flex xs12 md12 style="margin-top: -15px;">
                                 <label class="my-label text-no-wrap">今日进度:</label>
@@ -113,7 +113,7 @@ export default {
             loading: false,
             descriptionRules: [
                 v => !!v || '请输入工作汇报',
-                v => (v && v.length <= 100) || '最多输入100个字符'
+                v => (v && v.length <= 240) || '最多输入240个字符'
             ],
         }
     },

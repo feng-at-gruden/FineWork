@@ -169,8 +169,8 @@ body{
           animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
           animation-iteration-count: infinite;
-  -webkit-animation-duration: 20s;
-          animation-duration: 20s;
+  -webkit-animation-duration: 24s;
+          animation-duration: 24s;
   opacity: 1;
   -webkit-transform: scale(1.2);
           transform: scale(1.2);

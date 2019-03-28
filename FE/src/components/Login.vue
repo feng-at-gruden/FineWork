@@ -122,6 +122,7 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.TashkurganGrasslands_ZH-CN1141881683_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.springequinox_ZH-CN1099430476_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.EarlyBloomer_ZH-CN1044452089_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.RufousTailed_ZH-CN1593368869_1920x1080.jpg',	
 ]
 const TIMER = 20000
 export default {
