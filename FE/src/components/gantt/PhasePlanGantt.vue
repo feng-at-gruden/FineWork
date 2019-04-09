@@ -78,6 +78,12 @@ export default {
 				        }
 					}
 				}))
+				this.ganttEventIds.push(myGantt.attachEvent('onBeforeRowDragEnd', (id, parent, tindex) => {
+					var task = gantt.getTask(id)
+					    if(task.parent != parent)
+					        return false
+					    return true
+				}))
 			} else {
 				this.ganttEventIds.push(myGantt.attachEvent('onTaskDblClick', (id, event) => {
 					//双击打开工作日志/进度更新对话框

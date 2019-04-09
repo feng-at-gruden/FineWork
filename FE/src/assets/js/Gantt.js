@@ -367,6 +367,7 @@ export default {
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = projectEditingColumns
+			gantt.config.order_branch = true
 		} else {
 			gantt.config.columns = projectReadonlyColumns
 		}
@@ -431,6 +432,7 @@ export default {
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = phaseEditingColumns
+			gantt.config.order_branch = true
 			gantt.templates.task_class = function(start, end, task) {
 				var c = ''
 				if(task.type=='project')

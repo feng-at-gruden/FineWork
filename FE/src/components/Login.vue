@@ -123,6 +123,20 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.springequinox_ZH-CN1099430476_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.EarlyBloomer_ZH-CN1044452089_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.RufousTailed_ZH-CN1593368869_1920x1080.jpg',	
+'https://cn.bing.com/th?id=OHR.BlueTide_EN-CN9954190271_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.SPLLobby_EN-CN6683267834_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.Pepper_EN-CN5843968151_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.YongfuTown_EN-CN5641189378_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.NelderPlot_EN-CN8813996472_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BistiBadlands_EN-CN8442784979_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.HCABooks_EN-CN7398127982_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.MischiefCubs_EN-CN7135466931_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.EiffelBelow_EN-CN6709821136_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.EarthHourNYC_EN-CN6307178711_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.AurovilleIndia_EN-CN5835825337_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.WallaceMonument_ZH-CN4008495741_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.ChilehausHH_ZH-CN3895221092_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.QingmingBridge_ZH-CN3844222543_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {

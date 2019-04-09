@@ -7,6 +7,7 @@ import Vuex from 'vuex'
 import store from './vuex/store'
 import auth from './assets/js/Auth'
 import Vuetify from 'vuetify'
+import zhHans from 'vuetify/es5/locale/zh-Hans'
 import resource from './resource'
 import config from './assets/js/Config'
 import 'vuetify/dist/vuetify.min.css'
@@ -19,7 +20,13 @@ var theme = config.Themes[themeIndex]
 
 Vue.config.productionTip = false
 Vue.use(Vuex)
-Vue.use(Vuetify, { theme })
+Vue.use(Vuetify, { 
+    theme, 
+    lang: {
+        locales: { zhHans },
+        current: 'zhHans'
+    }
+})
 
 Vue.config.productionTip = false
 

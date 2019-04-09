@@ -78,6 +78,12 @@ export default {
 				        }
 					}
 				}))
+				this.ganttEventIds.push(myGantt.attachEvent('onBeforeRowDragEnd', (id, parent, tindex) => {
+					var task = gantt.getTask(id)
+					    if(task.parent != parent)
+					        return false
+					    return true
+				}))
 			} else {
 				this.ganttEventIds.push(myGantt.attachEvent('onTaskDblClick', (id, event) => {
 					//按ctrl键点击task进入阶段计划
