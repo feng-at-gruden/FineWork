@@ -8,7 +8,7 @@
                 <v-container fluid class="report-dialog-container">
                     <v-layout wrap>
                         <v-flex xs12 md12>
-                            <span class="title">{{myTask.text}}</span> - <span style="font-size: 0.9em;">({{myTask.status}})</span>
+                            <span class="title">{{myTask.text}}</span> - <span style="font-size: 0.9em;">{{myTask.group}}</span>   <span style="font-size: 0.9em;">({{myTask.status}})</span>
                         </v-flex>
                         <v-flex xs12 md12 style="margin-top: -5px;">
                             <v-divider></v-divider>

@@ -137,6 +137,19 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.WallaceMonument_ZH-CN4008495741_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.ChilehausHH_ZH-CN3895221092_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.QingmingBridge_ZH-CN3844222543_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.YukonEmerald_ZH-CN1893750172_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.SibWrestling_ZH-CN4106007210_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BlueTide_ZH-CN4055424992_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.ChipmunkCheeks_ZH-CN2370754946_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BesenheideBDJ_ZH-CN2139380821_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.AlpineEucalyptBark_ZH-CN2046783535_1920x1080.jpg',
+'/th?id=OHR.MiracleGarden_EN-CN7437183058_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.HopeValley_EN-CN7216481679_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BauhausArchive_EN-CN6923966348_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.GOTPath_EN-CN6091513115_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.RecordStoreDay_EN-CN5641273719_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BigWindDay_EN-CN5446594497_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.Bollenstreek_EN-CN6821407382_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {

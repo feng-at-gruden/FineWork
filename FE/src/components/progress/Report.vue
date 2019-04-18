@@ -44,6 +44,7 @@
             <v-data-table :headers="headers" :items="filteredTasks" class="elevation-1">
                 <template slot="items" slot-scope="props">
                     <td class="text-no-wrap task-name" @click="openWorkDialog(props.item)">{{ props.item.text }} <span class="task-exceed-small" v-if="props.item.exceed && props.item.status!=config.TaskStatus[3]">已逾期</span></td>
+                    <td class="text-xs-left text-no-wrap task-small">{{props.item.group}}</td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.start_date.split('T')[0] }} 至 {{ props.item.end_date.split('T')[0] }}</td>
                     <td class="text-xs-center">{{ props.item.duration }}天</td>
                     <td class="text-xs-center text-no-wrap task-date">{{ props.item.actual_start? props.item.actual_start.split('T')[0] : '' }}</td>
@@ -84,6 +85,7 @@ export default {
                     sortable: false,
                     value: 'text'
                 },
+                { text: '任务组', value: 'group', align: 'left' },
                 { text: '计划工期', value: 'start_date', align: 'center' },
                 { text: '计划工时', value: 'duration', align: 'center' },
                 { text: '开工日期', value: 'actual_start', align: 'center' },
@@ -179,6 +181,7 @@ export default {
             this.$http.get(this.config.API_URL + '/Phase/RawPlan/?id=' + this.selectedPhaseId).then(function(res) {
                 var json = JSON.parse(res.bodyText)
                 //json = this.refineTaskDate(json)
+                json = this.refineTaskGroup(json)
                 this.loading = false
                 this.tasks = json.data.filter(m => m.type != 'project')
                 this.updateFilteredTasks()
@@ -191,6 +194,27 @@ export default {
                 }
             }
             return json
+        },
+        refineTaskGroup(json){
+            for(var i=0;i<json.data.length;i++){
+                if(json.data[i].parent > 0){
+                    json.data[i].group = this.findTaskParent(json.data, json.data[i])
+                }
+            }
+            return json
+        },
+        findTaskParent(tasks, task){
+            var parent = ''
+            for(var i=0;i<tasks.length;i++){
+                if(tasks[i].id == task.parent){
+                    parent = tasks[i].task_name
+                    if(tasks[i].parent>0){
+                        parent = this.findTaskParent(tasks, tasks[i]) + "/" + parent
+                    }
+                    break
+                }
+            }
+            return parent
         },
         updateFilteredTasks() {
             if (this.tasks) {
@@ -264,6 +288,11 @@ export default {
     -webkit-transform: scale(0.75);
     font-style: italic;
     color: red;
+}
+.task-small {
+    font-size: 12px;
+    -webkit-transform: scale(0.75);
+    font-style: italic;
 }
 
 </style>

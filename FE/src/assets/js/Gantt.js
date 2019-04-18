@@ -1,5 +1,7 @@
 const denseDateFmt = gantt.date.date_to_str("%Y/%m/%d")
 const denseDateFmtS = gantt.date.date_to_str("%m/%d")
+const enableSort = false
+
 
 const denseDateFmtS2 = function(date){
 	if(date){
@@ -103,7 +105,7 @@ const projectEditingColumns = [
 const phaseReadonlyColumns = [
 	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",
 		template(obj) {
-			if(obj.type!='project' && obj.status!='未开工'){
+			if(obj.type!='project' && (obj.status!='未开工' || obj.delayed)){
 				return obj.text + '<i class="task-report-icon material-icons" onclick="javascript:gantt.callEvent(\'onOpenTaskWorkLog\', ['+obj.id+']);">open_in_new</i>'
 			}else{
 				return obj.text
@@ -367,7 +369,7 @@ export default {
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = projectEditingColumns
-			gantt.config.order_branch = true
+			gantt.config.order_branch = enableSort
 		} else {
 			gantt.config.columns = projectReadonlyColumns
 		}
@@ -432,7 +434,7 @@ export default {
 		//切换编辑和只读模式
 		if (editable) {
 			gantt.config.columns = phaseEditingColumns
-			gantt.config.order_branch = true
+			gantt.config.order_branch = enableSort
 			gantt.templates.task_class = function(start, end, task) {
 				var c = ''
 				if(task.type=='project')

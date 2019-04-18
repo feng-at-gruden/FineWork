@@ -24,7 +24,8 @@
                 <template v-else-if="item.title=='PHASE-DROPDOWN'" v-show="projectPhases.length>0">
                     <v-list-tile :key="i" v-show="projectPhases.length>0">
                         <v-list-tile-content class="drawer-phase-box">
-                            <v-select :items="projectPhases" v-model="selectedPhaseId" @change="handlePhaseDropdownChange" label="阶段计划" dense hide-details prepend-icon="playlist_add_check" single-line item-text="Name" item-value="Id" class="phase-select"></v-select>
+                            <v-select :items="projectPhases" v-model="selectedPhaseId" @change="handlePhaseDropdownChange" label="阶段计划" dense hide-details prepend-icon="playlist_add_check" single-line text-truncate item-text="Name" item-value="Id" class="phase-select">
+                            </v-select>
                         </v-list-tile-content>
                     </v-list-tile>
                 </template>
@@ -205,7 +206,7 @@ export default {
 
 
 .drawer-phase-box .v-input__slot {
-    height: 41px;
+    height: 40px;
 }
 
 .drawer-phase-box .v-text-field {
