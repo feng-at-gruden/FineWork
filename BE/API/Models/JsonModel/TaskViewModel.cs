@@ -27,5 +27,6 @@ namespace API.Models.JsonModel
         public DateTime? actual_end;
         public int actual_duration;
         public DateTime? last_update;
+        public Int32 WorklogCount;
     }
 }

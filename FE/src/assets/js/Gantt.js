@@ -67,7 +67,7 @@ const projectReadonlyColumns = [
 				str = "已停工"
 			} else if (obj.progress == 1) {
 				str = "已完工"
-			} else if (obj.progress == 0) {
+			} else if (obj.status == "未开工") {
 				str = "未开工"
 			} else {
 				str = accMul(obj.progress, 100) + "%"
@@ -105,7 +105,7 @@ const projectEditingColumns = [
 const phaseReadonlyColumns = [
 	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",
 		template(obj) {
-			if(obj.type!='project' && (obj.status!='未开工' || obj.delayed)){
+			if(obj.type!='project' && obj.WorklogCount>0){
 				return obj.text + '<i class="task-report-icon material-icons" onclick="javascript:gantt.callEvent(\'onOpenTaskWorkLog\', ['+obj.id+']);">open_in_new</i>'
 			}else{
 				return obj.text
@@ -118,7 +118,7 @@ const phaseReadonlyColumns = [
 		align: "center",
 		width: "96",
 		template(obj) {
-			if (obj.progress > 0) {
+			if (obj.status != "未开工") {
 				if (obj.type != 'project'){
 					var str = '<div>' + denseDateFmt(obj.start_date) + " - " + denseDateFmtS(obj.end_date) + '</div>'
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_start + " - " + denseDateFmtS2(obj.actual_end) + '</div>'
@@ -139,7 +139,7 @@ const phaseReadonlyColumns = [
 		align: "center",
 		width: "20",
 		template(obj) {
-			if (obj.progress > 0) {
+			if (obj.status != "未开工") {
 				if (obj.type != 'project'){
 					var str = '<div>' + obj.duration + '</div>'
 					str = str + '<div ' + (obj.exceed ? 'class="project-delayed"' : '') + '>' + obj.actual_duration + '</div>'
@@ -164,7 +164,7 @@ const phaseReadonlyColumns = [
 				str = "已停工"
 			} else if (obj.progress == 1) {
 				str = "已完工"
-			} else if (obj.progress == 0) {
+			} else if (obj.status == "未开工") {
 				str = "未开工"
 			} else {
 				str = accMul(obj.progress, 100) + "%"

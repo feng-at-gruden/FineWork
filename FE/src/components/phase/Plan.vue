@@ -390,7 +390,7 @@ export default {
         },
         openTaskWorkLog(id) {
             var t = this.plan.data.filter(t => t.id == id)[0]
-            if (t.type != 'project' && (t.status != this.config.TaskStatus[0] || t.delayed)) {
+            if (t.type != 'project' && t.WorklogCount>0) {
                 this.worklogTask = t
                 this.openWorklogCalendar = true
             }

@@ -312,6 +312,7 @@ namespace API.Controllers
                     last_update = task.LastUpdated,                    
                     type = "project",
                     open = true,
+                    WorklogCount = task.Worklog.Count,
                 };
                 if (task.LastUpdated.HasValue)
                 {
@@ -348,6 +349,7 @@ namespace API.Controllers
                     start_date = task.PlanStartDate,
                     end_date = task.PlanEndDate,
                     duration = (task.PlanEndDate.Value - task.PlanStartDate.Value).Days,
+                    WorklogCount = task.Worklog.Count,
                     //open = task.ChildrenTasks.Count > 0 ? true : false,
                 };
                 //2. Add plan task

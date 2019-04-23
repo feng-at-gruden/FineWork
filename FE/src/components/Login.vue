@@ -143,13 +143,19 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.ChipmunkCheeks_ZH-CN2370754946_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.BesenheideBDJ_ZH-CN2139380821_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.AlpineEucalyptBark_ZH-CN2046783535_1920x1080.jpg',
-'/th?id=OHR.MiracleGarden_EN-CN7437183058_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.MiracleGarden_EN-CN7437183058_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.HopeValley_EN-CN7216481679_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.BauhausArchive_EN-CN6923966348_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.GOTPath_EN-CN6091513115_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.RecordStoreDay_EN-CN5641273719_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.BigWindDay_EN-CN5446594497_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.Bollenstreek_EN-CN6821407382_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.CasaBatllo_ZH-CN2826447794_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.LaysanAlbatross_ZH-CN2784683590_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.HidingEggs_ZH-CN2732414254_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.CoveSpires_ZH-CN2680932006_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.Paepalanthus_ZH-CN2626725103_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.HopeValley_ZH-CN2208363231_1920x1080.jpg',
 ]
 const TIMER = 20000
 export default {

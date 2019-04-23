@@ -206,7 +206,7 @@ export default {
 
 
 .drawer-phase-box .v-input__slot {
-    height: 40px;
+    height: 41px;
 }
 
 .drawer-phase-box .v-text-field {
