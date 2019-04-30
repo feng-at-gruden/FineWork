@@ -317,7 +317,8 @@ namespace API.Controllers
                 if (task.LastUpdated.HasValue)
                 {
                     parentTask.last_update = DateTime.Parse(task.LastUpdated.Value.ToShortDateString()).AddDays(1);
-                    parentTask.actual_duration = (parentTask.last_update.Value - parentTask.actual_start.Value).Days;
+                    if(task.ActualStartDate.HasValue)
+                        parentTask.actual_duration = (parentTask.last_update.Value - parentTask.actual_start.Value).Days;
                 }
                 /*
                 var st1 = task.ChildrenTasks.Min(m => m.PlanStartDate);
