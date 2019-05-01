@@ -19,7 +19,10 @@
 .gantt_grid_scale{
     font-size: 15px;
 }
-
+.gantt-task-name{
+    font-size:12px;
+    -webkit-transform:scale(0.85);
+}
 .project{
     margin-top: 11px;
     height: 8px !important;

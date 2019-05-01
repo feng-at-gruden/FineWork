@@ -106,9 +106,9 @@ const phaseReadonlyColumns = [
 	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",
 		template(obj) {
 			if(obj.type!='project' && obj.WorklogCount>0){
-				return obj.text + '<i class="task-report-icon material-icons" onclick="javascript:gantt.callEvent(\'onOpenTaskWorkLog\', ['+obj.id+']);">open_in_new</i>'
+				return '<span title="'+obj.text+'" class="gantt-task-name">'+obj.text+'</span>' + '<i class="task-report-icon material-icons" onclick="javascript:gantt.callEvent(\'onOpenTaskWorkLog\', ['+obj.id+']);">open_in_new</i>'
 			}else{
-				return obj.text
+				return '<span title="'+obj.text+'" class="gantt-task-name">'+obj.text+'</span>'
 			}
 		}
 	},
@@ -116,7 +116,7 @@ const phaseReadonlyColumns = [
 		name: "start_date",
 		label: "施工周期",
 		align: "center",
-		width: "96",
+		width: "82",
 		template(obj) {
 			if (obj.status != "未开工") {
 				if (obj.type != 'project'){
@@ -157,7 +157,7 @@ const phaseReadonlyColumns = [
 		name: "progress",
 		label: "状态",
 		align: "center",
-		width: "42",
+		width: "33",
 		template: function(obj) {
 			var str
 			if (obj.status == "已停工") {
@@ -174,7 +174,7 @@ const phaseReadonlyColumns = [
 	}
 ];
 const phaseEditingColumns = [
-	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*" },
+	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",},
 	{
 		name: "start_date",
 		label: "施工周期",
