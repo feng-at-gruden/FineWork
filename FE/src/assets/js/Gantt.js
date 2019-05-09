@@ -103,7 +103,7 @@ const projectEditingColumns = [
 
 
 const phaseReadonlyColumns = [
-	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",
+	{ name: "text", label: "工作任务", tree: true, align: "left", width: "*",
 		template(obj) {
 			if(obj.type!='project' && obj.WorklogCount>0){
 				return '<span title="'+obj.text+'" class="gantt-task-name">'+obj.text+'</span>' + '<i class="task-report-icon material-icons" onclick="javascript:gantt.callEvent(\'onOpenTaskWorkLog\', ['+obj.id+']);">open_in_new</i>'
@@ -114,9 +114,9 @@ const phaseReadonlyColumns = [
 	},
 	{
 		name: "start_date",
-		label: "施工周期",
+		label: "任务周期",
 		align: "center",
-		width: "82",
+		width: "95",
 		template(obj) {
 			if (obj.status != "未开工") {
 				if (obj.type != 'project'){
@@ -157,7 +157,7 @@ const phaseReadonlyColumns = [
 		name: "progress",
 		label: "状态",
 		align: "center",
-		width: "33",
+		width: "36",
 		template: function(obj) {
 			var str
 			if (obj.status == "已停工") {
@@ -174,10 +174,10 @@ const phaseReadonlyColumns = [
 	}
 ];
 const phaseEditingColumns = [
-	{ name: "text", label: "施工任务", tree: true, align: "left", width: "*",},
+	{ name: "text", label: "工作任务", tree: true, align: "left", width: "*",},
 	{
 		name: "start_date",
-		label: "施工周期",
+		label: "任务周期",
 		align: "center",
 		width: "95",
 		template(obj) {
@@ -189,7 +189,7 @@ const phaseEditingColumns = [
 		name: "duration",
 		label: "天",
 		align: "center",
-		width: "25",
+		width: "28",
 		template(obj) {
 			var str = '<div class="oneline">' + obj.duration + '</div>'
 			return '<div class="gantt-content-samll">' + str + '</div>'
