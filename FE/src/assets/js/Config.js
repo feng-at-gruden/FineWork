@@ -41,7 +41,7 @@ const Theme = Themes[0]
 
 //单数反转
 //wget --no-cookie --no-check-certificate
-const WALL_PAPER_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=#INDEX#&n=1&nc=1361089515117&FORM=HYLH1"
+const WALL_PAPER_URL = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=1&n=10&nc=1361089515117&FORM=HYLH1"
 const WALLPAPERS = [
 'https://cn.bing.com/az/hprichbg/rb/GoldenEagle_EN-CN5621882775_1920x1080.jpg', //egale
 'https://cn.bing.com/az/hprichbg/rb/HoaryMarmot_ZH-CN7175843832_1920x1080.jpg',
@@ -141,6 +141,19 @@ const WALLPAPERS = [
 'https://cn.bing.com/th?id=OHR.CoastalFog_ZH-CN8104406852_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.FireIce_ZH-CN2924097132_1920x1080.jpg',
 'https://cn.bing.com/th?id=OHR.RainforestMoss_ZH-CN2878951870_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.NCFireweed_ZH-CN8827671063_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.StMaryFalls_ZH-CN8917284967_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.LightHouseNS_ZH-CN9060766128_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.SerengetiZebra_ZH-CN9007197602_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.ChannelIslandFox_ZH-CN5568101953_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.ZaanseSchans_ZH-CN5665496862_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.PipingPlover_ZH-CN0992806167_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BlueCannes_ZH-CN1811852585_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.JasperCub_ZH-CN4314891686_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BicycleRelief_ZH-CN4483533362_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BluebellBeech_ZH-CN8269343251_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.Ghyakar_ZH-CN4631836915_1920x1080.jpg',
+'https://cn.bing.com/th?id=OHR.BeeWeek_ZH-CN4917222816_1920x1080.jpg',
 ]
 
 //项目状态
